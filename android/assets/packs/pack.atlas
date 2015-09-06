@@ -1,0 +1,409 @@
+
+pack.png
+size: 256,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+frame
+  rotate: false
+  xy: 215, 45
+  size: 28, 30
+  split: 13, 13, 14, 14
+  orig: 28, 30
+  offset: 0, 0
+  index: -1
+frame2
+  rotate: false
+  xy: 1, 35
+  size: 72, 74
+  split: 34, 36, 36, 36
+  orig: 72, 74
+  offset: 0, 0
+  index: -1
+frame2_large
+  rotate: false
+  xy: 75, 35
+  size: 72, 74
+  split: 34, 36, 36, 36
+  orig: 72, 74
+  offset: 0, 0
+  index: -1
+howto
+  rotate: false
+  xy: 1, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+magpie
+  rotate: false
+  xy: 149, 45
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+play
+  rotate: false
+  xy: 215, 77
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+quit
+  rotate: false
+  xy: 215, 77
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+settings
+  rotate: false
+  xy: 35, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+
+pack2.png
+size: 256,512
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+tiles/floor_carpet
+  rotate: false
+  xy: 1, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/floor_carpet_bottom
+  rotate: false
+  xy: 1, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/floor_carpet_bottom_left
+  rotate: false
+  xy: 67, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/floor_carpet_bottom_right
+  rotate: false
+  xy: 1, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/floor_carpet_left
+  rotate: false
+  xy: 67, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/floor_carpet_right
+  rotate: false
+  xy: 133, 397
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/floor_carpet_top
+  rotate: false
+  xy: 1, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/floor_carpet_top_left
+  rotate: false
+  xy: 67, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/floor_carpet_top_right
+  rotate: false
+  xy: 133, 331
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/floor_stone
+  rotate: false
+  xy: 1, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/pillar_left
+  rotate: false
+  xy: 67, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/pillar_left_top
+  rotate: false
+  xy: 133, 265
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/pillar_right
+  rotate: false
+  xy: 1, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/pillar_right_top
+  rotate: false
+  xy: 67, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/wall
+  rotate: false
+  xy: 133, 199
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/wall_pillar_left
+  rotate: false
+  xy: 1, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/wall_pillar_left_top
+  rotate: false
+  xy: 67, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/wall_pillar_right
+  rotate: false
+  xy: 133, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/wall_pillar_right_top
+  rotate: false
+  xy: 67, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+tiles/wall_top
+  rotate: false
+  xy: 133, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+
+pack3.png
+size: 256,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ui/check-off
+  rotate: false
+  xy: 131, 17
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+ui/textfield
+  rotate: false
+  xy: 131, 17
+  size: 14, 14
+  split: 7, 6, 6, 7
+  pad: 4, 4, 4, 4
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+ui/check-on
+  rotate: false
+  xy: 131, 1
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+ui/cursor
+  rotate: false
+  xy: 40, 6
+  size: 3, 3
+  split: 1, 1, 1, 1
+  orig: 3, 3
+  offset: 0, 0
+  index: -1
+ui/default-pane
+  rotate: false
+  xy: 163, 8
+  size: 5, 3
+  split: 2, 2, 1, 1
+  orig: 5, 3
+  offset: 0, 0
+  index: -1
+ui/default-rect-pad
+  rotate: false
+  xy: 163, 8
+  size: 5, 3
+  split: 2, 2, 1, 1
+  orig: 5, 3
+  offset: 0, 0
+  index: -1
+ui/default-pane-noborder
+  rotate: false
+  xy: 170, 10
+  size: 1, 1
+  split: 0, 0, 0, 0
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+ui/default-rect
+  rotate: false
+  xy: 174, 23
+  size: 3, 3
+  split: 1, 1, 1, 1
+  orig: 3, 3
+  offset: 0, 0
+  index: -1
+ui/default-rect-down
+  rotate: false
+  xy: 40, 1
+  size: 3, 3
+  split: 1, 1, 1, 1
+  orig: 3, 3
+  offset: 0, 0
+  index: -1
+ui/default-round
+  rotate: false
+  xy: 117, 11
+  size: 12, 20
+  split: 5, 5, 10, 9
+  pad: 5, 5, 5, 4
+  orig: 12, 20
+  offset: 0, 0
+  index: -1
+ui/default-round-down
+  rotate: false
+  xy: 103, 11
+  size: 12, 20
+  split: 5, 5, 10, 9
+  pad: 5, 5, 5, 4
+  orig: 12, 20
+  offset: 0, 0
+  index: -1
+ui/default-round-large
+  rotate: false
+  xy: 59, 11
+  size: 20, 20
+  split: 10, 9, 9, 10
+  pad: 5, 5, 5, 5
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+ui/default-scroll
+  rotate: false
+  xy: 81, 11
+  size: 20, 20
+  split: 10, 9, 10, 9
+  pad: 2, 2, 2, 2
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+ui/default-select
+  rotate: false
+  xy: 30, 11
+  size: 27, 20
+  split: 5, 20, 10, 9
+  pad: 4, 18, 4, 4
+  orig: 27, 20
+  offset: 0, 0
+  index: -1
+ui/default-select-selection
+  rotate: false
+  xy: 181, 28
+  size: 3, 3
+  split: 1, 1, 1, 1
+  orig: 3, 3
+  offset: 0, 0
+  index: -1
+ui/default-slider
+  rotate: false
+  xy: 30, 1
+  size: 8, 8
+  split: 3, 3, 3, 3
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+ui/default-slider-knob
+  rotate: false
+  xy: 163, 13
+  size: 9, 18
+  orig: 9, 18
+  offset: 0, 0
+  index: -1
+ui/default-splitpane
+  rotate: false
+  xy: 174, 28
+  size: 5, 3
+  split: 2, 2, 1, 1
+  orig: 5, 3
+  offset: 0, 0
+  index: -1
+ui/default-splitpane-vertical
+  rotate: false
+  xy: 163, 1
+  size: 3, 5
+  split: 1, 1, 2, 2
+  orig: 3, 5
+  offset: 0, 0
+  index: -1
+ui/default-window
+  rotate: false
+  xy: 1, 2
+  size: 27, 29
+  split: 14, 12, 9, 19
+  pad: 6, 6, 5, 15
+  orig: 27, 29
+  offset: 0, 0
+  index: -1
+ui/selection
+  rotate: false
+  xy: 174, 20
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+ui/tree-minus
+  rotate: false
+  xy: 147, 17
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+ui/tree-plus
+  rotate: false
+  xy: 147, 1
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+ui/white
+  rotate: false
+  xy: 45, 6
+  size: 3, 3
+  orig: 3, 3
+  offset: 0, 0
+  index: -1
