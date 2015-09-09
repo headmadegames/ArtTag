@@ -13,6 +13,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -102,15 +103,15 @@ public class Assets implements Disposable, AssetErrorListener {
 	public void loadAll() {
 		Gdx.app.debug(TAG, "Init assets...");
 
+		for (final String image : AssetTextures.ALL_IMAGES) {
+			assetsManager.load(image, Texture.class);
+		}
+
 		assetsManager.load(AssetSounds.hit, Sound.class);
 		assetsManager.load(AssetSounds.jump, Sound.class);
 		assetsManager.load(AssetSounds.step, Sound.class);
 
 		assetsManager.load(AssetTextures.skin, Skin.class, AssetTextures.skinParameter);
-
-		assetsManager.load(AssetTextures.portrait1, Texture.class);
-		assetsManager.load(AssetTextures.portrait2, Texture.class);
-		assetsManager.load(AssetTextures.portrait3, Texture.class);
 
 		assetsManager.load(AssetMaps.map1, TiledMap.class);
 	}
@@ -156,5 +157,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		for (int i = 0; i < font.getRegions().size; i++) {
 			font.getRegion(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		}
+
+		final NinePatch ninepatch = skin.get(AssetTextures.frame, NinePatch.class);
+		ninepatch.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 	}
 }

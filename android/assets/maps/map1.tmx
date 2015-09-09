@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-down" width="20" height="16" tilewidth="64" tileheight="64" nextobjectid="65">
- <tileset firstgid="1" name="pack2" tilewidth="64" tileheight="64" spacing="0" tilecount="49">
-  <image source="../packs/pack2.png" width="512" height="512"/>
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="20" height="16" tilewidth="64" tileheight="64" nextobjectid="67">
+ <tileset firstgid="1" name="pack2" tilewidth="64" tileheight="64" tilecount="32">
+  <image source="../packs/pack2.png" width="512" height="256"/>
  </tileset>
  <layer name="floor" width="20" height="16">
   <data encoding="base64" compression="zlib">
@@ -10,12 +10,17 @@
  </layer>
  <layer name="walls" width="20" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYKA/4ARiLiqaxw7EHFQ0bzABJiBmJhKzYNGPLiYOxDJALA/Fckj60cUlsbgF3TwxIJYGYikolkUyD11cAoffCAGYecSqIxQu2MzDFc4gQChcsJmHLZxhgFC4wPQgA2zhTCyA6RkOgNi8QCwGAON5BZU=
+   eJxjYBgFo4B8IAbE0kAsBcWyQMwMxejiEmTaATOPWmCgzcMWLmIMiPCRh2JkgC2ciQUwPcMBMFMZAwBENwMB
   </data>
  </layer>
  <layer name="deco" width="20" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYKAvkERiixOphxWI2fDwKVU/CigHuMJ4NOyxA3LDhRx9o3GAGwAA/rcAlA==
+   eJxjYKAvkARiTiDmAmJxIvWwAjEbHj47EHOQoH4UUB/gCuPRsMcOyA0XcvSNxgFuAACUZgC2
+  </data>
+ </layer>
+ <layer name="roof" width="20" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFgxkwATEzkZgFi350MXEglgFieSiWQ9KPLi6JxS3Y7CAXwPxGLYAvXAi5HVc4gwC2cBFnwAwfZIAtnEfB4AMAs24C1w==
   </data>
  </layer>
  <objectgroup name="physics">
@@ -205,8 +210,25 @@
    </properties>
    <ellipse/>
   </object>
+  <object id="65" name="levelStatics" type="fixture" x="432" y="723" width="32" height="32">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="66" name="levelStatics" type="fixture" x="432.425" y="604" width="31.575" height="140">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="2047"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup name="objects">
+ <objectgroup name="objects" visible="0">
   <object id="16" name="art" type="art" x="400" y="391" width="98" height="83"/>
   <object id="35" name="art" type="art" x="778.833" y="392.75" width="98" height="83"/>
   <object id="36" name="art" type="art" x="1039.83" y="650.25" width="98" height="83"/>

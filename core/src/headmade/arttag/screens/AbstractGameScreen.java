@@ -15,8 +15,9 @@ public abstract class AbstractGameScreen extends InputAdapter implements Screen 
 
 	private static final String		TAG						= AbstractGameScreen.class.getName();
 
+	public static Camera			camera;
+
 	protected static Viewport		viewport;
-	protected static Camera			camera;
 	protected DirectedGame			game;
 
 	/* At the moment we are going to work with pixel dimensions */

@@ -17,9 +17,14 @@ public class StageScreen extends AbstractGameScreen {
 
 	protected Stage				stage;
 
+	public StageScreen(DirectedGame game, Stage stage) {
+		super(game);
+		this.stage = stage;
+	}
+
 	public StageScreen(DirectedGame game) {
 		super(game);
-		stage = new Stage(this.viewport, game.getBatch());
+		this.stage = new Stage(viewport, game.getBatch());
 		// stage.addListener(new EventListener() {
 		// @Override
 		// public boolean handle(Event event) {

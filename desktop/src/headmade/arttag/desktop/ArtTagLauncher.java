@@ -18,11 +18,18 @@ public class ArtTagLauncher {
 
 		if (rebuildAtlas) {
 			final Settings settings = new Settings();
-			settings.maxWidth = 2048;
-			settings.maxHeight = 2048;
+			settings.maxWidth = 512;
+			settings.maxHeight = 512;
 			settings.debug = drawDebugOutline;
-			settings.duplicatePadding = true;
+			// settings.duplicatePadding = true;
+			settings.grid = true;
+			settings.square = true;
+			settings.useIndexes = true;
+			settings.bleed = true;
+			settings.paddingX = 0;
+			settings.paddingY = 0;
 
+			// TexturePacker.processIfModified(settings, "assets-raw/images", "../android/assets/" + Assets.PACKS_BASE, Assets.PACK);
 			TexturePacker.process(settings, "assets-raw/images", "../android/assets/" + Assets.PACKS_BASE, Assets.PACK);
 		}
 

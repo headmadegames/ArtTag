@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 
 public class ArtTagInputController extends InputAdapter {
 
@@ -25,50 +26,74 @@ public class ArtTagInputController extends InputAdapter {
 	public boolean keyDown(int keycode) {
 		final float movementSpeed = 10f;
 		if (keycode == Keys.LEFT || keycode == Keys.A) {
-			Player.isMoveLeft = true;
+			Player.instance.isMoveLeft = true;
 			return true;
 		} else if (keycode == Keys.RIGHT || keycode == Keys.D) {
-			Player.isMoveRight = true;
+			Player.instance.isMoveRight = true;
 			return true;
 		} else if (keycode == Keys.UP || keycode == Keys.W) {
-			Player.isMoveUp = true;
+			Player.instance.isMoveUp = true;
 			return true;
 		} else if (keycode == Keys.DOWN || keycode == Keys.S) {
-			Player.isMoveDown = true;
+			Player.instance.isMoveDown = true;
 			return true;
 		} else if (keycode == Keys.ALT_LEFT) {
 			// action button 1
+			if (ArtTag.TOGGLE_LIGHT) {
+				Player.instance.isLightOn = !Player.instance.isLightOn;
+			} else {
+				Player.instance.isLightOn = true;
+			}
 			return true;
 		} else if (keycode == Keys.CONTROL_LEFT) {
 			// action button 2
+			if (Player.instance.isAbleToSteal) {
+				Player.instance.steal(artTagScreen);
+			} else if (Player.instance.isAbleToScan) {
+				Player.instance.scan(artTagScreen);
+			}
+			Player.instance.isRunning = true;
+			return true;
+		} else if (keycode == Keys.SPACE) {
+			artTagScreen.newJob();
 			return true;
 		} else if (keycode == Keys.J) {
-			final Camera cam = artTagScreen.getStage().getCamera();
+			final Camera cam = artTagScreen.camera;
 			cam.translate(-1 * movementSpeed, 0, 0);
 			cam.update();
 			return true;
 		} else if (keycode == Keys.L) {
-			final Camera cam = artTagScreen.getStage().getCamera();
+			final Camera cam = artTagScreen.camera;
 			cam.translate(1 * movementSpeed, 0, 0);
 			cam.update();
 			return true;
 		} else if (keycode == Keys.I) {
-			final Camera cam = artTagScreen.getStage().getCamera();
+			final Camera cam = artTagScreen.camera;
 			cam.translate(0, 1 * movementSpeed, 0);
 			cam.update();
 			return true;
 		} else if (keycode == Keys.K) {
-			final Camera cam = artTagScreen.getStage().getCamera();
+			final Camera cam = artTagScreen.camera;
 			cam.translate(1, -1 * movementSpeed, 0);
 			cam.update();
+			return true;
+		} else if (keycode == Keys.H) {
+			artTagScreen.debugEnabled = !artTagScreen.debugEnabled;
 			return true;
 		}
 		return super.keyDown(keycode);
 	}
 
 	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		final Vector3 worldClickVec = artTagScreen.camera.unproject(new Vector3(screenX, screenY, 0));
+		Gdx.app.log(TAG, "Clicked at " + worldClickVec);
+		return super.touchDown(screenX, screenY, pointer, button);
+	}
+
+	@Override
 	public boolean scrolled(int amount) {
-		final OrthographicCamera cam = (OrthographicCamera) artTagScreen.getStage().getCamera();
+		final OrthographicCamera cam = (OrthographicCamera) artTagScreen.camera;
 		cam.zoom += amount * 0.5f;
 		cam.zoom = MathUtils.clamp(cam.zoom, 0.5f, 10f);
 		cam.update();
@@ -79,22 +104,27 @@ public class ArtTagInputController extends InputAdapter {
 	@Override
 	public boolean keyUp(int keycode) {
 		if (keycode == Keys.LEFT || keycode == Keys.A) {
-			Player.isMoveLeft = false;
+			Player.instance.isMoveLeft = false;
 			return true;
 		} else if (keycode == Keys.RIGHT || keycode == Keys.D) {
-			Player.isMoveRight = false;
+			Player.instance.isMoveRight = false;
 			return true;
 		} else if (keycode == Keys.UP || keycode == Keys.W) {
-			Player.isMoveUp = false;
+			Player.instance.isMoveUp = false;
 			return true;
 		} else if (keycode == Keys.DOWN || keycode == Keys.S) {
-			Player.isMoveDown = false;
+			Player.instance.isMoveDown = false;
 			return true;
 		} else if (keycode == Keys.ALT_LEFT) {
 			// action button 1
+			if (ArtTag.TOGGLE_LIGHT) {
+			} else {
+				Player.instance.isLightOn = false;
+			}
 			return true;
 		} else if (keycode == Keys.CONTROL_LEFT) {
 			// action button 2
+			Player.instance.isRunning = false;
 			return true;
 		}
 		return super.keyUp(keycode);
