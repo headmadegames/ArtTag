@@ -14,7 +14,7 @@ public class TagService {
 	private static final String			TAG			= TagService.class.getName();
 
 	public static final String[]		TAGS		= { "Architecture", "a Drawing", "Fauna", "Heraldy", "Typography", "a Map",
-			"Sheet Music", "a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
+		"Sheet Music", "a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
 
 	public static TagService			instance	= new TagService();
 
@@ -51,7 +51,7 @@ public class TagService {
 
 	/**
 	 * sets the tags in the art according to job description
-	 * 
+	 *
 	 * @param art
 	 * @param jobDescription
 	 */
@@ -59,16 +59,38 @@ public class TagService {
 		Gdx.app.log(TAG, "Tagging " + art);
 		if (jobDescription.artTagNot != null && jobDescription.artTagNot.size() > 0) {
 			for (final String tagNnot : jobDescription.artTagNot) {
+				Gdx.app.log(TAG, "Tagging " + art + " as NOT a " + jobDescription.artTag);
 				art.fitsTagNot.add(tagNnot);
 			}
+			art.fitsTag = null;
 		} else {
+			Gdx.app.log(TAG, "Tagging " + art + " as " + jobDescription.artTag);
 			art.fitsTag = jobDescription.artTag;
+			art.fitsTagNot.clear();
+		}
+	}
+
+	/**
+	 * sets the tagsNotMatched in the art according to job description
+	 *
+	 * @param art
+	 * @param jobDescription
+	 */
+	public void tagNotMatched(Art art, JobDescription jobDescription) {
+		if (jobDescription.artTagNot != null && jobDescription.artTagNot.size() > 0) {
+			// we can't say for sure which tag it matches
+		} else {
+			// tag it only if it wasn't positivley tagged before
+			if (art.fitsTag == null) {
+				Gdx.app.log(TAG, "Tagging " + art + " as NOT a" + jobDescription.artTag);
+				art.fitsTagNot.add(jobDescription.artTag);
+			}
 		}
 	}
 
 	/**
 	 * saves all tags from the given artList
-	 * 
+	 *
 	 * @param artList
 	 */
 	public void tag(Array<Art> artList) {

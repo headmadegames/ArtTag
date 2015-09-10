@@ -6,15 +6,6 @@ import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 public class AssetTextures {
 
 
-
-
-
-
-
-
-
-
-
 	private static final String TAG = AssetTextures.class.getName();
 	private static final String IMAGES_FOLDER = "images/";
 

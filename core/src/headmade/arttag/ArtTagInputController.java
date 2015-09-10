@@ -49,37 +49,52 @@ public class ArtTagInputController extends InputAdapter {
 			// action button 2
 			if (Player.instance.isAbleToSteal) {
 				Player.instance.steal(artTagScreen);
+				return true;
 			} else if (Player.instance.isAbleToScan) {
 				Player.instance.scan(artTagScreen);
+				return true;
+			} else if (Player.instance.isTouchingExit) {
+				if (Player.instance.isExitActivated) {
+					artTagScreen.endLevel();
+				} else {
+					Player.instance.activateExit(artTagScreen);
+				}
+				Player.instance.scan(artTagScreen);
+				return true;
 			}
+			// default action
 			Player.instance.isRunning = true;
 			return true;
-		} else if (keycode == Keys.SPACE) {
-			artTagScreen.newJob();
-			return true;
-		} else if (keycode == Keys.J) {
-			final Camera cam = artTagScreen.camera;
-			cam.translate(-1 * movementSpeed, 0, 0);
-			cam.update();
-			return true;
-		} else if (keycode == Keys.L) {
-			final Camera cam = artTagScreen.camera;
-			cam.translate(1 * movementSpeed, 0, 0);
-			cam.update();
-			return true;
-		} else if (keycode == Keys.I) {
-			final Camera cam = artTagScreen.camera;
-			cam.translate(0, 1 * movementSpeed, 0);
-			cam.update();
-			return true;
-		} else if (keycode == Keys.K) {
-			final Camera cam = artTagScreen.camera;
-			cam.translate(1, -1 * movementSpeed, 0);
-			cam.update();
-			return true;
-		} else if (keycode == Keys.H) {
+		} else if (keycode == Keys.F12) {
 			artTagScreen.debugEnabled = !artTagScreen.debugEnabled;
 			return true;
+		}
+		if (artTagScreen.debugEnabled) {
+			// debug inputs
+			if (keycode == Keys.SPACE) {
+				artTagScreen.newJob();
+				return true;
+			} else if (keycode == Keys.J) {
+				final Camera cam = artTagScreen.camera;
+				cam.translate(-1 * movementSpeed, 0, 0);
+				cam.update();
+				return true;
+			} else if (keycode == Keys.L) {
+				final Camera cam = artTagScreen.camera;
+				cam.translate(1 * movementSpeed, 0, 0);
+				cam.update();
+				return true;
+			} else if (keycode == Keys.I) {
+				final Camera cam = artTagScreen.camera;
+				cam.translate(0, 1 * movementSpeed, 0);
+				cam.update();
+				return true;
+			} else if (keycode == Keys.K) {
+				final Camera cam = artTagScreen.camera;
+				cam.translate(1, -1 * movementSpeed, 0);
+				cam.update();
+				return true;
+			}
 		}
 		return super.keyDown(keycode);
 	}

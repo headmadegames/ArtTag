@@ -10,6 +10,7 @@ import headmade.arttag.actors.Art;
 import headmade.arttag.assets.AssetMaps;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
+import headmade.arttag.screens.transitions.ScreenTransitionFade;
 import headmade.arttag.service.TagService;
 import headmade.arttag.utils.MapUtils;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
@@ -23,7 +24,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -33,7 +33,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
@@ -61,6 +60,8 @@ public class ArtTagScreen extends StageScreen {
 	private final Label					instructionsActor;
 	private final Label					resultActor;
 
+	private float						sumDeltaLookAtImage;
+
 	// private final Map map;
 
 	public ArtTagScreen(DirectedGame game) {
@@ -81,7 +82,7 @@ public class ArtTagScreen extends StageScreen {
 
 		/** BOX2D LIGHT STUFF BEGIN */
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0.1f, 0.1f, 0.2f, 0.3f);
+		rayHandler.setAmbientLight(0.08f, 0.08f, 0.16f, 0.1f);
 		rayHandler.setBlurNum(3);
 		rayHandler.diffuseBlendFunc.set(GL20.GL_DST_COLOR, GL20.GL_SRC_COLOR);
 		// RayHandler.setGammaCorrection(true);
@@ -122,19 +123,10 @@ public class ArtTagScreen extends StageScreen {
 		Player.instance.update(this, delta);
 		// camera.position.x = camera.position.x * ArtTag.UNIT_SCALE;
 		// camera.position.y = camera.position.y * ArtTag.UNIT_SCALE;
-		camera.position.x = Player.instance.body.getPosition().x;
-		camera.position.y = Player.instance.body.getPosition().y;
-		camera.update();
-
-		// UI update
-		if (currentArt != null) {
-			imageActor.setDrawable(new TextureRegionDrawable(new TextureRegion(currentArt.image)));
-			rootTable.layout();
-		} else {
-			imageActor.setDrawable(null);
-		}
-		if (Player.instance.isScanning || (currentArt != null && currentArt.isScanned)) {
-			resultActor.setVisible(true);
+		if (Player.instance.body != null) {
+			camera.position.x = Player.instance.body.getPosition().x;
+			camera.position.y = Player.instance.body.getPosition().y;
+			camera.update();
 		}
 
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
@@ -184,8 +176,40 @@ public class ArtTagScreen extends StageScreen {
 		rayHandler.setCombinedMatrix((OrthographicCamera) camera);
 		rayHandler.updateAndRender();
 
+		// UI update
 		if (currentArt != null) {
-			imageActor.getColor().a = Player.instance.imageAlpha;
+			imageActor.setDrawable(currentArt.drawable);
+			rootTable.layout();
+		} else {
+			imageActor.setDrawable(null);
+		}
+		// show scan result?
+		if (Player.instance.isTouchingArt && (Player.instance.isScanning || (currentArt != null && currentArt.isScanned))) {
+			resultActor.setVisible(true);
+		} else {
+			resultActor.setVisible(false);
+		}
+		// render UI
+		if (currentArt != null) {
+			final float alpha = Player.instance.imageAlpha;
+			imageActor.getColor().a = alpha;
+			if (alpha > 0f) {
+				instructionsActor.setVisible(true);
+				jobDescActor.setVisible(true);
+			} else {
+				instructionsActor.setVisible(false);
+				jobDescActor.setVisible(false);
+			}
+
+			if (alpha > 0.3f) {
+				if (sumDeltaLookAtImage > 0.3f) {
+					TagService.instance.tagNotMatched(currentArt, jobDescription);
+				} else {
+					sumDeltaLookAtImage += delta;
+				}
+			} else {
+				sumDeltaLookAtImage = 0f;
+			}
 		}
 		stage.act(delta);
 		stage.draw();
@@ -193,15 +217,6 @@ public class ArtTagScreen extends StageScreen {
 		if (debugEnabled) {
 			box2dDebugRenderer.render(world, camera.combined);
 		}
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-		mapRenderer.dispose();
-		rayHandler.dispose();
-		world.dispose();
-		box2dDebugRenderer.dispose();
 	}
 
 	@Override
@@ -218,6 +233,9 @@ public class ArtTagScreen extends StageScreen {
 	public void endLevel() {
 		TagService.instance.tag(artList);
 		System.out.println(TagService.instance.tagVos);
+		Player.instance.body = null;
+		Player.instance.artInView.clear();
+		game.setScreen(new RatingScreen(game), ScreenTransitionFade.init(1f));
 	}
 
 	public void setInstruction(String text) {
@@ -226,6 +244,15 @@ public class ArtTagScreen extends StageScreen {
 
 	public void setResult(String text) {
 		resultActor.setText(text);
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		mapRenderer.dispose();
+		rayHandler.dispose();
+		world.dispose();
+		box2dDebugRenderer.dispose();
 	}
 
 }

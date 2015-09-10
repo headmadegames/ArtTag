@@ -18,7 +18,6 @@ public class JobDescription {
 	public Integer				artYearRange;
 
 	public JobDescription() {
-
 		if (RandomUtil.random() > 0.2f) {
 			artTag = RandomUtil.random(TagService.TAGS);
 		} else {

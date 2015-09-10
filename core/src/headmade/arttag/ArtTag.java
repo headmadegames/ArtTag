@@ -30,13 +30,15 @@ public class ArtTag extends DirectedGame {
 	public static final short	CAT_ARTTRIGGER		= 0x0008;
 	public static final short	CAT_PLAYERLIGHT		= 0x0010;
 	public static final short	CAT_LIGHT			= 0x0020;
+	public static final short	CAT_EXIT			= 0x0040;
 
 	public static final short	MASK_LEVEL			= -1;
-	public static final short	MASK_PLAYER			= CAT_LEVEL | CAT_LIGHT | CAT_GUARD | CAT_ARTTRIGGER;
+	public static final short	MASK_PLAYER			= CAT_LEVEL | CAT_LIGHT | CAT_GUARD | CAT_ARTTRIGGER | CAT_EXIT;
 	public static final short	MASK_PLAYERLIGHT	= CAT_LEVEL | CAT_GUARD | CAT_ARTTRIGGER;
 	public static final short	MASK_LIGHT			= CAT_LEVEL | CAT_PLAYER | CAT_GUARD;
 	public static final short	MASK_GUARD			= CAT_LEVEL | CAT_PLAYER | CAT_LIGHT | CAT_PLAYERLIGHT;
 	public static final short	MASK_ARTTRIGGER		= CAT_PLAYER | CAT_PLAYERLIGHT;
+	public static final short	MASK_EXIT			= CAT_PLAYER;
 
 	public static final short	GROUP_LIGHT			= 0x0000;
 

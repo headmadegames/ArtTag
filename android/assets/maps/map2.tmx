@@ -23,7 +23,7 @@
    eJxjYBgFgxkwATEzkZgFi350MXEglgFieSiWQ9KPLi6JxS3Y7CAXwPxGLYAvXAi5HVc4gwC2cBFnwAwfZIAtnAcLUKGyecpUNo+eAADy0gMe
   </data>
  </layer>
- <objectgroup name="physics">
+ <objectgroup color="#7da474" name="physics">
   <object id="1" name="levelStatics" type="fixture" x="-52.6667" y="-31.5" width="1469.33" height="202">
    <properties>
     <property name="body" value="level"/>
@@ -237,7 +237,7 @@
    <ellipse/>
   </object>
  </objectgroup>
- <objectgroup name="objects">
+ <objectgroup color="#ffaaff" name="objects">
   <object id="16" name="art" type="art" x="399" y="391" width="98" height="83"/>
   <object id="35" name="art" type="art" x="782.833" y="392.75" width="98" height="83"/>
   <object id="36" name="art" type="art" x="1039.83" y="650.25" width="98" height="83"/>
@@ -251,7 +251,7 @@
    <ellipse/>
   </object>
  </objectgroup>
- <objectgroup name="lights">
+ <objectgroup color="#ffff00" name="lights">
   <object id="69" name="light" type="point" x="111.167" y="127.167" width="92.5" height="92.5">
    <properties>
     <property name="color" value="44AA5555"/>

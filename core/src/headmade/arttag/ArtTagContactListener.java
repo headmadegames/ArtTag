@@ -27,6 +27,7 @@ public class ArtTagContactListener implements ContactListener {
 			handleBeginContactWithPlayer(contact, contact.getFixtureA(), contact.getFixtureB());
 		} else if (isPlayer(contact.getFixtureB())) {
 			handleBeginContactWithPlayer(contact, contact.getFixtureB(), contact.getFixtureA());
+
 		} else if (isPlayerLight(contact.getFixtureA())) {
 			handleBeginContactWithPlayerLight(contact, contact.getFixtureA(), contact.getFixtureB());
 		} else if (isPlayerLight(contact.getFixtureB())) {
@@ -66,10 +67,12 @@ public class ArtTagContactListener implements ContactListener {
 
 	private void handleBeginContactWithPlayer(Contact contact, Fixture fixPlayer, Fixture fixOther) {
 		if (isArtTrigger(fixOther)) {
-			if (artTag.currentArt != null) {
-				Player.instance.isAbleToScan = true;
-				Gdx.app.log(TAG, "Player can read " + artTag.currentArt);
-			}
+			// if (artTag.currentArt != null) {
+			Player.instance.isTouchingArt = true;
+			Gdx.app.log(TAG, "Player touching " + artTag.currentArt);
+			// }
+		} else if (isExit(fixOther)) {
+			Player.instance.isTouchingExit = true;
 		} else if (isGuard(fixOther)) {
 			Gdx.app.log(TAG, "Game Over!");
 		}
@@ -85,8 +88,10 @@ public class ArtTagContactListener implements ContactListener {
 
 	private void handleEndContactWithPlayer(Contact contact, Fixture fixPlayer, Fixture fixOther) {
 		if (isArtTrigger(fixOther)) {
-			Gdx.app.log(TAG, "Player can no longer read " + artTag.currentArt);
-			Player.instance.isAbleToScan = false;
+			Gdx.app.log(TAG, "Player no longer touching " + artTag.currentArt);
+			Player.instance.isTouchingArt = false;
+		} else if (isExit(fixOther)) {
+			Player.instance.isTouchingExit = false;
 		}
 	}
 
@@ -95,7 +100,7 @@ public class ArtTagContactListener implements ContactListener {
 			if (Player.instance.artInView.removeValue(fixOther, true)) {
 				Gdx.app.log(TAG, "removing art from view");
 			} else {
-				Gdx.app.log(TAG, "Tried to remove art from view, but it found no match");
+				Gdx.app.error(TAG, "Tried to remove art from view, but it found no match");
 			}
 		} else if (isGuard(fixOther)) {
 			Gdx.app.log(TAG, "Guard is no longer in Playerlight!");
@@ -116,5 +121,9 @@ public class ArtTagContactListener implements ContactListener {
 
 	private boolean isGuard(Fixture fix) {
 		return fix.getFilterData().categoryBits == ArtTag.CAT_GUARD;
+	}
+
+	private boolean isExit(Fixture fix) {
+		return fix.getFilterData().categoryBits == ArtTag.CAT_EXIT;
 	}
 }

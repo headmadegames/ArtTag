@@ -1,5 +1,7 @@
 package headmade.arttag.assets;
 
+import headmade.arttag.ArtTag;
+
 import java.io.File;
 
 import com.badlogic.gdx.Gdx;
@@ -158,7 +160,12 @@ public class Assets implements Disposable, AssetErrorListener {
 			font.getRegion(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		}
 
-		final NinePatch ninepatch = skin.get(AssetTextures.frame, NinePatch.class);
+		NinePatch ninepatch = skin.get(AssetTextures.frame, NinePatch.class);
 		ninepatch.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		ninepatch.scale(ArtTag.UNIT_SCALE, ArtTag.UNIT_SCALE);
+
+		ninepatch = skin.get(AssetTextures.frame2, NinePatch.class);
+		ninepatch.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		ninepatch.scale(ArtTag.UNIT_SCALE / 2, ArtTag.UNIT_SCALE / 2);
 	}
 }

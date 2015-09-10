@@ -5,6 +5,7 @@ import headmade.arttag.assets.Assets;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 
@@ -21,13 +22,15 @@ public class ArtTagLauncher {
 			settings.maxWidth = 512;
 			settings.maxHeight = 512;
 			settings.debug = drawDebugOutline;
-			// settings.duplicatePadding = true;
+			settings.duplicatePadding = true;
 			settings.grid = true;
 			settings.square = true;
 			settings.useIndexes = true;
 			settings.bleed = true;
-			settings.paddingX = 0;
-			settings.paddingY = 0;
+			settings.paddingX = 2;
+			settings.paddingY = 2;
+			settings.wrapX = TextureWrap.MirroredRepeat;
+			settings.wrapY = TextureWrap.MirroredRepeat;
 
 			// TexturePacker.processIfModified(settings, "assets-raw/images", "../android/assets/" + Assets.PACKS_BASE, Assets.PACK);
 			TexturePacker.process(settings, "assets-raw/images", "../android/assets/" + Assets.PACKS_BASE, Assets.PACK);

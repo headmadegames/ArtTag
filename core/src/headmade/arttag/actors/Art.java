@@ -1,6 +1,5 @@
 package headmade.arttag.actors;
 
-import headmade.arttag.ArtTag;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
 import headmade.arttag.service.ImageService;
@@ -13,7 +12,11 @@ import java.util.Set;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Art {
 
@@ -25,6 +28,7 @@ public class Art {
 
 	public NinePatch			frame;
 	public Texture				image;
+	public Drawable				drawable;
 	public Rectangle			rectangle;
 
 	public String				assetName;
@@ -33,11 +37,16 @@ public class Art {
 	public String				fitsTag;
 	public Set<String>			fitsTagNot	= new HashSet<String>();
 
+	public Body					artTrigger;
+
 	public boolean				isScanned;
+	public boolean				isStolen;
 
 	public Art(Rectangle rectangle) {
 		super();
-		this.image = Assets.assetsManager.get(ImageService.instance.getUnusedImage(), Texture.class);
+		this.imageId = ImageService.instance.getUnusedImage();
+		this.image = Assets.assetsManager.get(imageId, Texture.class);
+		this.drawable = new TextureRegionDrawable(new TextureRegion(image));
 		this.rectangle = rectangle;
 		this.name = RandomService.instance.generateArtName();
 		this.artistName = RandomService.instance.generateArtistName();
@@ -45,10 +54,10 @@ public class Art {
 
 		if (RandomUtil.random() > 0.5) {
 			this.frame = Assets.instance.skin.get(AssetTextures.frame, NinePatch.class);
-			frame.scale(ArtTag.UNIT_SCALE, ArtTag.UNIT_SCALE);
+			// frame.scale(ArtTag.UNIT_SCALE, ArtTag.UNIT_SCALE);
 		} else {
 			this.frame = Assets.instance.skin.get(AssetTextures.frame2, NinePatch.class);
-			frame.scale(ArtTag.UNIT_SCALE / 2, ArtTag.UNIT_SCALE / 2);
+			// frame.scale(ArtTag.UNIT_SCALE / 2, ArtTag.UNIT_SCALE / 2);
 		}
 	}
 
@@ -70,9 +79,23 @@ public class Art {
 		// rectangle.height / ArtTag.UNIT_SCALE);
 		// batch.setTransformMatrix(oldTransMat);
 
-		batch.draw(image, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom(), rectangle.width - frame.getPadLeft()
-				- frame.getPadRight(), rectangle.height - frame.getPadTop() - frame.getPadBottom());
-		// frame.draw(batch, rectangle.x, rectangle.y, rectangle.getWidth(), rectangle.height);
+		// final float width = rectangle.width - frame.getPadLeft() - frame.getPadRight();
+		// final float height = rectangle.height - frame.getPadTop() - frame.getPadBottom();
+		// final float aspectRatio = new Float(image.getWidth()) / new Float(image.getHeight());
+		// if (aspectRatio > 1) {
+		// batch.draw(image, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom()
+		// + (rectangle.height / 2 - (height / aspectRatio) / 2), width, height / aspectRatio);
+		// } else {
+		// batch.draw(image, rectangle.x + frame.getPadLeft() + (rectangle.width / 2 - (width * aspectRatio) / 2),
+		// rectangle.y + frame.getPadBottom(), width * aspectRatio, height);
+		// }
+
+		if (!isStolen) {
+			batch.draw(image, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom(), rectangle.width - frame.getPadLeft()
+					- frame.getPadRight(), rectangle.height - frame.getPadTop() - frame.getPadBottom());
+		}
+
+		frame.draw(batch, rectangle.x, rectangle.y, rectangle.getWidth(), rectangle.height);
 	}
 
 	@Override

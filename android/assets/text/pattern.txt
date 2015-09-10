@@ -1,55 +1,30 @@
 #N
-#N#N
 #N #N
 #N #N - The #adj #N
-#N of #N
-#N of the #N
-#N of the #N of #N
 #N vs #N
-#N like #N
 #adj #N
 #adj #N #N
-#adj #N of the #N
-#adj #N on the #N
 #adj #N vs #adj #N
 The #N
 The #N #N
 The #adj #N
-The #N of #N
-The #adj #N of #N
 The #adj #N vs The #adj #N
 About a #N
 About a #adj #N
 From #N to #N 
-It's a #adj #N
-It's a #adj #N #N
-It's a #adj,#adj #N
-It's a #adj,#adj #N #N
-Where in the world is #N #N
-Where in the world is #adj #N
-I am #N
-I am #N #N
-I am #adj #N #N
-You are #N
-You are #N #N
-You are #adj #N #N
-Your #N is #adj
-Your #N is a #N
-Your #N is a #adj #N
-#Nman
-#Nman - #N of #N
-#Nman - The #N
-#Nman - The #adj #N
-#Nman vs #N
-#Nman vs #Nman
-#Nwoman
-#Nwoman - #N of #N
-#Nwoman - The #N
-#Nwoman - The #adj #N
-#Nwoman vs #N
-#Nwoman vs #Nman
-#Neater
-#Neater - The #adj #N
+#N-Man
+#N-Man - The #N
+#N-Man - The #adj #N
+#N-Man vs #N
+#N-Man vs #N-Man
+#N-Woman
+#N-Woman - The #N
+#N-Woman - The #adj #N
+#N-Woman vs #N
+#N-Woman vs #Nman
+#N-Eater
+#N-Eater - The #N
+#N-Eater - The #adj #N
 My #N #N
 My #adj #N
 My #adj #ver
@@ -57,13 +32,13 @@ My #adj #ver
 #ving
 #ver
 #vers
-#verman
-#verman - The #adj #N
-#verwoman
-#verwoman - The #adj #N
-#ving
+#ver-Man
+#ver-Man - The #adj #N
+#ver-Woman
+#ver-Woman - The #adj #N
 #vs
 #ver #vs #ver 
+#ver #ving #ver 
 #ver #vs #N
 #v #N #N
 #N #vs #N
@@ -79,14 +54,6 @@ The #N #vs
 The #adj #ver
 The #N #ver
 The #adj #N #ver
-I am #ver
-I am #adj #ver
-I am #ving
-I am #ving #vly
-You are #ver
-You are #adj #ver
-You are #ving
-You are #ving #vly
 // These don't work well
 // The #adj #N from your #N
 // like #N like #N

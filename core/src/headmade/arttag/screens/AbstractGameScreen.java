@@ -48,7 +48,7 @@ public abstract class AbstractGameScreen extends InputAdapter implements Screen 
 
 	@Override
 	public void hide() {
-
+		dispose();
 	}
 
 	@Override
