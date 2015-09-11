@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-down" width="20" height="16" tilewidth="64" tileheight="64" nextobjectid="82">
- <tileset firstgid="1" name="pack2" tilewidth="64" tileheight="64" tilecount="64" spacing="2" margin="2">
-  <image source="../packs/pack2.png" width="512" height="512"/>
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="20" height="16" tilewidth="64" tileheight="64" nextobjectid="97">
+ <tileset firstgid="1" name="pack3" tilewidth="64" tileheight="64" spacing="2" margin="2" tilecount="49">
+  <image source="../packs/pack3.png" width="512" height="512"/>
  </tileset>
  <layer name="floor" width="20" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjZmBgYKYylodiOSCWQeMzIvEZscgj82HmSUGxLBBLU8CHmSdCJTwUzJOnonny0HCklnnUNAvZz4M5PkbNo9w8amIAIK8V/w==
+   eJxjZmBgYKYylodiOSCWQeMzIvEZscgj82HmSUGxLBBLU8CHmSdCJTwUzJOnonny0HCklnnUNAvZz4M5PkbNo9w8QpgU9QAmQxYh
   </data>
  </layer>
  <layer name="walls" width="20" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo4B8IAbE0kAsBcWyQMwMxejiEmTaATOPWmCgzcMWLmIMiPCRh2JkgC2ciQUwPcMBMFMZAwBENwMB
+   eJxjYBgFo4B8IAbE0kAsBcWyQMwMxejiEmTaATOPWmCgzcMWLmIMiPCRh2JkgC2ciQUwPcMBMBOBSVELAEM7Avs=
   </data>
  </layer>
  <layer name="deco" width="20" height="16">
@@ -20,11 +20,11 @@
  </layer>
  <layer name="roof" width="20" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFgxkwATEzkZgFi350MXEglgFieSiWQ9KPLi6JxS3Y7CAXwPxGLYAvXAi5HVc4gwC2cBFnwAwfZIAtnAcLUKGyecpUNo+eAADy0gMe
+   eJxjYBgFgxkwATEzkZgFi350MXEglgFieSiWQ9KPLi6JxS3Y7CAX0MI8XOFCyC5cekEAW7iIM2CGDzLAFs6DBahQ2TxlKpuHDxCTD0hRCwD7+gNU
   </data>
  </layer>
- <objectgroup name="physics">
-  <object id="1" name="levelStatics" type="fixture" x="-52.6667" y="-31.5" width="1469.33" height="202">
+ <objectgroup color="#00aa00" name="physics">
+  <object id="1" name="levelStatics" type="fixture" x="0" y="2" width="588" height="168.5">
    <properties>
     <property name="body" value="level"/>
     <property name="filter.maskBits" value="-1"/>
@@ -32,7 +32,7 @@
     <property name="restitution" value="0.2"/>
    </properties>
   </object>
-  <object id="3" name="levelStatics" type="fixture" x="-138" y="-40.8333" width="200" height="1138.67">
+  <object id="3" name="levelStatics" type="fixture" x="2" y="114" width="62" height="375.334">
    <properties>
     <property name="body" value="level"/>
     <property name="filter.maskBits" value="-1"/>
@@ -40,7 +40,7 @@
     <property name="restitution" value="0.2"/>
    </properties>
   </object>
-  <object id="4" name="levelStatics" type="fixture" x="-231.333" y="999.17" width="1745.33" height="145.333">
+  <object id="4" name="levelStatics" type="fixture" x="0" y="990.746" width="1274" height="33.254">
    <properties>
     <property name="body" value="level"/>
     <property name="filter.maskBits" value="-1"/>
@@ -48,7 +48,7 @@
     <property name="restitution" value="0.2"/>
    </properties>
   </object>
-  <object id="5" name="levelStatics" type="fixture" x="1216.33" y="-68.8333" width="245.337" height="1120">
+  <object id="5" name="levelStatics" type="fixture" x="1216.5" y="575.5" width="59.5" height="446.5">
    <properties>
     <property name="body" value="level"/>
     <property name="filter.maskBits" value="-1"/>
@@ -236,8 +236,56 @@
    </properties>
    <ellipse/>
   </object>
+  <object id="87" name="doorLeft" type="fixture" x="0" y="309.916" width="17" height="530.167">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="88" name="levelStatics" type="fixture" x="2" y="575.917" width="61" height="446.083">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="91" name="levelStatics" type="fixture" x="1214.5" y="2" width="61.5" height="488">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="92" name="levelStatics" type="fixture" x="1259.68" y="110.78" width="16.32" height="625.22">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="95" name="levelStatics" type="fixture" x="690" y="1.75" width="588" height="168.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="96" name="doorTop" type="fixture" x="380" y="1.75" width="588" height="168.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup name="objects">
+ <objectgroup color="#ffaaff" name="objects">
   <object id="16" name="art" type="art" x="399" y="391" width="98" height="83"/>
   <object id="35" name="art" type="art" x="782.833" y="392.75" width="98" height="83"/>
   <object id="36" name="art" type="art" x="1039.83" y="650.25" width="98" height="83"/>
@@ -250,16 +298,20 @@
   <object id="80" name="player" type="player" x="136" y="174" width="49" height="49">
    <ellipse/>
   </object>
+  <object id="82" name="door" type="door" x="588" y="170" width="101.333" height="22.6667"/>
+  <object id="84" name="doorLeft" type="door" x="20.0002" y="488.667" width="24.3332" height="86.3334"/>
+  <object id="89" name="door" type="door" x="1235.83" y="490.167" width="24.3332" height="86.3334"/>
+  <object id="90" name="door" type="door" x="577.167" y="970.333" width="126.833" height="27.1667"/>
  </objectgroup>
- <objectgroup name="lights">
+ <objectgroup color="#ffff00" name="lights" visible="0">
   <object id="69" name="light" type="point" x="111.167" y="127.167" width="92.5" height="92.5">
    <properties>
     <property name="color" value="44AA5555"/>
    </properties>
    <ellipse/>
   </object>
-  <object id="74" type="cone" x="638.297" y="341.852" width="1" height="1" rotation="268.898">
-   <polygon points="0,0 208.14,-146.328 208.14,147.351"/>
+  <object id="74" type="cone" x="908.733" y="956.773" width="2.48018" height="1.55974" rotation="260.163">
+   <polygon points="0,0 516.225,-228.234 516.225,229.83"/>
   </object>
  </objectgroup>
 </map>

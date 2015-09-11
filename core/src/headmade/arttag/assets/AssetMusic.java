@@ -6,11 +6,11 @@ public class AssetMusic {
 	private static final String	MUSIC_PATH	= "music/";
 
 	// @formatter:off
-//	 @Asset(Music.class)
-	 public static final String
-	 		gameOver = 	MUSIC_PATH + "xclntr-game_over.ogg",
-	 		normal = 	MUSIC_PATH + "Music_For_Your_Media_-_51_Solving_a_Crime.mp3",
-	 		intro = 	MUSIC_PATH + "Music_For_Your_Media_-_93_Spy.mp3",
-	 		spotted = 	MUSIC_PATH + "Music_For_Your_Media_-_89_Epic_Action.mp3";
+	//	 @Asset(Music.class)
+	public static final String
+	gameOver = 	MUSIC_PATH + "DDmyzik_-_Farewell.mp3",
+	intro = 	MUSIC_PATH + "DDmyzik_-_Cool_Guys.mp3",
+	normal = 	MUSIC_PATH + "DDmyzik_-_Super_Chill.mp3",
+	spotted = 	MUSIC_PATH + "DDmyzik_-_Active_Sports.mp3";
 
 }

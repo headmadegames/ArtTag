@@ -4,14 +4,15 @@ import headmade.arttag.assets.Assets;
 import headmade.arttag.screens.IntroScreen;
 import headmade.arttag.screens.transitions.ScreenTransition;
 import headmade.arttag.screens.transitions.ScreenTransitionFade;
+import headmade.arttag.service.MusicService;
 import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ArtTag extends DirectedGame {
 
-	public static final String	BUTTON_A			= "A";
-	public static final String	BUTTON_B			= "B";
+	public static final String	BUTTON_A			= "Shift";
+	public static final String	BUTTON_B			= "Space";
 
 	public final static int		VELOCITY_ITERS		= 6;
 	public final static int		POSITION_ITERS		= 2;
@@ -31,14 +32,16 @@ public class ArtTag extends DirectedGame {
 	public static final short	CAT_PLAYERLIGHT		= 0x0010;
 	public static final short	CAT_LIGHT			= 0x0020;
 	public static final short	CAT_EXIT			= 0x0040;
+	public static final short	CAT_DOOR			= 0x0080;
 
 	public static final short	MASK_LEVEL			= -1;
-	public static final short	MASK_PLAYER			= CAT_LEVEL | CAT_LIGHT | CAT_GUARD | CAT_ARTTRIGGER | CAT_EXIT;
+	public static final short	MASK_PLAYER			= CAT_LEVEL | CAT_LIGHT | CAT_GUARD | CAT_ARTTRIGGER | CAT_EXIT | CAT_DOOR;
 	public static final short	MASK_PLAYERLIGHT	= CAT_LEVEL | CAT_GUARD | CAT_ARTTRIGGER;
 	public static final short	MASK_LIGHT			= CAT_LEVEL | CAT_PLAYER | CAT_GUARD;
 	public static final short	MASK_GUARD			= CAT_LEVEL | CAT_PLAYER | CAT_LIGHT | CAT_PLAYERLIGHT;
 	public static final short	MASK_ARTTRIGGER		= CAT_PLAYER | CAT_PLAYERLIGHT;
 	public static final short	MASK_EXIT			= CAT_PLAYER;
+	public static final short	MASK_DOOR			= MASK_EXIT;
 
 	public static final short	GROUP_LIGHT			= 0x0000;
 
@@ -53,6 +56,8 @@ public class ArtTag extends DirectedGame {
 
 		// Load all assets
 		Assets.instance.init();
+
+		MusicService.instance.init(this);
 
 		// Start game with Playground Screen
 		final ScreenTransition transition = ScreenTransitionFade.init(0.0f);

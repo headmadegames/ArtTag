@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="left-down" width="20" height="16" tilewidth="64" tileheight="64" nextobjectid="82">
- <tileset firstgid="1" name="pack2" tilewidth="64" tileheight="64" tilecount="64" spacing="2" margin="2">
-  <image source="../packs/pack2.png" width="512" height="512"/>
+ <tileset firstgid="1" name="pack3" tilewidth="64" tileheight="64" tilecount="64" spacing="2" margin="2">
+  <image source="../packs/pack3.png" width="512" height="512"/>
  </tileset>
  <layer name="floor" width="20" height="16">
   <data encoding="base64" compression="zlib">

@@ -1,16 +1,18 @@
 package headmade.arttag;
 
+import headmade.arttag.screens.AbstractGameScreen;
+import headmade.arttag.screens.transitions.ScreenTransition;
+import headmade.arttag.service.MusicService;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
-import headmade.arttag.screens.AbstractGameScreen;
-import headmade.arttag.screens.transitions.ScreenTransition;
-
 public abstract class DirectedGame extends Game {
-	private static final String TAG = DirectedGame.class.getName();
+	private static final String	TAG	= DirectedGame.class.getName();
 
 	private boolean				init;
 	private AbstractGameScreen	currScreen;
@@ -20,7 +22,7 @@ public abstract class DirectedGame extends Game {
 	private float				time;
 	private ScreenTransition	screenTransition;
 
-	protected SpriteBatch batch;
+	protected SpriteBatch		batch;
 
 	/**
 	 * Called on android when back button is pressed
@@ -31,11 +33,11 @@ public abstract class DirectedGame extends Game {
 
 		if (currScreen != null) {
 			currScreen.hide();
-			currScreen.dispose();
+			// currScreen.dispose();
 		}
 		if (nextScreen != null) {
 			nextScreen.hide();
-			nextScreen.dispose();
+			// nextScreen.dispose();
 		}
 		if (init) {
 			currFbo.dispose();
@@ -46,6 +48,11 @@ public abstract class DirectedGame extends Game {
 			init = false;
 		}
 
+	}
+
+	@Override
+	public Screen getScreen() {
+		return currScreen;
 	}
 
 	public SpriteBatch getBatch() {
@@ -108,6 +115,7 @@ public abstract class DirectedGame extends Game {
 				}
 			}
 		}
+		MusicService.instance.update();
 	}
 
 	@Override

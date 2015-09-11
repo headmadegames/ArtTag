@@ -6,6 +6,12 @@ import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 public class AssetTextures {
 
 
+
+
+
+
+
+
 	private static final String TAG = AssetTextures.class.getName();
 	private static final String IMAGES_FOLDER = "images/";
 
@@ -87,7 +93,10 @@ public class AssetTextures {
 	frame		=	"frame",
 	frame2 		= 	"frame2",
 	frame2Large = 	"frame2_color",
-	player 		= 	"magpie";
+	player 		= 	"magpie",
+	button 		= 	"button",
+	joystick 	= 	"joystick",
+	artTreachery = 	"large/title_roman_caps";
 
 	//	@formatter:off
 	//	@Asset(NinePatch.class)

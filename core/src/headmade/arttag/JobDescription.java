@@ -25,12 +25,12 @@ public class JobDescription {
 				artTagNot.add(RandomUtil.random(TagService.TAGS));
 			}
 		}
-		if (RandomUtil.random() > 0.5f) {
-			artArtist = RandomService.instance.generateArtistName();
-		} else {
-			artYearFrom = RandomService.instance.generateYear();
-			artYearRange = RandomService.instance.generateYearRange(artYearFrom, 10 + Math.round(RandomUtil.random(100)));
-		}
+		// if (RandomUtil.random() > 0.5f) {
+		// artArtist = RandomService.instance.generateArtistName();
+		// } else {
+		artYearFrom = RandomService.instance.generateYear();
+		artYearRange = RandomService.instance.generateYearRange(artYearFrom, 10 + Math.round(RandomUtil.random(100)));
+		// }
 		desc = RandomService.instance.generateJobDescription(this);
 	}
 }

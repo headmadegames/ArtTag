@@ -27,6 +27,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
@@ -53,17 +54,18 @@ public class MapUtils {
 		Gdx.app.log(TAG, "Loading map " + mapName);
 		artTagScreen.map = Assets.assetsManager.get(mapName, TiledMap.class);
 		final Box2DMapObjectParser parser = new Box2DMapObjectParser(ArtTag.UNIT_SCALE);
-		// final Listener listener = new Box2DMapObjectParser.Listener.Adapter() {
-		//
-		// @Override
-		// public void created(Fixture fixture, MapObject mapObject) {
-		//
-		// Gdx.app.log(TAG, "mapObject.getProperties()" + fixture.getFilterData().maskBits);
-		// super.created(fixture, mapObject);
-		// }
-		//
-		// };
-		// parser.setListener(listener);
+		final Box2DMapObjectParser.Listener.Adapter listener = new Box2DMapObjectParser.Listener.Adapter() {
+
+			@Override
+			public void created(Fixture fixture, MapObject mapObject) {
+
+				Gdx.app.log(TAG, "mapObject.getProperties()" + fixture.getFilterData().maskBits);
+				super.created(fixture, mapObject);
+			}
+
+		};
+		parser.setListener(listener);
+
 		parser.load(artTagScreen.world, artTagScreen.map);
 		if (null == artTagScreen.mapRenderer) {
 			// artTagScreen.mapRenderer = new OrthogonalTiledMapRenderer(artTagScreen.map, artTagScreen.getGame().getBatch());
@@ -83,6 +85,8 @@ public class MapUtils {
 				}
 			} else if (OBJ_GUARD.equals(mapObject.getName())) {
 
+			} else if (OBJ_DOOR.equals(mapObject.getName())) {
+				createDoor(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
 			} else if (OBJ_EXIT.equals(mapObject.getName())) {
 				createExit(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
 			} else if (OBJ_PLAYER.equals(mapObject.getName())) {
@@ -113,7 +117,14 @@ public class MapUtils {
 
 	}
 
+	private static void createDoor(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
+		Gdx.app.log(TAG, "Creating door");
+		toWorldScale(rectangle, unitScale);
+		createSensor(artTagScreen, rectangle, ArtTag.CAT_DOOR, ArtTag.MASK_DOOR);
+	}
+
 	private static void createExit(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
+		Gdx.app.log(TAG, "Creating exit");
 		toWorldScale(rectangle, unitScale);
 		createSensor(artTagScreen, rectangle, ArtTag.CAT_EXIT, ArtTag.MASK_EXIT);
 	}

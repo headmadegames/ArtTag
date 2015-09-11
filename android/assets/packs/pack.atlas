@@ -4,9 +4,16 @@ size: 512,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-frame
+button
   rotate: false
   xy: 1, 1
+  size: 64, 47
+  orig: 64, 47
+  offset: 0, 0
+  index: -1
+frame
+  rotate: false
+  xy: 75, 1
   size: 28, 30
   split: 13, 13, 14, 14
   orig: 28, 30
@@ -14,7 +21,7 @@ frame
   index: -1
 frame2
   rotate: false
-  xy: 75, 1
+  xy: 149, 1
   size: 72, 74
   split: 34, 36, 36, 36
   orig: 72, 74
@@ -22,7 +29,7 @@ frame2
   index: -1
 frame2_color
   rotate: false
-  xy: 149, 1
+  xy: 223, 1
   size: 72, 74
   split: 34, 36, 36, 36
   orig: 72, 74
@@ -30,21 +37,28 @@ frame2_color
   index: -1
 howto
   rotate: false
-  xy: 223, 1
+  xy: 297, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+joystick
+  rotate: false
+  xy: 371, 1
+  size: 62, 109
+  orig: 62, 109
+  offset: 0, 0
+  index: -1
 magpie
   rotate: false
-  xy: 297, 1
+  xy: 1, 112
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 paper
   rotate: false
-  xy: 371, 1
+  xy: 75, 112
   size: 64, 73
   split: 32, 30, 38, 33
   pad: 25, 24, 28, 30
@@ -53,27 +67,40 @@ paper
   index: -1
 play
   rotate: false
-  xy: 1, 77
+  xy: 149, 112
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 quit
   rotate: false
-  xy: 1, 77
+  xy: 149, 112
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 settings
   rotate: false
-  xy: 75, 77
+  xy: 223, 112
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 
 pack2.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+large/title_roman_caps
+  rotate: false
+  xy: 1, 110
+  size: 640, 107
+  orig: 640, 107
+  offset: 0, 0
+  index: -1
+
+pack3.png
 size: 512,512
 format: RGBA8888
 filter: Nearest,Nearest
@@ -331,7 +358,7 @@ tiles/z00_tree_leafs_top
   offset: 0, 0
   index: -1
 
-pack3.png
+pack4.png
 size: 512,64
 format: RGBA8888
 filter: Nearest,Nearest

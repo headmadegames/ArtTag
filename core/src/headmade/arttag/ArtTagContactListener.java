@@ -72,7 +72,11 @@ public class ArtTagContactListener implements ContactListener {
 			Gdx.app.log(TAG, "Player touching " + artTag.currentArt);
 			// }
 		} else if (isExit(fixOther)) {
+			Gdx.app.log(TAG, "Start touching exit");
 			Player.instance.isTouchingExit = true;
+		} else if (isDoor(fixOther)) {
+			Gdx.app.log(TAG, "Start touching door");
+			Player.instance.isTouchingDoor = true;
 		} else if (isGuard(fixOther)) {
 			Gdx.app.log(TAG, "Game Over!");
 		}
@@ -91,7 +95,11 @@ public class ArtTagContactListener implements ContactListener {
 			Gdx.app.log(TAG, "Player no longer touching " + artTag.currentArt);
 			Player.instance.isTouchingArt = false;
 		} else if (isExit(fixOther)) {
+			Gdx.app.log(TAG, "End touching exit");
 			Player.instance.isTouchingExit = false;
+		} else if (isDoor(fixOther)) {
+			Gdx.app.log(TAG, "End touching door");
+			Player.instance.isTouchingDoor = false;
 		}
 	}
 
@@ -125,5 +133,9 @@ public class ArtTagContactListener implements ContactListener {
 
 	private boolean isExit(Fixture fix) {
 		return fix.getFilterData().categoryBits == ArtTag.CAT_EXIT;
+	}
+
+	private boolean isDoor(Fixture fix) {
+		return fix.getFilterData().categoryBits == ArtTag.CAT_DOOR;
 	}
 }

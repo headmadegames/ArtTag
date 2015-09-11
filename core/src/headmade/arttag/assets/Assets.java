@@ -10,6 +10,7 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -108,6 +109,11 @@ public class Assets implements Disposable, AssetErrorListener {
 		for (final String image : AssetTextures.ALL_IMAGES) {
 			assetsManager.load(image, Texture.class);
 		}
+
+		assetsManager.load(AssetMusic.gameOver, Music.class);
+		assetsManager.load(AssetMusic.intro, Music.class);
+		assetsManager.load(AssetMusic.normal, Music.class);
+		assetsManager.load(AssetMusic.spotted, Music.class);
 
 		assetsManager.load(AssetSounds.hit, Sound.class);
 		assetsManager.load(AssetSounds.jump, Sound.class);

@@ -10,17 +10,16 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class IntroScreen extends StageScreen {
 
 	private static final String	TAG	= IntroScreen.class.getName();
 
 	private final Table			rootTable;
+
+	private boolean				isStarted;
 
 	public IntroScreen(final DirectedGame game) {
 		super(game);
@@ -46,28 +45,30 @@ public class IntroScreen extends StageScreen {
 		super.preDraw(delta);
 
 		Assets.assetsManager.update();
-		if (MathUtils.isEqual(1, Assets.assetsManager.getProgress())) {
+		if (!isStarted && MathUtils.isEqual(1f, Assets.assetsManager.getProgress())) {
 			// done loading eh
 			Assets.instance.onFinishLoading();
 
-			final TextButton startButton = new TextButton("Start", Assets.instance.skin);
-			startButton.addListener(new InputListener() {
-
-				@Override
-				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					startGame();
-					return super.touchDown(event, x, y, pointer, button);
-				}
-			});
-
 			startGame();
+			isStarted = true;
+
+			// final TextButton startButton = new TextButton("Start", Assets.instance.skin);
+			// startButton.addListener(new InputListener() {
+			//
+			// @Override
+			// public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+			// startGame();
+			// return super.touchDown(event, x, y, pointer, button);
+			// }
+			// });
 		}
 	}
 
 	protected void startGame() {
 		Gdx.app.log(TAG, "Start Button clicked");
 
-		final ScreenTransition transition = ScreenTransitionFade.init(0.0f);
-		game.setScreen(new ArtTagScreen(game), transition);
+		final ScreenTransition transition = ScreenTransitionFade.init(1.0f);
+		// game.setScreen(new ArtTagScreen(game), transition);
+		game.setScreen(new MenuScreen(game), transition);
 	}
 }

@@ -54,10 +54,8 @@ public class Art {
 
 		if (RandomUtil.random() > 0.5) {
 			this.frame = Assets.instance.skin.get(AssetTextures.frame, NinePatch.class);
-			// frame.scale(ArtTag.UNIT_SCALE, ArtTag.UNIT_SCALE);
 		} else {
 			this.frame = Assets.instance.skin.get(AssetTextures.frame2, NinePatch.class);
-			// frame.scale(ArtTag.UNIT_SCALE / 2, ArtTag.UNIT_SCALE / 2);
 		}
 	}
 
@@ -100,17 +98,11 @@ public class Art {
 
 	@Override
 	public String toString() {
-		return "Art [name=" + name + ", artistName=" + artistName + ", year=" + year + ", assetName=" + assetName + "]";
+		return "Art [name=" + name + ", artistName=" + artistName + ", year=" + year + ", imageId=" + imageId + "]";
 	}
 
 	public String resultText() {
 		return "From the year " + year;
 	}
-
-	// public void drawFrame(SpriteBatch batch) {
-	// frame.draw(batch, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-	// // frame.draw(batch, rectangle.x / ArtTag.UNIT_SCALE, rectangle.y / ArtTag.UNIT_SCALE, rectangle.width / ArtTag.UNIT_SCALE,
-	// // rectangle.height / ArtTag.UNIT_SCALE);
-	// }
 
 }

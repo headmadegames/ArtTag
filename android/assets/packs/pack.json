@@ -1,5 +1,9 @@
 {
-com.badlogic.gdx.graphics.g2d.BitmapFont: { default-font: { file: fonts/default.fnt } },
+com.badlogic.gdx.graphics.g2d.BitmapFont: { 
+	default-font: { file: fonts/default.fnt },
+	typewriter-font: { file: fonts/typewriter.fnt },
+	scanner-font: { file: fonts/scanner.fnt }
+},
 com.badlogic.gdx.graphics.Color: {
 	green: { a: 1, b: 0, g: 1, r: 0 },
 	white: { a: 1, b: 1, g: 1, r: 1 },
@@ -45,7 +49,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: { font: default-font, fontColor: white },
-	jobDesc: { font: default-font, fontColor: black, background: paper }
+	jobDesc: { font: typewriter-font, fontColor: black, background: paper }
+	info: { font: default-font, fontColor: white, background: ui/default-round }
+	scanner: { font: scanner-font, fontColor: green, background: paper }
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: { selection: ui/selection, background: ui/textfield, font: default-font, fontColor: white, cursor: ui/cursor }
@@ -75,12 +81,12 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
 		downFontColor: red,
 		overFontColor: red,
 		disabledFontColor: black,
-		up: ui/default-round,
-		down: ui/default-round-down,
-		over: ui/default-round,
-		checked: ui/default-round,
-		checkedOver: ui/default-round,
-		disabled: ui/default-round
+		up: paper,
+		down: paper,
+		over: paper,
+		checked: paper,
+		checkedOver: paper,
+		disabled: paper
 	}
 	play: {
 		font: default-font,
@@ -88,12 +94,12 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
 		downFontColor: red,
 		overFontColor: red,
 		disabledFontColor: black,
-		up: ui/default-round,
-		down: ui/default-round-down,
-		over: ui/default-round,
-		checked: ui/default-round,
-		checkedOver: ui/default-round,
-		disabled: ui/default-round,
+		up: frame2_color,
+		down: frame2_color,
+		over: frame2_color,
+		checked: frame2_color,
+		checkedOver: frame2_color,
+		disabled: frame2_color,
 		imageUp: play,
 		imageOver: play
 	}
@@ -103,12 +109,12 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
 		downFontColor: red,
 		overFontColor: red,
 		disabledFontColor: black,
-		up: ui/default-round,
-		down: ui/default-round-down,
-		over: ui/default-round,
-		checked: ui/default-round,
-		checkedOver: ui/default-round,
-		disabled: ui/default-round,
+		up: paper,
+		down: paper,
+		over: paper,
+		checked: paper,
+		checkedOver: paper,
+		disabled: paper,
 		imageUp: quit,
 		imageOver: quit
 	}
@@ -118,12 +124,27 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
 		downFontColor: red,
 		overFontColor: red,
 		disabledFontColor: black,
-		up: ui/default-round,
-		down: ui/default-round-down,
-		over: ui/default-round,
-		checked: ui/default-round,
-		checkedOver: ui/default-round,
-		disabled: ui/default-round,
+		up: paper,
+		down: paper,
+		over: paper,
+		checked: paper,
+		checkedOver: paper,
+		disabled: paper,
+		imageUp: settings,
+		imageOver: settings
+	}
+	howto: {
+		font: default-font,
+		fontColor: white,
+		downFontColor: red,
+		overFontColor: red,
+		disabledFontColor: black,
+		up: paper,
+		down: paper,
+		over: paper,
+		checked: paper,
+		checkedOver: paper,
+		disabled: paper,
 		imageUp: settings,
 		imageOver: settings
 	}

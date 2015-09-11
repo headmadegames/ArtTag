@@ -26,13 +26,23 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 
 public class Player {
+	private static final String		MSG_DOOR						= "Press " + ArtTag.BUTTON_A + " Button to walk trough door.";
+	private static final String		MSG_EXIT						= "Do you really want to leave? \nConfirm with the " + ArtTag.BUTTON_A
+																			+ " Button.";
+	private static final String		MSG_SCAN						= "Is the image what our client is looking for?\nScan the image with ";
+	private static final String		MSG_SCAN_2						= "Scanning only reveals the age of the image.\nSo don't waste your "
+			+ "time scanning artwork that doesn't match the job description.";
+	private static final String		MSG_SCAN_3						= "Is this what our client is looking for?\nCancel with "
+																			+ ArtTag.BUTTON_B + " Button.\n" + "Take it with the "
+																			+ ArtTag.BUTTON_A + " Button.";
+
 	private static final String		TAG								= Player.class.getName();
 
-	public static final Player		instance						= new Player();											// Singleton
+	public static final Player		instance						= new Player();															// Singleton
 
 	// private static final String[] SCANNING_PROGRESS = { "/", "/\\\\\\", "/\\\\\\/", "/\\\\\\/\\\\\\", "/\\\\\\/\\\\\\/" };
-	private static final String[]	SCANNING_PROGRESS				= { "|          |", "|-         |", "|--        |", "|---       |",
-			"|----      |", "|-----     |", "|------    |", "|-------   |", "|--------  |", "|--------- |", "|----------|" };
+	private static final String[]	SCANNING_PROGRESS				= { "I          I", "IX         I", "IXX        I", "IXXX       I",
+			"IXXXX      I", "IXXXXX     I", "IXXXXXX    I", "IXXXXXXX   I", "IXXXXXXXX  I", "IXXXXXXXXX I", "IXXXXXXXXXXI" };
 
 	private static final float		STEP_VOLUME						= 0.3f;
 	private static final float		PLAYER_RADIUS					= 0.25f;
@@ -61,7 +71,10 @@ public class Player {
 	public boolean					isScanning;
 	public boolean					isTouchingArt;
 	public boolean					isTouchingExit;
+	public boolean					isTouchingDoor;
 	public boolean					isExitActivated;
+	public boolean					isSpotted;
+	public boolean					isCaught;
 
 	public float					imageAlpha;
 	public Array<Fixture>			artInView						= new Array<Fixture>();
@@ -79,6 +92,7 @@ public class Player {
 	private float					playerLightLength				= MAX_PLAYERLIGHT_LENGTH / 2;
 	private float					reactionTime					= MAX_REACTION_TIME;
 	private float					scanTime						= MAX_SCAN_TIME;
+	private int						carryCacity						= 2;
 	private int						scanProgress;
 
 	private final long				stepSoundId;
@@ -228,7 +242,7 @@ public class Player {
 		// is player moving?
 		if (!MathUtils.isEqual(targetMoveVec.len2(), 0f)) {
 			sound.setVolume(stepSoundId, isRunning ? STEP_VOLUME * 2 : STEP_VOLUME);
-			sound.setPitch(stepSoundId, runFactor);
+			sound.setPitch(stepSoundId, isRunning ? runFactor : 1f);
 			body.setTransform(body.getPosition(), body.getAngle() + rotByRad);
 		} else {
 			sound.setVolume(stepSoundId, 0f);
@@ -249,13 +263,22 @@ public class Player {
 						// Gdx.app.log(TAG, "distance " + distance + " alpha " + newAlpha);
 						imageAlpha = newAlpha;
 						artTag.currentArt = (Art) fixture.getBody().getUserData();
+						if (artTag.currentArt.isScanned) {
+							artTag.setInstruction(MSG_SCAN + ArtTag.BUTTON_A);
+						} else {
+							artTag.setInstruction(MSG_SCAN + ArtTag.BUTTON_A);
+						}
 					}
 				}
 			}
 		}
 
+		if (isTouchingDoor) {
+			artTag.setInstruction(MSG_DOOR);
+		}
+
 		if (isScanning) {
-			artTag.setInstruction("Scanning only reveals the age of the image.\nSo don't waste your time scanning artwork that doesn't match the job description.");
+			artTag.setInstruction(MSG_SCAN_2);
 			if (!isTouchingArt || !isLightOn) {
 				// abort scan
 				isScanning = false;
@@ -272,8 +295,7 @@ public class Player {
 					sumDeltaScan = 0f;
 					// TODO cancel scan sound
 					artTag.currentArt.isScanned = true;
-					artTag.setInstruction("Is this what our client is looking for?\nCancel with " + ArtTag.BUTTON_B + " Button.\n"
-							+ "Take it with the " + ArtTag.BUTTON_A + " Button.");
+					artTag.setInstruction(MSG_SCAN_3);
 				}
 			}
 		}
@@ -283,6 +305,10 @@ public class Player {
 
 	public void upgradeSpeed() {
 		maxMoveSpeed = MathUtils.clamp(1.2f * maxMoveSpeed, 0, MAX_SPEED_WALK);
+	}
+
+	public void carryCapacity() {
+		carryCacity++;
 	}
 
 	public void upgradeLightDistance() {
@@ -330,6 +356,6 @@ public class Player {
 	public void activateExit(ArtTagScreen artTagScreen) {
 		Gdx.app.log(TAG, "Activating exit");
 		isExitActivated = true;
-		artTagScreen.setInstruction("Do you really want to leave?\n" + "Confirm with the " + ArtTag.BUTTON_A + " Button.");
+		artTagScreen.setInstruction(MSG_EXIT);
 	}
 }

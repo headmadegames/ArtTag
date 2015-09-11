@@ -37,7 +37,7 @@ public class ArtTagInputController extends InputAdapter {
 		} else if (keycode == Keys.DOWN || keycode == Keys.S) {
 			Player.instance.isMoveDown = true;
 			return true;
-		} else if (keycode == Keys.ALT_LEFT) {
+		} else if (keycode == Keys.ALT_LEFT || keycode == Keys.ALT_RIGHT || keycode == Keys.Z || keycode == Keys.SPACE) {
 			// action button 1
 			if (ArtTag.TOGGLE_LIGHT) {
 				Player.instance.isLightOn = !Player.instance.isLightOn;
@@ -45,7 +45,8 @@ public class ArtTagInputController extends InputAdapter {
 				Player.instance.isLightOn = true;
 			}
 			return true;
-		} else if (keycode == Keys.CONTROL_LEFT) {
+		} else if (keycode == Keys.CONTROL_LEFT || keycode == Keys.CONTROL_RIGHT || keycode == Keys.X || keycode == Keys.SHIFT_LEFT
+				|| keycode == Keys.SHIFT_RIGHT) {
 			// action button 2
 			if (Player.instance.isAbleToSteal) {
 				Player.instance.steal(artTagScreen);
@@ -61,7 +62,11 @@ public class ArtTagInputController extends InputAdapter {
 				}
 				Player.instance.scan(artTagScreen);
 				return true;
+			} else if (Player.instance.isTouchingDoor) {
+				artTagScreen.newLevel();
+				return true;
 			}
+
 			// default action
 			Player.instance.isRunning = true;
 			return true;
@@ -110,7 +115,7 @@ public class ArtTagInputController extends InputAdapter {
 	public boolean scrolled(int amount) {
 		final OrthographicCamera cam = (OrthographicCamera) artTagScreen.camera;
 		cam.zoom += amount * 0.5f;
-		cam.zoom = MathUtils.clamp(cam.zoom, 0.5f, 10f);
+		cam.zoom = MathUtils.clamp(cam.zoom, 0.005f, 10f);
 		cam.update();
 		Gdx.app.log(TAG, "Zoom changed to " + cam.zoom);
 		return true;
@@ -130,14 +135,15 @@ public class ArtTagInputController extends InputAdapter {
 		} else if (keycode == Keys.DOWN || keycode == Keys.S) {
 			Player.instance.isMoveDown = false;
 			return true;
-		} else if (keycode == Keys.ALT_LEFT) {
+		} else if (keycode == Keys.ALT_LEFT || keycode == Keys.ALT_RIGHT || keycode == Keys.Z || keycode == Keys.SPACE) {
 			// action button 1
 			if (ArtTag.TOGGLE_LIGHT) {
 			} else {
 				Player.instance.isLightOn = false;
 			}
 			return true;
-		} else if (keycode == Keys.CONTROL_LEFT) {
+		} else if (keycode == Keys.CONTROL_LEFT || keycode == Keys.CONTROL_RIGHT || keycode == Keys.X || keycode == Keys.SHIFT_LEFT
+				|| keycode == Keys.SHIFT_RIGHT) {
 			// action button 2
 			Player.instance.isRunning = false;
 			return true;

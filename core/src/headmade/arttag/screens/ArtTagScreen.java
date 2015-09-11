@@ -13,6 +13,7 @@ import headmade.arttag.assets.Assets;
 import headmade.arttag.screens.transitions.ScreenTransitionFade;
 import headmade.arttag.service.TagService;
 import headmade.arttag.utils.MapUtils;
+import headmade.arttag.utils.RandomUtil;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 import box2dLight.Light;
 import box2dLight.RayHandler;
@@ -37,6 +38,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 public class ArtTagScreen extends StageScreen {
+
+	private static final String			TAG					= ArtTagScreen.class.getName();
 
 	private static final float			MIN_WORLD_WIDTH		= Gdx.graphics.getWidth() * ArtTag.UNIT_SCALE;
 	private static final float			MIN_WORLD_HEIGHT	= Gdx.graphics.getHeight() * ArtTag.UNIT_SCALE;
@@ -67,6 +70,7 @@ public class ArtTagScreen extends StageScreen {
 	public ArtTagScreen(DirectedGame game) {
 		super(game);// , new Stage(new ExtendViewport(MIN_WORLD_WIDTH, MIN_WORLD_HEIGHT), game.getBatch()));
 		camera = new OrthographicCamera(MIN_WORLD_WIDTH, MIN_WORLD_HEIGHT);
+		((OrthographicCamera) camera).zoom = 0.5f;
 
 		// perspectiveCam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		// perspectiveCam.position.set(300f, 3000f, 1000f);
@@ -97,19 +101,21 @@ public class ArtTagScreen extends StageScreen {
 		imageActor = new Image(Assets.assetsManager.get(AssetTextures.animal4, Texture.class));
 		jobDescActor = new Label(jobDescription.desc, Assets.instance.skin, "jobDesc");
 		jobDescActor.setWrap(true);
-		instructionsActor = new Label("Instructions", Assets.instance.skin, "jobDesc");
+		instructionsActor = new Label("Instructions", Assets.instance.skin, "info");
 		instructionsActor.setWrap(true);
-		resultActor = new Label("Result", Assets.instance.skin, "jobDesc");
+		instructionsActor.setVisible(false);
+		resultActor = new Label("Result", Assets.instance.skin, "scanner");
 		resultActor.setVisible(false);
 		resultActor.setAlignment(Align.center);
 
+		Gdx.app.log(TAG, "camera.viewportWidth " + camera.viewportWidth + " Gdx.graphics.getWidth(): " + Gdx.graphics.getWidth());
 		rootTable = new Table(Assets.instance.skin);
 		rootTable.setFillParent(true);
-		rootTable.add(jobDescActor).width(Gdx.graphics.getWidth() / 4).pad(10f);
+		rootTable.add(jobDescActor).pad(10f).width((camera.viewportWidth / ArtTag.UNIT_SCALE) / 4);
 		rootTable.add(imageActor).center().expand();
-		rootTable.add(instructionsActor).bottom().right().width(Gdx.graphics.getWidth() / 4).pad(10f);
+		rootTable.add(instructionsActor).top().right().pad(10f).width((camera.viewportWidth / ArtTag.UNIT_SCALE) / 4);
 		rootTable.row();
-		rootTable.add(resultActor).width(Gdx.graphics.getWidth() / 4).center().colspan(3);
+		rootTable.add(resultActor).center().colspan(3).width((camera.viewportWidth / ArtTag.UNIT_SCALE) / 4);
 
 		stage.addActor(rootTable);
 
@@ -244,6 +250,10 @@ public class ArtTagScreen extends StageScreen {
 
 	public void setResult(String text) {
 		resultActor.setText(text);
+	}
+
+	public void newLevel() {
+		MapUtils.loadMap(this, RandomUtil.random(AssetMaps.ALL_MAPS));
 	}
 
 	@Override
