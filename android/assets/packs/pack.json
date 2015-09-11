@@ -48,7 +48,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 	default-vertical: { background: ui/default-slider, knob: ui/default-round-large }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-	default: { font: default-font, fontColor: white },
+	default: { font: typewriter-font, fontColor: black },
 	jobDesc: { font: typewriter-font, fontColor: black, background: paper }
 	info: { font: default-font, fontColor: white, background: ui/default-round }
 	scanner: { font: scanner-font, fontColor: green, background: paper }

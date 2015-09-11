@@ -1,10 +1,14 @@
 package headmade.arttag.utils;
 
 import headmade.arttag.ArtTag;
+import headmade.arttag.Guard;
 import headmade.arttag.Player;
 import headmade.arttag.actors.Art;
 import headmade.arttag.assets.Assets;
 import headmade.arttag.screens.ArtTagScreen;
+
+import java.util.HashMap;
+
 import net.dermetfan.gdx.physics.box2d.Box2DMapObjectParser;
 import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 import box2dLight.ConeLight;
@@ -16,18 +20,19 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
@@ -40,6 +45,7 @@ public class MapUtils {
 
 	private static final String	OBJ_PLAYER		= "player";
 	private static final String	OBJ_GUARD		= "guard";
+	private static final String	OBJ_PATH		= "path";
 	private static final String	OBJ_DOOR		= "door";
 	private static final String	OBJ_EXIT		= "exit";
 	private static final String	OBJ_ART			= "art";
@@ -54,17 +60,17 @@ public class MapUtils {
 		Gdx.app.log(TAG, "Loading map " + mapName);
 		artTagScreen.map = Assets.assetsManager.get(mapName, TiledMap.class);
 		final Box2DMapObjectParser parser = new Box2DMapObjectParser(ArtTag.UNIT_SCALE);
-		final Box2DMapObjectParser.Listener.Adapter listener = new Box2DMapObjectParser.Listener.Adapter() {
-
-			@Override
-			public void created(Fixture fixture, MapObject mapObject) {
-
-				Gdx.app.log(TAG, "mapObject.getProperties()" + fixture.getFilterData().maskBits);
-				super.created(fixture, mapObject);
-			}
-
-		};
-		parser.setListener(listener);
+		// final Box2DMapObjectParser.Listener.Adapter listener = new Box2DMapObjectParser.Listener.Adapter() {
+		//
+		// @Override
+		// public void created(Fixture fixture, MapObject mapObject) {
+		//
+		// Gdx.app.log(TAG, "mapObject.getProperties()" + fixture.getFilterData().maskBits);
+		// super.created(fixture, mapObject);
+		// }
+		//
+		// };
+		// parser.setListener(listener);
 
 		parser.load(artTagScreen.world, artTagScreen.map);
 		if (null == artTagScreen.mapRenderer) {
@@ -83,8 +89,6 @@ public class MapUtils {
 				} else {
 					Gdx.app.error(TAG, OBJ_ART + " has to be a Rectangle");
 				}
-			} else if (OBJ_GUARD.equals(mapObject.getName())) {
-
 			} else if (OBJ_DOOR.equals(mapObject.getName())) {
 				createDoor(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
 			} else if (OBJ_EXIT.equals(mapObject.getName())) {
@@ -96,6 +100,43 @@ public class MapUtils {
 							(e.y + e.height / 2f) * parser.getUnitScale());
 				}
 			}
+		}
+
+		{ // guards
+			final HashMap<String, Guard> guards = new HashMap<String, Guard>();
+			final Array<MapObject> paths = new Array<MapObject>();
+			layer = artTagScreen.map.getLayers().get("guards");
+			for (final MapObject mapObject : layer.getObjects()) {
+				if (mapObject.getName() != null && mapObject.getName().contains(OBJ_GUARD)) {
+					final Ellipse e = ((EllipseMapObject) mapObject).getEllipse();
+					final Guard g = new Guard();
+					g.createBody(artTagScreen, (e.x + e.width / 2f) * parser.getUnitScale(), (e.y + e.height / 2f) * parser.getUnitScale());
+					guards.put(mapObject.getName().trim(), g);
+				} else if (mapObject.getName() != null && mapObject.getName().contains(OBJ_PATH)) {
+					paths.add(mapObject);
+				} else {
+					Gdx.app.log(TAG, "WTF");
+				}
+			}
+			for (final MapObject mapObject : paths) {
+				final PolylineMapObject pl = (PolylineMapObject) mapObject;
+				final String ownerName = pl.getProperties().get("owner", String.class);
+				final Guard g = guards.get(ownerName.trim());
+				Gdx.app.log(TAG, "guards " + guards.keySet());
+				if (g != null) {
+					final Polyline p = pl.getPolyline();
+					p.setScale(parser.getUnitScale(), parser.getUnitScale());
+					p.setPosition(p.getX() * parser.getUnitScale(), p.getY() * parser.getUnitScale());
+					final float[] vertices = p.getTransformedVertices();
+					for (int i = 0; i < vertices.length; i += 2) {
+						g.path.add(new Vector2(vertices[i], vertices[i + 1]));
+					}
+					artTagScreen.guards.add(g);
+				} else {
+					Gdx.app.log(TAG, "No guard for path " + ownerName);
+				}
+			}
+
 		}
 
 		layer = artTagScreen.map.getLayers().get("lights");

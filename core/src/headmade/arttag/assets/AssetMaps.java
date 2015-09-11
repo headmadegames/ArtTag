@@ -2,6 +2,12 @@ package headmade.arttag.assets;
 
 public class AssetMaps {
 
+
+
+
+
+
+
 	private static final String		TAG			= AssetMaps.class.getName();
 
 	public static final String		MAPS_PATH	= "maps/";
@@ -9,7 +15,7 @@ public class AssetMaps {
 	//	@formatter:off
 	//	@Asset(Sound.class)
 	public static final String
-	map1		= MAPS_PATH + "map1.tmx";
+	map1		= MAPS_PATH + "map5.tmx";
 
 	public static final String[]	ALL_MAPS	= { map1 };
 

@@ -23,8 +23,12 @@ public class ImageService {
 		final ArrayList<String> tempList = new ArrayList<String>();
 		tempList.addAll(allImages);
 		tempList.removeAll(imagesUsed);
-		String img = RandomUtil.random(tempList);
-		imagesUsed.add(img);
-		return img;
+		if (tempList.isEmpty()) {
+			return RandomUtil.random(allImages);
+		} else {
+			final String img = RandomUtil.random(tempList);
+			imagesUsed.add(img);
+			return img;
+		}
 	}
 }

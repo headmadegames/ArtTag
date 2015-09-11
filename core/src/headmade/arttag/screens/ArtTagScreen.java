@@ -4,13 +4,13 @@ import headmade.arttag.ArtTag;
 import headmade.arttag.ArtTagContactListener;
 import headmade.arttag.ArtTagInputController;
 import headmade.arttag.DirectedGame;
+import headmade.arttag.Guard;
 import headmade.arttag.JobDescription;
 import headmade.arttag.Player;
 import headmade.arttag.actors.Art;
 import headmade.arttag.assets.AssetMaps;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
-import headmade.arttag.screens.transitions.ScreenTransitionFade;
 import headmade.arttag.service.TagService;
 import headmade.arttag.utils.MapUtils;
 import headmade.arttag.utils.RandomUtil;
@@ -30,6 +30,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.DestructionListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -52,8 +53,9 @@ public class ArtTagScreen extends StageScreen {
 	public final World					world;
 	public final RayHandler				rayHandler;
 	public Array<Light>					lights				= new Array<Light>();
-	public JobDescription				jobDescription;
+	public Array<Guard>					guards				= new Array<Guard>();
 	public Array<Art>					artList				= new Array<Art>();
+	public JobDescription				jobDescription;
 	public Art							currentArt;
 	public boolean						debugEnabled;
 
@@ -83,6 +85,9 @@ public class ArtTagScreen extends StageScreen {
 
 		this.world = new World(new Vector2(0f, 0f), true);
 		world.setContactListener(contactListener);
+		world.setDestructionListener(new DestructionListener() {
+
+		});
 
 		/** BOX2D LIGHT STUFF BEGIN */
 		rayHandler = new RayHandler(world);
@@ -126,7 +131,13 @@ public class ArtTagScreen extends StageScreen {
 	public void render(float delta) {
 		world.step(ArtTag.TIME_STEP, ArtTag.VELOCITY_ITERS, ArtTag.POSITION_ITERS);
 
+		// isSpotted will be set by guards
+		Player.instance.isSpotted = false;
+		for (final Guard g : guards) {
+			g.update(this, delta);
+		}
 		Player.instance.update(this, delta);
+
 		// camera.position.x = camera.position.x * ArtTag.UNIT_SCALE;
 		// camera.position.y = camera.position.y * ArtTag.UNIT_SCALE;
 		if (Player.instance.body != null) {
@@ -241,7 +252,8 @@ public class ArtTagScreen extends StageScreen {
 		System.out.println(TagService.instance.tagVos);
 		Player.instance.body = null;
 		Player.instance.artInView.clear();
-		game.setScreen(new RatingScreen(game), ScreenTransitionFade.init(1f));
+		Gdx.app.exit();
+		// game.setScreen(new RatingScreen(game), ScreenTransitionFade.init(1f));
 	}
 
 	public void setInstruction(String text) {

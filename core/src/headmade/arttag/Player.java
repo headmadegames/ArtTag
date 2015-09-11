@@ -9,7 +9,6 @@ import headmade.arttag.service.TagService;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 import box2dLight.ConeLight;
-import box2dLight.PointLight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -29,7 +28,8 @@ public class Player {
 	private static final String		MSG_DOOR						= "Press " + ArtTag.BUTTON_A + " Button to walk trough door.";
 	private static final String		MSG_EXIT						= "Do you really want to leave? \nConfirm with the " + ArtTag.BUTTON_A
 																			+ " Button.";
-	private static final String		MSG_SCAN						= "Is the image what our client is looking for?\nScan the image with ";
+	private static final String		MSG_SCAN						= "Is the image what our client is looking for?\nScan it's age with "
+			+ ArtTag.BUTTON_A;
 	private static final String		MSG_SCAN_2						= "Scanning only reveals the age of the image.\nSo don't waste your "
 			+ "time scanning artwork that doesn't match the job description.";
 	private static final String		MSG_SCAN_3						= "Is this what our client is looking for?\nCancel with "
@@ -48,7 +48,7 @@ public class Player {
 	private static final float		PLAYER_RADIUS					= 0.25f;
 	private static final float		PLAYERLIGHT_CONE_LENGTH_FACTOR	= 0.7f;
 	private static final float		MAX_RUN_FACTOR					= 2f;
-	private static final float		MAX_SPEED_WALK					= 3f;
+	private static final float		MAX_SPEED_WALK					= 2.2f;
 	private static final float		MAX_PLAYERLIGHT_ANGLE			= 35f;
 	private static final float		MAX_PLAYERLIGHT_LENGTH			= 5f;
 	private static final float		MAX_PLAYERLIGHT_CONE_LENGTH		= MAX_PLAYERLIGHT_LENGTH * 0.7f;
@@ -76,6 +76,7 @@ public class Player {
 	public boolean					isSpotted;
 	public boolean					isCaught;
 
+	public int						cash;
 	public float					imageAlpha;
 	public Array<Fixture>			artInView						= new Array<Fixture>();
 	public Array<Art>				inventory						= new Array<Art>();
@@ -88,7 +89,7 @@ public class Player {
 	private final float				playerlightAngle				= MAX_PLAYERLIGHT_ANGLE;
 	// upgradable stats
 	private float					runFactor						= MAX_RUN_FACTOR * 0.75f;
-	private float					maxMoveSpeed					= MAX_SPEED_WALK;
+	private float					walkSpeed						= MAX_SPEED_WALK * 0.75f;
 	private float					playerLightLength				= MAX_PLAYERLIGHT_LENGTH / 2;
 	private float					reactionTime					= MAX_REACTION_TIME;
 	private float					scanTime						= MAX_SCAN_TIME;
@@ -173,25 +174,12 @@ public class Player {
 			// artTagScreen.lights.add(playerLight);
 
 			// PointLight
-			final PointLight light2 = new PointLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM);
-			light2.setPosition(body.getWorldCenter());
-			light2.setDistance(0.5f);
-			light2.attachToBody(body, 0f, 0f);
-			light2.setColor(0.8f, 0.8f, 1f, 0.5f);
-			light2.setSoftnessLength(0.5f);
-			artTagScreen.lights.add(light2);
-
-			// final PointLight light2 = new PointLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, null, LIGHT_DISTANCE / 2, x, y);
-			// light2.attachToBody(body, PLAYER_RADIUS / 1.5f, PLAYER_RADIUS * 0.9f);
+			// final PointLight light2 = new PointLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM);
+			// light2.setPosition(body.getWorldCenter());
+			// light2.setDistance(0.5f);
+			// light2.attachToBody(body, 0f, 0f);
+			// light2.setColor(0.8f, 0.8f, 1f, 0.5f);
 			// light2.setSoftnessLength(0.5f);
-			// light2.setColor(1f, 0.8f, 0.3f, 1f);
-			// artTagScreen.lights.add(light2);
-
-			// final ConeLight light2 = new ConeLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, null, LIGHT_DISTANCE, 0, 0, 0f, 90);//
-			// // MathUtils.random(30f, 50f));
-			// light2.attachToBody(Player.body, PLAYER_RADIUS / 2f, PLAYER_RADIUS * 0.9f, 90);
-			// light2.setSoftnessLength(0.5f);
-			// light2.setColor(1f, 0.9f, 0.7f, 1f);
 			// artTagScreen.lights.add(light2);
 		}
 	}
@@ -200,7 +188,8 @@ public class Player {
 		if (body == null) {
 			return;
 		}
-		final float moveSpeed = isRunning ? maxMoveSpeed * runFactor : maxMoveSpeed;
+
+		final float moveSpeed = isRunning ? walkSpeed * runFactor : walkSpeed;
 		final Vector2 oldMoveVec = targetMoveVec.cpy();
 		targetMoveVec.x = 0f;
 		targetMoveVec.y = 0f;
@@ -296,6 +285,7 @@ public class Player {
 					// TODO cancel scan sound
 					artTag.currentArt.isScanned = true;
 					artTag.setInstruction(MSG_SCAN_3);
+					TagService.instance.tag(artTag.currentArt, artTag.jobDescription);
 				}
 			}
 		}
@@ -304,7 +294,7 @@ public class Player {
 	}
 
 	public void upgradeSpeed() {
-		maxMoveSpeed = MathUtils.clamp(1.2f * maxMoveSpeed, 0, MAX_SPEED_WALK);
+		walkSpeed = MathUtils.clamp(1.2f * walkSpeed, 0, MAX_SPEED_WALK);
 	}
 
 	public void carryCapacity() {
@@ -350,7 +340,6 @@ public class Player {
 		// TODO play scan sound
 		isScanning = true;
 		sumDeltaScan = 0f;
-		TagService.instance.tag(artTagScreen.currentArt, artTagScreen.jobDescription);
 	}
 
 	public void activateExit(ArtTagScreen artTagScreen) {

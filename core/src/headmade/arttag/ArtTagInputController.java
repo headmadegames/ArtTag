@@ -113,11 +113,13 @@ public class ArtTagInputController extends InputAdapter {
 
 	@Override
 	public boolean scrolled(int amount) {
-		final OrthographicCamera cam = (OrthographicCamera) artTagScreen.camera;
-		cam.zoom += amount * 0.5f;
-		cam.zoom = MathUtils.clamp(cam.zoom, 0.005f, 10f);
-		cam.update();
-		Gdx.app.log(TAG, "Zoom changed to " + cam.zoom);
+		if (artTagScreen.debugEnabled) {
+			final OrthographicCamera cam = (OrthographicCamera) artTagScreen.camera;
+			cam.zoom += amount * 0.5f;
+			cam.zoom = MathUtils.clamp(cam.zoom, 0.5f, 10f);
+			cam.update();
+			Gdx.app.log(TAG, "Zoom changed to " + cam.zoom);
+		}
 		return true;
 	}
 

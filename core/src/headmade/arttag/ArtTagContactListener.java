@@ -32,6 +32,7 @@ public class ArtTagContactListener implements ContactListener {
 			handleBeginContactWithPlayerLight(contact, contact.getFixtureA(), contact.getFixtureB());
 		} else if (isPlayerLight(contact.getFixtureB())) {
 			handleBeginContactWithPlayerLight(contact, contact.getFixtureB(), contact.getFixtureA());
+
 		}
 	}
 
@@ -51,6 +52,12 @@ public class ArtTagContactListener implements ContactListener {
 		} else if (isPlayerLight(contact.getFixtureB())) {
 			handleEndContactWithPlayerLight(contact, contact.getFixtureB(), contact.getFixtureA());
 		}
+
+		if (isGuardLight(contact.getFixtureA())) {
+			handleEndContactWithGuardLight(contact, contact.getFixtureA(), contact.getFixtureB());
+		} else if (isGuardLight(contact.getFixtureB())) {
+			handleEndContactWithGuardLight(contact, contact.getFixtureB(), contact.getFixtureA());
+		}
 	}
 
 	@Override
@@ -61,6 +68,16 @@ public class ArtTagContactListener implements ContactListener {
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
+
+		// if (isPlayer(contact.getFixtureA())) {
+		// if (isGuard(contact.getFixtureB())) {
+		// Gdx.app.log(TAG, "Game Over!");
+		// }
+		// } else if (isPlayer(contact.getFixtureB())) {
+		// if (isGuard(contact.getFixtureA())) {
+		// Gdx.app.log(TAG, "Game Over!");
+		// }
+		// }
 		// Gdx.app.log(TAG, "Begin contact between " + contact.getFixtureA().getFilterData().categoryBits + " and "
 		// + contact.getFixtureB().getFilterData().categoryBits);
 	}
@@ -79,6 +96,8 @@ public class ArtTagContactListener implements ContactListener {
 			Player.instance.isTouchingDoor = true;
 		} else if (isGuard(fixOther)) {
 			Gdx.app.log(TAG, "Game Over!");
+		} else if (isGuardLight(fixOther)) {
+			handleBeginContactWithGuardLight(contact, fixOther, fixPlayer);
 		}
 	}
 
@@ -87,6 +106,17 @@ public class ArtTagContactListener implements ContactListener {
 			Player.instance.artInView.add(fixOther);
 		} else if (isGuard(fixOther)) {
 			Gdx.app.log(TAG, "Guard is in Playerlight!");
+			final Guard g = (Guard) fixOther.getBody().getUserData();
+			g.isTouchingPlayerLightCone = true;
+		}
+	}
+
+	private void handleBeginContactWithGuardLight(Contact contact, Fixture fixLight, Fixture fixOther) {
+		if (isPlayer(fixOther)) {
+			Gdx.app.log(TAG, "Guard sees player!");
+			final Guard g = (Guard) fixLight.getUserData();
+			g.playerInView.add(fixOther);
+			g.isAlert = true;
 		}
 	}
 
@@ -112,6 +142,17 @@ public class ArtTagContactListener implements ContactListener {
 			}
 		} else if (isGuard(fixOther)) {
 			Gdx.app.log(TAG, "Guard is no longer in Playerlight!");
+			final Guard g = (Guard) fixOther.getBody().getUserData();
+			g.isTouchingPlayerLightCone = false;
+		}
+	}
+
+	private void handleEndContactWithGuardLight(Contact contact, Fixture fixLight, Fixture fixOther) {
+		if (isPlayer(fixOther)) {
+			final Guard g = (Guard) fixLight.getUserData();
+			Gdx.app.log(TAG, "Guard can no longer see player!");
+			g.playerInView.removeValue(fixOther, true);
+			g.isAlert = false;
 		}
 	}
 
@@ -125,6 +166,10 @@ public class ArtTagContactListener implements ContactListener {
 
 	private boolean isPlayerLight(Fixture fix) {
 		return fix.getFilterData().categoryBits == ArtTag.CAT_PLAYERLIGHT;
+	}
+
+	private boolean isGuardLight(Fixture fix) {
+		return fix.getFilterData().categoryBits == ArtTag.CAT_GUARDLIGHT;
 	}
 
 	private boolean isGuard(Fixture fix) {

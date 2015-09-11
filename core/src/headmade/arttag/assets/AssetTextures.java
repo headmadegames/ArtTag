@@ -12,6 +12,8 @@ public class AssetTextures {
 
 
 
+
+
 	private static final String TAG = AssetTextures.class.getName();
 	private static final String IMAGES_FOLDER = "images/";
 
@@ -94,6 +96,7 @@ public class AssetTextures {
 	frame2 		= 	"frame2",
 	frame2Large = 	"frame2_color",
 	player 		= 	"magpie",
+	guard 		= 	"guard00",
 	button 		= 	"button",
 	joystick 	= 	"joystick",
 	artTreachery = 	"large/title_roman_caps";

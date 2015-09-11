@@ -1,0 +1,876 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-up" width="200" height="160" tilewidth="64" tileheight="64" nextobjectid="192">
+ <tileset firstgid="1" name="pack3" tilewidth="64" tileheight="64" spacing="2" margin="2" tilecount="49">
+  <image source="../packs/pack3.png" width="512" height="512"/>
+ </tileset>
+ <layer name="floor" width="200" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt3FGOmzAQANCscoJK+Wq37f1vWUVatNSysY2BDOQ9yR9ZGUikGcbGZm83AAAAAAAAAAAAAAAAAAAAAAAAAAAAAIjpb9LgnaTxX2tHXQsi+NnZjroWRPDobGuOXXMtiGAej6P58eOrteTH5+17LPUn+SxHiGLL/OipH79u32Op38ln+UEUrWOakfxY2+DVplhMxzalv+eOlRtc1RSP6dim9PfcsWvGV7X5B0Qwcl9PY7wU+7lr1eYfEFnLOCeN8VLsp+c0vuLs0vlHrvXEuvkHV5LOP3Jti/y4f7XcMfcdfx+M2PpZ1FJ+TNJ5i/wgqr3zIzdeK81bJvKFaEpzgtH8aBmvbVVPRuY0pWd05ks81e75LfP39DytrVZPen/DGqVndPKDp9o9v2X+np5nbSutq7T+hlatNUN+MDr/flTOdW84frSe9MZwa82QHxyVH73XzNWT0uepf61fT72QE6RysdGyVpg7finGWuNzaY/K/PPUv9avp17Ij/c2rdvN5WKjtlZYuze3aI3XvRtMnrmxtJ+kdY9J7d48medRrvWMe+QHe3vmx9L6RO8ek1rMzfMo19buc+xpa5+P8X5ye6L2vCdv3XdN22q9hes7Y35MSnWg5b2U3Pkgdc+0rSzF/Mft/3nHx0LfUryX6kDveynwCkv5UVuHn/cdfQ9rUnrGBq8QYaw27196xgavEC0/jK+Ibsv5x2Ohj/zgjPaafyytT6b9rX8Q1ZbjobXjK+sfRBUhP4yvuII0jlv3uffuZ4czSuO4dZ977352OIO17y/1tlqdgYjWvr/U22p1BiI4ql6M1hd4haPqxWh9gSNE+/8I6gmRRPv/COoJkbw6H2qifz+uLXr8Rf9+XNvZ4u1s35dzO1u8ne37AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjPoHCl6M/w==
+  </data>
+ </layer>
+ <layer name="walls" width="200" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt2kluxCAQAECiHLI8IHtm/v/L+GArDAmKke0MS5XUEjI+cIBuwA4BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBa3UTthykeM32xjynOc5yidvo8zG3owd0U9yvee5/ibY7PqJ0+D3MbRrbUDOCnpWakrBvIy60bANr2PMVruLxziu+gln4Y0dMUL+Hyzim+g1r6ASB2+0us6YPRnTPhTALfZ5A0nEkAANpS4/mmxjFRn/+YJzWeb2ocE/VZM0/2/t/qWrlbzaAFW3L3lv+H1QxaVJLXS9aHesHerjGnSvJ6yf/16gV7y82pdN3IzfQqnttL+6/5nq4buZlexXN7afc039U2yOtprQOMoOTuNX7XfogRlNy9xu8etR+y7iDPOQSgb2v2Qb5PMqo1+6CS75PWDuQ5dwCMZeu+yL6Knm3dF9lX0ZOj8r06Qg+OyvfqCC2qJa/XMg6I1ZLXaxkHY2slT7cyTvrSSp5uZZwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAt+QI/2xNW
+  </data>
+ </layer>
+ <layer name="deco" width="200" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt2UsKgzAQANB00e8B+tm1vf8hTcCASGhVtFLzHgyKhjCLgSGTEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2JrX2gnAgvYxDoX3b/+y54B9gRDOMS5rJwELe7cxZn1yjHHqfUt2bWS3GI/J2cG2XWPc104CfqTUa8b0HwD+26f51ZycP6hNrvkhte/8QS1Sf0l9Jtd8frr/AACYznwXAABYQn9m279PLK3pci4BAAAAYC5D5lFdZlPUSu0DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQFkDLvoD2Q==
+  </data>
+ </layer>
+ <layer name="roof" width="200" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt3VtuozAABdAo051k9r/GUaVGQh6/bbBpzpH4KIE4Uu4NGNL28QAAAAAAAAAAAAAAAAAAAAAAAAAAAAB+iz+JBXaUyusuC6zUk8FcflvXl8aBlfQD0lIZ/PuzpPYJ8x7b9rgu3P75KJ9X6QervTN4zOu318/yOKz/Cn4+5vf1+N9x3fOwf+trg1VS/Qi3KfWjdPzQD+4o1o/U4vjBp5k9Py/t82b+wR2M9uPM+xn6wWqrjh+1+8BKvfep9YNPNjub+sFv0prN1vuDx3Uz5yxwhdZclq7v5vqRevwZWQc7uPr8KnZ/JHUNuHf8Xmddn+O+Uu957/Xcnn7Ethnpx+i+OkKo9v0ubXfMTmyu0tKP1jyO3K/RDXLO6Ec4V+nNV+3xRD84S+49D69PlZ4ntc1oP3Za+Cyp9zyWzdLz1PRjl9zpAzXCPLznCM/IuphYj8Ltd8yhflASy0NrP3rHWZ3L1eOzv54cpH4ntzRO7Vhn5rNmPgNvYR5qsv/qHGeHfqTGg5gwGz3Zrx1nVj9mX3fSD1KuykaY0Vx+jz/nzodKY5TWHx+HmN7P4pXz695+pK5D6AdX27EfueeDK+kHpJUyV3s+VjP/KN2f1A92MzIniWU89njra/k28/dNoFfqPKd237P6kXocVtMPSGu9Pnzsx4zvuef6BqvNOn7Mph/sruXzfkTtcQh2cuXxIsffG2IHVx0vWrV83wtm2bUPJbn/KQSzjPRj9LrVyHzD/USuMJKpM/I4knf9YLae+3lnfl6PzDH0g9la+3E2/WAnuUy15PTMbO7wGvhMs/pxFf3gSne7X32318u9yRsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALv4B3rEDNg=
+  </data>
+ </layer>
+ <objectgroup color="#ffaaff" name="objects">
+  <object id="1" name="player" type="player" x="3300" y="2040" width="45" height="45">
+   <ellipse/>
+  </object>
+  <object id="11" name="exit" type="exit" x="3267" y="1938" width="56.334" height="87.5"/>
+  <object id="12" name="art" type="art" x="3648" y="1941" width="128" height="64"/>
+  <object id="17" name="art" type="art" x="3377" y="1945" width="31" height="52"/>
+  <object id="24" name="art" type="art" x="3664" y="2448" width="96" height="64"/>
+  <object id="25" name="art" type="art" x="3248" y="2448" width="48" height="64"/>
+  <object id="26" name="art" type="art" x="3360" y="2448" width="48" height="64"/>
+  <object id="35" name="art" type="art" x="3292.36" y="3149.55" width="72.6364" height="70.4545"/>
+  <object id="36" name="art" type="art" x="3162.68" y="3277.77" width="72.6364" height="70.4545"/>
+  <object id="37" name="art" type="art" x="3469.68" y="2886.77" width="169.318" height="84.2272"/>
+  <object id="38" name="art" type="art" x="2975.68" y="2892.77" width="72.6364" height="70.4545"/>
+  <object id="39" name="art" type="art" x="3200.68" y="2889.77" width="72.6364" height="70.4545"/>
+  <object id="57" name="art" type="art" x="2709" y="1935" width="85" height="79"/>
+  <object id="58" name="art" type="art" x="2897" y="1935" width="96" height="64"/>
+  <object id="59" name="art" type="art" x="2459" y="1930" width="70" height="85"/>
+  <object id="60" name="art" type="art" x="2265" y="1934" width="74" height="70"/>
+  <object id="61" name="art" type="art" x="2446" y="2322" width="96" height="64"/>
+  <object id="62" name="art" type="art" x="2711" y="2315" width="79" height="77"/>
+  <object id="74" name="art" type="art" x="2712.68" y="3274.77" width="144.318" height="76.2272"/>
+  <object id="76" name="art" type="art" x="5696" y="3474" width="128" height="64"/>
+  <object id="77" name="art" type="art" x="6080" y="3470" width="128" height="64"/>
+  <object id="78" name="art" type="art" x="5898" y="3792" width="104" height="58"/>
+  <object id="128" name="art" type="art" x="5566" y="3092" width="128" height="64"/>
+  <object id="129" name="art" type="art" x="5332" y="3092" width="88" height="66"/>
+  <object id="130" name="art" type="art" x="6206" y="3088" width="128" height="64"/>
+  <object id="131" name="art" type="art" x="6464" y="3094" width="128" height="64"/>
+  <object id="132" name="art" type="art" x="6590" y="3352" width="128" height="64"/>
+  <object id="133" name="art" type="art" x="6464" y="3598" width="128" height="64"/>
+  <object id="134" name="art" type="art" x="6590" y="3864" width="128" height="64"/>
+  <object id="135" name="art" type="art" x="6590" y="4178" width="128" height="64"/>
+  <object id="136" name="art" type="art" x="6846" y="4178" width="128" height="64"/>
+  <object id="137" name="art" type="art" x="7106" y="4310" width="128" height="64"/>
+  <object id="138" name="art" type="art" x="7364" y="4430" width="128" height="64"/>
+  <object id="139" name="art" type="art" x="5440" y="4050" width="128" height="64"/>
+  <object id="140" name="art" type="art" x="6204" y="4050" width="128" height="64"/>
+  <object id="141" name="art" type="art" x="5708" y="4053" width="104" height="58"/>
+  <object id="142" name="art" type="art" x="5964" y="4053" width="104" height="58"/>
+  <object id="143" name="art" type="art" x="5332" y="3542" width="88" height="66"/>
+  <object id="144" name="art" type="art" x="4946" y="4175" width="88" height="66"/>
+  <object id="145" name="art" type="art" x="4436" y="4431" width="88" height="66"/>
+  <object id="146" name="art" type="art" x="4670" y="4312" width="128" height="64"/>
+  <object id="147" name="art" type="art" x="5323" y="3784" width="104" height="84"/>
+  <object id="148" name="art" type="art" x="4648" y="3532" width="104" height="84"/>
+  <object id="149" name="art" type="art" x="4634" y="3780" width="140" height="96"/>
+  <object id="150" name="art" type="art" x="5012" y="3541" width="88" height="66"/>
+  <object id="151" name="art" type="art" x="4552" y="2700" width="104" height="84"/>
+  <object id="152" name="art" type="art" x="4792" y="2820" width="140" height="96"/>
+  <object id="153" name="art" type="art" x="5076" y="2961" width="88" height="66"/>
+  <object id="154" name="art" type="art" x="3834" y="3204" width="140" height="96"/>
+  <object id="155" name="art" type="art" x="4308.48" y="3533.67" width="88" height="66"/>
+  <object id="156" name="art" type="art" x="4506" y="3269.33" width="74.6667" height="92"/>
+  <object id="157" name="art" type="art" x="4824.67" y="3269.33" width="74.6667" height="91.1667"/>
+  <object id="158" name="art" type="art" x="4632" y="3273.33" width="142.667" height="83.1667"/>
+  <object id="174" name="art" type="art" x="4236" y="2384" width="96" height="64"/>
+  <object id="175" name="art" type="art" x="4490" y="2384" width="48" height="64"/>
+  <object id="176" name="art" type="art" x="4488" y="2128" width="48" height="64"/>
+  <object id="177" name="art" type="art" x="4230" y="2126" width="120" height="64"/>
+  <object id="178" name="art" type="art" x="4069" y="1939" width="112" height="66"/>
+  <object id="179" name="art" type="art" x="4433" y="1932" width="158" height="72"/>
+  <object id="180" name="art" type="art" x="4286" y="1938" width="48" height="64"/>
+ </objectgroup>
+ <objectgroup color="#ff0000" name="guards">
+  <object id="15" name="path" type="path" x="3301" y="2782">
+   <properties>
+    <property name="owner" value="guard1"/>
+   </properties>
+   <polyline points="0,0 -445,0 -445,284 -256,284 -256,641 63,641 195,511 196,295 484,292 484,1"/>
+  </object>
+  <object id="16" name="guard1" type="guard" x="3338" y="2758.5" width="45" height="45">
+   <ellipse/>
+  </object>
+  <object id="63" name="guard2" type="guard" x="2600.86" y="2036.65" width="45" height="45">
+   <ellipse/>
+  </object>
+  <object id="66" name="path" type="path" x="2784" y="2121.33">
+   <properties>
+    <property name="owner" value="guard2"/>
+   </properties>
+   <polyline points="-484,-42.6667 -482.333,345.333 -147.667,340 -97.3333,629.333 -64,338.333 192.333,338.333 189.667,-43.6667 -4,-45 -154.667,105.333 -333.333,-40.3333"/>
+  </object>
+  <object id="98" name="guard3" type="guard" x="5719.92" y="3629.02" width="45" height="45">
+   <ellipse/>
+  </object>
+  <object id="100" name="path" type="path" x="5696.97" y="3639.39">
+   <properties>
+    <property name="owner" value="guard3"/>
+   </properties>
+   <polyline points="0,0 -9.09091,284.848 518.182,284.848 509.091,-12.1212 254.545,-3.0303 254.545,-339.394 -518.182,-330.303 -518.182,645.455 627.273,645.455 765.03,515.606 766.03,98.6061 1052.03,105.606 1049.03,-151.394 777.03,-151.394 763.03,-327.394 265.03,-341.394 243.03,24.6061"/>
+  </object>
+  <object id="101" name=" guard5" type="guard" x="5935.5" y="3243.5" width="45" height="45">
+   <ellipse/>
+  </object>
+  <object id="102" name="path" type="path" x="6006" y="3272">
+   <properties>
+    <property name="owner" value="guard5"/>
+   </properties>
+   <polyline points="0,0 404,0 474,210 734,216 734,476 462,476 462,1008 896,1064 1064,1216 806,1042 -818,1034 -1148,1202 -804,998 -838,460 -972,432 -838,404 -818,12"/>
+  </object>
+  <object id="160" name=" guard4" type="guard" x="4459.5" y="3653.5" width="45" height="45">
+   <ellipse/>
+  </object>
+  <object id="161" name="path" type="path" x="4480" y="3428">
+   <properties>
+    <property name="owner" value="guard4"/>
+   </properties>
+   <polyline points="0,0 448,0 442,504 0,504 6,260 434,266 440,-6"/>
+  </object>
+  <object id="165" name=" guard6" type="guard" x="4580.53" y="2901.74" width="45" height="45">
+   <ellipse/>
+  </object>
+  <object id="166" name="path" type="path" x="4157.58" y="2912.12">
+   <properties>
+    <property name="owner" value="guard6"/>
+   </properties>
+   <polyline points="0,0 0,445.455 -584.848,484.848 9.09091,539.394 51.5152,781.818 996.97,781.818 996.97,212.121 327.273,9.09091"/>
+  </object>
+  <object id="171" name=" guard7" type="guard" x="4337.5" y="2533.5" width="45" height="45">
+   <ellipse/>
+  </object>
+  <object id="172" name="path" type="path" x="4540" y="2562">
+   <properties>
+    <property name="owner" value="guard7"/>
+   </properties>
+   <polyline points="0,0 -476,0 -476,-512 -434,-512 -504,-512 -504,-288 -742,-296 -280,-294 -496,-288 -498,82"/>
+  </object>
+  <object id="185" name="path" type="path" x="3633.33" y="3357.58">
+   <properties>
+    <property name="owner" value="guard9"/>
+   </properties>
+   <polyline points="0,0 127.273,-351.515 127.273,-712.121 -118.182,-796.97 -106.061,-1166.67 139.394,-1157.58 190.909,-1093.94 436.364,-1093.94 445.455,-478.788 730.303,-469.697 509.091,-415.152 581.818,103.03"/>
+  </object>
+  <object id="186" name=" guard9" type="guard" x="4129.02" y="3395.68" width="45" height="45">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup color="#ffff00" name="lights">
+  <object id="27" name="light" type="point" x="3248" y="1984" width="92.5" height="92.5">
+   <properties>
+    <property name="color" value="44AA5555"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="28" name="light" type="point" x="3200" y="1824" width="640" height="640">
+   <properties>
+    <property name="color" value="99776688"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="67" name="light" type="point" x="2409.24" y="1807.27" width="429.091" height="429.091">
+   <properties>
+    <property name="color" value="99776688"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="188" name="light" type="point" x="4030" y="3290" width="640" height="640">
+   <properties>
+    <property name="color" value="99776688"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="189" name="light" type="point" x="2744" y="2662" width="868" height="868">
+   <properties>
+    <property name="color" value="99776688"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="190" name="light" type="point" x="4725.45" y="3467.88" width="1326.06" height="1326.06">
+   <properties>
+    <property name="color" value="99776688"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="191" name="light" type="point" x="6234.55" y="3892.12" width="640" height="640">
+   <properties>
+    <property name="color" value="99776688"/>
+   </properties>
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup color="#00aa00" name="physics">
+  <object id="5" name="level" type="body" x="3418.12" y="1622.82">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+   <polygon points="0,0 127.273,-109.091 136.364,136.364"/>
+  </object>
+  <object id="6" name="levelStatics" type="fixture" x="2184" y="1880" width="1679" height="144">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="7" name="levelStatics" type="fixture" x="3840" y="2304" width="128" height="871.758">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="20" name="levelStatics" type="fixture" x="3004" y="1888" width="196" height="779">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="21" name="levelStatics" type="fixture" x="3840" y="1418" width="128" height="800">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="22" name="levelStatics" type="fixture" x="3200" y="2394" width="272" height="144">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="23" name="levelStatics" type="fixture" x="3568" y="2393" width="272" height="144">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="29" name="levelStatics" type="fixture" x="3456" y="1872" width="128" height="281">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="31" name="levelStatics" type="fixture" x="3659.33" y="2131.33" width="39.3333" height="39.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="32" name="levelStatics" type="fixture" x="3660.33" y="2259.67" width="39.3333" height="39.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="33" name="levelStatics" type="fixture" x="3339.67" y="2259" width="39.3333" height="39.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="34" name="levelStatics" type="fixture" x="3339.67" y="2131.33" width="39.3333" height="39.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="41" name="levelStatics" type="fixture" x="3659.33" y="2708.33" width="39.3333" height="39.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="42" name="levelStatics" type="fixture" x="3338.33" y="2708.33" width="39.3333" height="39.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="43" name="levelStatics" type="fixture" x="3467.33" y="3348" width="39.3333" height="39.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="44" name="levelStatics" type="fixture" x="3139.67" y="3068" width="59" height="59">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="45" name="levelStatics" type="fixture" x="2751" y="2522" width="272" height="144">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="46" name="levelStatics" type="fixture" x="2945" y="2842" width="765" height="144">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="47" name="levelStatics" type="fixture" x="3328.5" y="2844" width="77.5" height="397">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="48" name="levelStatics" type="fixture" x="3119.5" y="3121" width="157.5" height="245">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="49" name="levelStatics" type="fixture" x="3231.25" y="3121" width="157.5" height="119.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="50" name="levelStatics" type="fixture" x="2068.67" y="2524" width="554.667" height="380">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="51" name="levelStatics" type="fixture" x="2045" y="1870.5" width="196" height="779">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="52" name="levelStatics" type="fixture" x="2350" y="2269.33" width="544" height="144">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="53" name="levelStatics" type="fixture" x="2350" y="2110" width="146" height="236">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="54" name="levelStatics" type="fixture" x="2750" y="2113" width="146" height="236">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="55" name="levelStatics" type="fixture" x="2569.33" y="2130.33" width="39.3333" height="39.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="56" name="levelStatics" type="fixture" x="2635.33" y="2130.33" width="39.3333" height="39.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="69" name="levelStatics" type="fixture" x="2197.67" y="2816" width="554.667" height="380">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="70" name="levelStatics" type="fixture" x="2389.67" y="3174" width="568.334" height="194">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="71" name="levelStatics" type="fixture" x="2133.67" y="3304" width="554.667" height="380">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="72" name="levelStatics" type="fixture" x="2532.67" y="3553" width="1551.33" height="380">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="73" name="levelStatics" type="fixture" x="2890.33" y="3412.33" width="39.3333" height="39.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="79" name="levelStatics" type="fixture" x="5505" y="3434" width="128" height="704">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="80" name="levelStatics" type="fixture" x="6273" y="3435" width="128" height="703">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="81" name="levelStatics" type="fixture" x="6003" y="3435" width="285" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="82" name="levelStatics" type="fixture" x="5619.5" y="3433.5" width="285" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="83" name="levelStatics" type="fixture" x="5807" y="3750" width="287.5" height="131.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="84" name="levelStatics" type="fixture" x="5359" y="4008.5" width="1056" height="130.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="85" name="levelStatics" type="fixture" x="6510.5" y="3307.17" width="285" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="86" name="levelStatics" type="fixture" x="6510.83" y="3819.17" width="285" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="87" name="levelStatics" type="fixture" x="6385.83" y="3563.17" width="285" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="88" name="levelStatics" type="fixture" x="6509.83" y="4139.17" width="551.167" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="89" name="levelStatics" type="fixture" x="7021.42" y="4265.5" width="551.167" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="90" name="levelStatics" type="fixture" x="7297.42" y="4391.5" width="551.167" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="91" name="levelStatics" type="fixture" x="7088.42" y="4766.5" width="551.167" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="92" name="levelStatics" type="fixture" x="6616.42" y="4641.5" width="551.167" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="93" name="levelStatics" type="fixture" x="6423.42" y="4512.5" width="551.167" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="94" name="levelStatics" type="fixture" x="5248" y="4385.5" width="1599.58" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="95" name="levelStatics" type="fixture" x="7556.42" y="4524.5" width="343.583" height="311.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="96" name="levelStatics" type="fixture" x="4332" y="4001.33" width="803.584" height="263.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="97" name="levelStatics" type="fixture" x="3759" y="3164.5" width="288.5" height="142">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="103" name="levelStatics" type="fixture" x="6785.02" y="3308.12" width="318.008" height="936.227">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="105" name="levelStatics" type="fixture" x="6015.14" y="3051.62" width="655.864" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="106" name="levelStatics" type="fixture" x="5230.07" y="3048.5" width="788.599" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="107" name="levelStatics" type="fixture" x="4978.07" y="2918.5" width="655.864" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="108" name="levelStatics" type="fixture" x="4716.07" y="2796.5" width="655.864" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="109" name="levelStatics" type="fixture" x="4288.07" y="2664.5" width="655.864" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="110" name="levelStatics" type="fixture" x="4367.07" y="3246.5" width="751.932" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="111" name="levelStatics" type="fixture" x="4544.4" y="3497.83" width="318.599" height="126.167">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="112" name="levelStatics" type="fixture" x="4543.4" y="3753.83" width="318.599" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="113" name="levelStatics" type="fixture" x="5234.03" y="3753.83" width="318.599" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="114" name="levelStatics" type="fixture" x="5231.37" y="3499.17" width="318.599" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="115" name="levelStatics" type="fixture" x="4990.67" y="3321.33" width="126.667" height="304">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="116" name="levelStatics" type="fixture" x="4990.67" y="3774.67" width="144" height="321.333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="117" name="levelStatics" type="fixture" x="3610.33" y="3819.77" width="803.584" height="263.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="118" name="levelStatics" type="fixture" x="4284.64" y="2980" width="127.481" height="647.273">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="119" name="levelStatics" type="fixture" x="4403.03" y="3115.29" width="458.303" height="127">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="120" name="levelStatics" type="fixture" x="4356" y="2980" width="126" height="196">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="121" name="levelStatics" type="fixture" x="4070.21" y="4126.25" width="803.584" height="263.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="122" name="levelStatics" type="fixture" x="3818.21" y="4254.25" width="803.584" height="263.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="123" name="levelStatics" type="fixture" x="4132.21" y="4766.25" width="803.584" height="263.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="124" name="levelStatics" type="fixture" x="3546.21" y="4506.25" width="803.584" height="263.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="125" name="levelStatics" type="fixture" x="4738.21" y="4638.25" width="803.584" height="263.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="126" name="levelStatics" type="fixture" x="4992.21" y="4514.25" width="803.584" height="263.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="127" name="levelStatics" type="fixture" x="6659.5" y="3006" width="285" height="301.5">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="159" name="levelStatics" type="fixture" x="4156" y="2664" width="324" height="194">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="169" name="levelStatics" type="fixture" x="3921.03" y="1223.18" width="867.03" height="800">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="170" name="levelStatics" type="fixture" x="4666.49" y="1896.97" width="867.03" height="800">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="181" name="levelStatics" type="fixture" x="4141.67" y="2334.67" width="464.667" height="139.667">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="182" name="levelStatics" type="fixture" x="4142" y="2079.5" width="464.667" height="139.667">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="187" name="levelStatics" type="fixture" x="4039" y="2957.67" width="46.3333" height="46.3333">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

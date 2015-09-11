@@ -168,10 +168,10 @@ public class Assets implements Disposable, AssetErrorListener {
 
 		NinePatch ninepatch = skin.get(AssetTextures.frame, NinePatch.class);
 		ninepatch.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		ninepatch.scale(ArtTag.UNIT_SCALE, ArtTag.UNIT_SCALE);
+		ninepatch.scale(ArtTag.UNIT_SCALE * 0.75f, ArtTag.UNIT_SCALE * 0.75f);
 
 		ninepatch = skin.get(AssetTextures.frame2, NinePatch.class);
 		ninepatch.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		ninepatch.scale(ArtTag.UNIT_SCALE / 2, ArtTag.UNIT_SCALE / 2);
+		ninepatch.scale(ArtTag.UNIT_SCALE / 3, ArtTag.UNIT_SCALE / 3);
 	}
 }
