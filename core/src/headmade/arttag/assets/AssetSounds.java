@@ -8,9 +8,9 @@ public class AssetSounds {
 	//	@formatter:off
 	//	@Asset(Sound.class)
 	public static final String
-	jump		= SOUNDS_PATH + "jump.wav",
+	scan		= SOUNDS_PATH + "scan.wav",
 	step 		= SOUNDS_PATH + "step1.wav",
-	hit			= SOUNDS_PATH + "hit.wav";
+	steal			= SOUNDS_PATH + "steal.wav";
 
 
 }

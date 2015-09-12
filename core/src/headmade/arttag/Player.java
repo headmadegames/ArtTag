@@ -27,14 +27,14 @@ import com.badlogic.gdx.utils.Array;
 public class Player {
 	private static final String		MSG_DOOR						= "Press " + ArtTag.BUTTON_A + " Button to walk trough door.";
 	private static final String		MSG_EXIT						= "Do you really want to leave? \nConfirm with the " + ArtTag.BUTTON_A
-																			+ " Button.";
+			+ " Button.";
 	private static final String		MSG_SCAN						= "Is the image what our client is looking for?\nScan it's age with "
-			+ ArtTag.BUTTON_A;
+																			+ ArtTag.BUTTON_A;
 	private static final String		MSG_SCAN_2						= "Scanning only reveals the age of the image.\nSo don't waste your "
-			+ "time scanning artwork that doesn't match the job description.";
+																			+ "time scanning artwork that doesn't match the job description.";
 	private static final String		MSG_SCAN_3						= "Is this what our client is looking for?\nCancel with "
-																			+ ArtTag.BUTTON_B + " Button.\n" + "Take it with the "
-																			+ ArtTag.BUTTON_A + " Button.";
+			+ ArtTag.BUTTON_B + " Button.\n" + "Take it with the "
+			+ ArtTag.BUTTON_A + " Button.";
 
 	private static final String		TAG								= Player.class.getName();
 
@@ -42,7 +42,7 @@ public class Player {
 
 	// private static final String[] SCANNING_PROGRESS = { "/", "/\\\\\\", "/\\\\\\/", "/\\\\\\/\\\\\\", "/\\\\\\/\\\\\\/" };
 	private static final String[]	SCANNING_PROGRESS				= { "I          I", "IX         I", "IXX        I", "IXXX       I",
-			"IXXXX      I", "IXXXXX     I", "IXXXXXX    I", "IXXXXXXX   I", "IXXXXXXXX  I", "IXXXXXXXXX I", "IXXXXXXXXXXI" };
+		"IXXXX      I", "IXXXXX     I", "IXXXXXX    I", "IXXXXXXX   I", "IXXXXXXXX  I", "IXXXXXXXXX I", "IXXXXXXXXXXI" };
 
 	private static final float		STEP_VOLUME						= 0.3f;
 	private static final float		PLAYER_RADIUS					= 0.25f;
@@ -330,6 +330,7 @@ public class Player {
 		artTagScreen.world.destroyBody(artTagScreen.currentArt.artTrigger);
 		artTagScreen.currentArt = null;
 		isAbleToSteal = false;
+		Assets.assetsManager.get(AssetSounds.steal, Sound.class).play(0.3f);
 	}
 
 	public void scan(ArtTagScreen artTagScreen) {
@@ -340,6 +341,7 @@ public class Player {
 		// TODO play scan sound
 		isScanning = true;
 		sumDeltaScan = 0f;
+		Assets.assetsManager.get(AssetSounds.scan, Sound.class).play(0.3f);
 	}
 
 	public void activateExit(ArtTagScreen artTagScreen) {

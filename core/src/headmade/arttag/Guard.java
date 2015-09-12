@@ -32,7 +32,7 @@ public class Guard {
 	private static final float		MAX_RUN_FACTOR				= 2f;
 	private static final float		MAX_SPEED_WALK				= 1f;
 	private static final float		MAX_LIGHT_ANGLE				= 35f;
-	private static final float		MAX_LIGHT_LENGTH			= 10f;
+	private static final float		MAX_LIGHT_LENGTH			= 8f;
 	private static final float		MAX_LIGHT_CONE_LENGTH		= MAX_LIGHT_LENGTH * 0.7f;
 	private static final float		MAX_REACTION_TIME			= 0.1f;
 	private static final float		MAX_ROTATION_SPEED			= 1f;
@@ -272,7 +272,12 @@ public class Guard {
 
 		// is moving?
 		if (!MathUtils.isEqual(targetMoveVec.len2(), 0f)) {
-			sound.setVolume(stepSoundId, isRunning ? STEP_VOLUME * 2 : STEP_VOLUME);
+			final float dist = body.getPosition().dst(Player.instance.body.getPosition());
+			float volume = isRunning ? STEP_VOLUME * 2 : STEP_VOLUME;
+			if (dist > 1) {
+				volume = volume / dist;
+			}
+			sound.setVolume(stepSoundId, volume);
 			sound.setPitch(stepSoundId, isRunning ? runFactor : 1f);
 			body.setTransform(body.getPosition(), body.getAngle() + rotByRad);
 		} else {

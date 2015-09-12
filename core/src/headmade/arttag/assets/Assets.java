@@ -115,8 +115,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		assetsManager.load(AssetMusic.normal, Music.class);
 		assetsManager.load(AssetMusic.spotted, Music.class);
 
-		assetsManager.load(AssetSounds.hit, Sound.class);
-		assetsManager.load(AssetSounds.jump, Sound.class);
+		assetsManager.load(AssetSounds.steal, Sound.class);
+		assetsManager.load(AssetSounds.scan, Sound.class);
 		assetsManager.load(AssetSounds.step, Sound.class);
 
 		assetsManager.load(AssetTextures.skin, Skin.class, AssetTextures.skinParameter);

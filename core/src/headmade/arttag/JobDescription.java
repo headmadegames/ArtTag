@@ -29,7 +29,8 @@ public class JobDescription {
 		// artArtist = RandomService.instance.generateArtistName();
 		// } else {
 		artYearFrom = RandomService.instance.generateYear();
-		artYearRange = RandomService.instance.generateYearRange(artYearFrom, 10 + Math.round(RandomUtil.random(100)));
+		artYearRange = 40;
+		// artYearRange = RandomService.instance.generateYearRange(artYearFrom, 40);
 		// }
 		desc = RandomService.instance.generateJobDescription(this);
 	}

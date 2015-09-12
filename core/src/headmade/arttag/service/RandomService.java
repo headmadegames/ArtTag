@@ -3,8 +3,6 @@ package headmade.arttag.service;
 import headmade.arttag.JobDescription;
 import headmade.arttag.utils.RandomUtil;
 
-import java.util.Calendar;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 
@@ -72,11 +70,11 @@ public class RandomService {
 	}
 
 	public int generateYearRange(int minYear, int range) {
-		return MathUtils.clamp(RandomUtil.random(range), 1, Calendar.getInstance().get(Calendar.YEAR) - minYear);
+		return MathUtils.clamp(RandomUtil.random(range), 1, 2015 - minYear);
 	}
 
 	public int generateYear() {
-		return Math.round(Calendar.getInstance().get(Calendar.YEAR) - 10 - 500 * RandomUtil.random());
+		return Math.round(2015 - 50 - 200 * RandomUtil.random());
 	}
 
 	public String generateJobDescription(JobDescription job) {

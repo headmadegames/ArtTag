@@ -209,7 +209,7 @@ public class MenuScreen extends StageScreen {
 	}
 
 	protected void play() {
-		final ScreenTransition transition = ScreenTransitionFade.init(1f);
+		final ScreenTransition transition = ScreenTransitionFade.init(0.3f);
 		// game.setScreen(new MenuScreen(game), transition);
 		game.setScreen(new ArtTagScreen(game), transition);
 	}
