@@ -272,14 +272,16 @@ public class Guard {
 
 		// is moving?
 		if (!MathUtils.isEqual(targetMoveVec.len2(), 0f)) {
-			final float dist = body.getPosition().dst(Player.instance.body.getPosition());
-			float volume = isRunning ? STEP_VOLUME * 2 : STEP_VOLUME;
-			if (dist > 1) {
-				volume = volume / dist;
+			if (Player.instance.body != null) {
+				final float dist = body.getPosition().dst(Player.instance.body.getPosition());
+				float volume = isRunning ? STEP_VOLUME * 2 : STEP_VOLUME;
+				if (dist > 1) {
+					volume = volume / dist;
+				}
+				sound.setVolume(stepSoundId, volume);
+				sound.setPitch(stepSoundId, isRunning ? runFactor : 1f);
+				body.setTransform(body.getPosition(), body.getAngle() + rotByRad);
 			}
-			sound.setVolume(stepSoundId, volume);
-			sound.setPitch(stepSoundId, isRunning ? runFactor : 1f);
-			body.setTransform(body.getPosition(), body.getAngle() + rotByRad);
 		} else {
 			sound.setVolume(stepSoundId, 0f);
 			sound.setPitch(stepSoundId, 1f);

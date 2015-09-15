@@ -11,6 +11,7 @@ import headmade.arttag.actors.Art;
 import headmade.arttag.assets.AssetMaps;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
+import headmade.arttag.screens.transitions.ScreenTransitionFade;
 import headmade.arttag.service.TagService;
 import headmade.arttag.utils.MapUtils;
 import headmade.arttag.utils.RandomUtil;
@@ -252,8 +253,8 @@ public class ArtTagScreen extends StageScreen {
 		System.out.println(TagService.instance.tagVos);
 		Player.instance.body = null;
 		Player.instance.artInView.clear();
-		Gdx.app.exit();
-		// game.setScreen(new RatingScreen(game), ScreenTransitionFade.init(1f));
+		// Gdx.app.exit();
+		game.setScreen(new RatingScreen(game), ScreenTransitionFade.init(1f));
 	}
 
 	public void setInstruction(String text) {

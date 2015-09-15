@@ -24,12 +24,18 @@ public class TagService {
 	}
 
 	public void tag(String imageId, String tag) {
+		if (tag == null) {
+			return;
+		}
 		final TagVo tagVo = getTagVo(imageId, tag);
 		tagVo.countTag += 1;
 		Gdx.app.log(TAG, "Tagging " + imageId + " as " + tag);
 	}
 
 	public void tagNotMatched(String imageId, String tag) {
+		if (tag == null) {
+			return;
+		}
 		final TagVo tagVo = getTagVo(imageId, tag);
 		tagVo.countTagNotMatched += 1;
 		Gdx.app.log(TAG, "Tagging " + imageId + " as NOT a " + tag);
@@ -96,8 +102,8 @@ public class TagService {
 	public void tag(Array<Art> artList) {
 		for (final Art art : artList) {
 			if (art.fitsTagNot != null && art.fitsTagNot.size() > 0) {
-				for (final String tagNnot : art.fitsTagNot) {
-					tagNotMatched(art.imageId, tagNnot);
+				for (final String tagNot : art.fitsTagNot) {
+					tagNotMatched(art.imageId, tagNot);
 				}
 			} else {
 				tag(art.imageId, art.fitsTag);
