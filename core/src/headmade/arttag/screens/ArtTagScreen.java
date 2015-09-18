@@ -254,7 +254,7 @@ public class ArtTagScreen extends StageScreen {
 		Player.instance.body = null;
 		Player.instance.artInView.clear();
 		// Gdx.app.exit();
-		game.setScreen(new RatingScreen(game), ScreenTransitionFade.init(1f));
+		game.setScreen(new RatingScreen(game, jobDescription), ScreenTransitionFade.init(1f));
 	}
 
 	public void setInstruction(String text) {

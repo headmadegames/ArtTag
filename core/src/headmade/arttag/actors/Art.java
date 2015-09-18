@@ -1,5 +1,6 @@
 package headmade.arttag.actors;
 
+import headmade.arttag.JobDescription;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
 import headmade.arttag.service.ImageService;
@@ -105,4 +106,10 @@ public class Art {
 		return "From the year " + year;
 	}
 
+	public boolean matchesDescription(JobDescription jobDescription) {
+		if (year <= jobDescription.artYearFrom + jobDescription.artYearRange && year >= jobDescription.artYearFrom) {
+			return true;
+		}
+		return false;
+	}
 }
