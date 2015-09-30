@@ -14,6 +14,12 @@ public class AssetTextures {
 
 
 
+
+
+
+
+
+
 	private static final String TAG = AssetTextures.class.getName();
 	private static final String IMAGES_FOLDER = "images/";
 
@@ -90,6 +96,7 @@ public class AssetTextures {
 		vehicle1
 	};
 
+
 	public static final String	
 	paper 		= 	"paper",
 	frame		=	"frame",
@@ -99,7 +106,12 @@ public class AssetTextures {
 	guard 		= 	"guard00",
 	button 		= 	"button",
 	joystick 	= 	"joystick",
+	placeholder1 =	"placeholder1",
+	placeholder2 =	"placeholder2",
+	placeholder3 =	"placeholder3", 
 	artTreachery = 	"large/title_roman_caps";
+
+	public static final String[]	ALL_PLACEHOLDERS	= {placeholder1, placeholder2, placeholder3};
 
 	//	@formatter:off
 	//	@Asset(NinePatch.class)

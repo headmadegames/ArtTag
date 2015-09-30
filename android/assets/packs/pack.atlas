@@ -93,23 +93,44 @@ paper
   orig: 64, 73
   offset: 0, 0
   index: -1
-play
+placeholder1
   rotate: false
   xy: 371, 112
+  size: 32, 28
+  orig: 32, 28
+  offset: 0, 0
+  index: -1
+placeholder2
+  rotate: false
+  xy: 1, 223
+  size: 23, 32
+  orig: 23, 32
+  offset: 0, 0
+  index: -1
+placeholder3
+  rotate: false
+  xy: 75, 223
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+play
+  rotate: false
+  xy: 149, 223
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 quit
   rotate: false
-  xy: 371, 112
+  xy: 149, 223
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 settings
   rotate: false
-  xy: 1, 223
+  xy: 223, 223
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
