@@ -12,6 +12,7 @@ import headmade.arttag.assets.AssetMaps;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
 import headmade.arttag.screens.transitions.ScreenTransitionFade;
+import headmade.arttag.service.FlickrService;
 import headmade.arttag.service.TagService;
 import headmade.arttag.utils.MapUtils;
 import headmade.arttag.utils.RandomUtil;
@@ -48,6 +49,7 @@ public class ArtTagScreen extends StageScreen {
 	private final Box2DDebugRenderer	box2dDebugRenderer;
 	private final ArtTagInputController	inputController;
 	private final ContactListener		contactListener;
+	private Art							currentArt;
 
 	public OrthogonalTiledMapRenderer	mapRenderer;
 	public TiledMap						map;
@@ -57,7 +59,6 @@ public class ArtTagScreen extends StageScreen {
 	public Array<Guard>					guards				= new Array<Guard>();
 	public Array<Art>					artList				= new Array<Art>();
 	public JobDescription				jobDescription;
-	public Art							currentArt;
 	public boolean						debugEnabled;
 
 	private final Table					rootTable;
@@ -126,6 +127,7 @@ public class ArtTagScreen extends StageScreen {
 		stage.addActor(rootTable);
 
 		MapUtils.loadMap(this, AssetMaps.map1);
+
 	}
 
 	@Override
@@ -196,13 +198,13 @@ public class ArtTagScreen extends StageScreen {
 
 		// UI update
 		if (currentArt != null) {
-			imageActor.setDrawable(currentArt.drawable);
+			imageActor.setDrawable(currentArt.getDrawable());
 			rootTable.layout();
 		} else {
 			imageActor.setDrawable(null);
 		}
 		// show scan result?
-		if (Player.instance.isTouchingArt && (Player.instance.isScanning || (currentArt != null && currentArt.isScanned))) {
+		if (Player.instance.isTouchingArt && (Player.instance.isScanning || (currentArt != null && currentArt.isScanned()))) {
 			resultActor.setVisible(true);
 		} else {
 			resultActor.setVisible(false);
@@ -250,7 +252,7 @@ public class ArtTagScreen extends StageScreen {
 
 	public void endLevel() {
 		TagService.instance.tag(artList);
-		System.out.println(TagService.instance.tagVos);
+		Gdx.app.log(TAG, TagService.instance.tagVos.toString());
 		Player.instance.body = null;
 		Player.instance.artInView.clear();
 		// Gdx.app.exit();
@@ -276,6 +278,20 @@ public class ArtTagScreen extends StageScreen {
 		rayHandler.dispose();
 		world.dispose();
 		box2dDebugRenderer.dispose();
+		for (final Art art : artList) {
+			art.dispose();
+		}
+	}
+
+	public Art getCurrentArt() {
+		return currentArt;
+	}
+
+	public void setCurrentArt(Art currentArt) {
+		if (currentArt.getWebArt() == null) {
+			currentArt.setWebArt(FlickrService.instance.getWebArt());
+		}
+		this.currentArt = currentArt;
 	}
 
 }

@@ -40,6 +40,9 @@ public class MenuScreen extends StageScreen {
 
 	public MenuScreen(DirectedGame game) {
 		super(game);
+
+		// FlickrService.instance.getPhotos(1, 1);
+
 		jiggleAction = ActionFactory.wiggleRepeat(1f, 0.8f);
 
 		final Table rootTable = new Table();

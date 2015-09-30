@@ -86,7 +86,7 @@ public class ArtTagContactListener implements ContactListener {
 		if (isArtTrigger(fixOther)) {
 			// if (artTag.currentArt != null) {
 			Player.instance.isTouchingArt = true;
-			Gdx.app.log(TAG, "Player touching " + artTag.currentArt);
+			Gdx.app.log(TAG, "Player touching " + artTag.getCurrentArt());
 			// }
 		} else if (isExit(fixOther)) {
 			Gdx.app.log(TAG, "Start touching exit");
@@ -122,7 +122,7 @@ public class ArtTagContactListener implements ContactListener {
 
 	private void handleEndContactWithPlayer(Contact contact, Fixture fixPlayer, Fixture fixOther) {
 		if (isArtTrigger(fixOther)) {
-			Gdx.app.log(TAG, "Player no longer touching " + artTag.currentArt);
+			Gdx.app.log(TAG, "Player no longer touching " + artTag.getCurrentArt());
 			Player.instance.isTouchingArt = false;
 		} else if (isExit(fixOther)) {
 			Gdx.app.log(TAG, "End touching exit");

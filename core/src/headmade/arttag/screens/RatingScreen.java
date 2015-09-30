@@ -1,6 +1,5 @@
 package headmade.arttag.screens;
 
-import headmade.arttag.ArtTag;
 import headmade.arttag.DirectedGame;
 import headmade.arttag.JobDescription;
 import headmade.arttag.Player;
@@ -14,6 +13,8 @@ import headmade.arttag.vo.TagVo;
 
 import java.util.Map;
 
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -23,9 +24,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Scaling;
 
 public class RatingScreen extends StageScreen {
 	private static final String		TAG	= RatingScreen.class.getName();
+
 	private final JobDescription	jobDesc;
 	private final HorizontalGroup	artContainer;
 	private final Label				jobDescActor;
@@ -39,24 +42,30 @@ public class RatingScreen extends StageScreen {
 
 		final Table rootTable = new Table(Assets.instance.skin);
 		rootTable.setFillParent(true);
-		rootTable.setBackground(Assets.instance.skin.getDrawable(AssetTextures.paper));
+		// rootTable.setBackground(Assets.instance.skin.getDrawable(AssetTextures.paper));
 
 		int cash = 0;
 		artContainer = new HorizontalGroup();
 		for (int i = 0; i < Player.instance.inventory.size; i++) {
 			final Art art = Player.instance.inventory.get(i);
-			artContainer.addActor(new Image(art.image));
+			final Image img = new Image(art.getTexture());
+			img.setScaling(Scaling.fit);
+			// img.setWidth(camera.viewportWidth / Player.instance.inventory.size);
+			// img.setHeight(camera.viewportHeight / 5);
+			artContainer.addActor(img);
 			cash += 100;
 			if (art.matchesDescription(jobDescription)) {
 				cash += 1000 + MathUtils.random(300);
 			}
 		}
-		artContainer.pad(5f);
+		artContainer.space(20f);
+		artContainer.pad(20f);
 
 		jobDescActor = new Label(jobDescription.desc, Assets.instance.skin, "jobDesc");
 		jobDescActor.setWrap(true);
 
 		finchActor = new Image(Assets.assetsManager.get(AssetTextures.portrait4, Texture.class));
+		finchActor.setScaling(Scaling.fit);
 
 		final String earnings = "Earnings:\n$" + cash;
 		earningActor = new Label(earnings, Assets.instance.skin, "jobDesc");
@@ -72,23 +81,47 @@ public class RatingScreen extends StageScreen {
 		continueButton.getLabelCell().padRight(10f);
 
 		rootTable.setFillParent(true);
-		rootTable.add(jobDescActor).pad(10f).width((camera.viewportWidth / ArtTag.UNIT_SCALE) / 4);
+		rootTable.add(jobDescActor).pad(10f).width((camera.viewportWidth) / 4);
 		rootTable.add(finchActor).center().expand();
-		rootTable.add(earningActor).pad(10f).width((camera.viewportWidth / ArtTag.UNIT_SCALE) / 4);
+		rootTable.add(earningActor).pad(10f).width((camera.viewportWidth) / 4);
 		rootTable.row();
-		rootTable.add(artContainer).center().colspan(3);
+		rootTable.add(artContainer).height(camera.viewportHeight / 5).center().colspan(3);
 
 		rootTable.row();
 		rootTable.add().colspan(2);
 		rootTable.add(continueButton);
 
 		// buildTagTable(rootTable);
+		rootTable.setDebug(true);
 
 		stage.addActor(rootTable);
+
+		stage.addListener(new InputListener() {
+
+			@Override
+			public boolean scrolled(InputEvent event, float x, float y, int amount) {
+				if (rootTable.getDebug()) {
+					final OrthographicCamera cam = (OrthographicCamera) camera;
+					cam.zoom += amount * 0.5f;
+					cam.zoom = MathUtils.clamp(cam.zoom, 0.5f, 10f);
+					cam.update();
+				}
+				return true;
+			}
+
+			@Override
+			public boolean keyDown(InputEvent event, int keycode) {
+				if (keycode == Keys.F12) {
+					rootTable.setDebug(!rootTable.getDebug());
+					return true;
+				}
+				return super.keyDown(event, keycode);
+			}
+
+		});
 	}
 
 	protected void nextScreen() {
-		// TODO Auto-generated method stub
 
 	}
 

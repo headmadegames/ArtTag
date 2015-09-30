@@ -201,7 +201,7 @@ public class Guard {
 				final RayCastCallback callback = new RayCastCallback() {
 					@Override
 					public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-						Gdx.app.log(TAG, "reportRayFixture adds new backToPathPoint" + lastVisibleVecBackToPath);
+						// Gdx.app.log(TAG, "reportRayFixture adds new backToPathPoint" + lastVisibleVecBackToPath);
 						backToPath.add(lastVisibleVecBackToPath.cpy());
 						return 0;
 					}
@@ -215,7 +215,7 @@ public class Guard {
 			lastVisibleVecBackToPath = body.getWorldCenter();
 		}
 
-		if (isAlert && playerInView.size > 0) {
+		if (isAlert && playerInView.size > 0 && Player.instance.body != null) {
 			targetPoint = Player.instance.body.getWorldCenter();
 		} else if (isSuspicious && playerLastSeenVec != null) {
 			targetPoint = playerLastSeenVec;
@@ -230,20 +230,20 @@ public class Guard {
 				// following Path back to path
 				targetPoint = backToPath.get(backToPath.size - 1);
 				if (BODY_RADIUS / 10 > targetPoint.dst(body.getPosition())) {
-					Gdx.app.log(TAG, "Guard reached target back to path point " + targetPoint);
+					// Gdx.app.log(TAG, "Guard reached target back to path point " + targetPoint);
 					backToPath.pop();
 				}
 			} else {
 				// following path
 				targetPoint = path.get(currentPathIndex);
 				if (BODY_RADIUS > targetPoint.dst(body.getPosition())) {
-					Gdx.app.log(TAG, "Guard reached target point " + targetPoint);
+					// Gdx.app.log(TAG, "Guard reached target point " + targetPoint);
 					currentPathIndex++;
 					if (currentPathIndex >= path.size) {
 						currentPathIndex = 0;
 					}
 					targetPoint = path.get(currentPathIndex);
-					Gdx.app.log(TAG, "New target point " + targetPoint);
+					// Gdx.app.log(TAG, "New target point " + targetPoint);
 				}
 			}
 

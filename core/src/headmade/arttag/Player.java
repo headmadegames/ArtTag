@@ -251,8 +251,8 @@ public class Player {
 					if (newAlpha > imageAlpha) {
 						// Gdx.app.log(TAG, "distance " + distance + " alpha " + newAlpha);
 						imageAlpha = newAlpha;
-						artTag.currentArt = (Art) fixture.getBody().getUserData();
-						if (artTag.currentArt.isScanned) {
+						artTag.setCurrentArt((Art) fixture.getBody().getUserData());
+						if (artTag.getCurrentArt().isScanned()) {
 							artTag.setInstruction(MSG_SCAN + ArtTag.BUTTON_A);
 						} else {
 							artTag.setInstruction(MSG_SCAN + ArtTag.BUTTON_A);
@@ -279,18 +279,18 @@ public class Player {
 				artTag.setResult(" Scanning " + SCANNING_PROGRESS[scanProgress]);
 				sumDeltaScan += delta;
 				if (sumDeltaScan > scanTime) {
-					artTag.setResult(artTag.currentArt.resultText());
+					artTag.setResult(artTag.getCurrentArt().resultText());
 					isScanning = false;
 					sumDeltaScan = 0f;
 					// TODO cancel scan sound
-					artTag.currentArt.isScanned = true;
+					artTag.getCurrentArt().setScanned(true);
 					artTag.setInstruction(MSG_SCAN_3);
-					TagService.instance.tag(artTag.currentArt, artTag.jobDescription);
+					TagService.instance.tag(artTag.getCurrentArt(), artTag.jobDescription);
 				}
 			}
 		}
-		isAbleToScan = !isScanning && isTouchingArt && artTag.currentArt != null && !artTag.currentArt.isScanned;
-		isAbleToSteal = isTouchingArt && artTag.currentArt != null && artTag.currentArt.isScanned;
+		isAbleToScan = !isScanning && isTouchingArt && artTag.getCurrentArt() != null && !artTag.getCurrentArt().isScanned();
+		isAbleToSteal = isTouchingArt && artTag.getCurrentArt() != null && artTag.getCurrentArt().isScanned();
 	}
 
 	public void upgradeSpeed() {
@@ -321,14 +321,14 @@ public class Player {
 		if (!isAbleToSteal) {
 			return;
 		}
-		Gdx.app.log(TAG, "Stealing " + artTagScreen.currentArt);
+		Gdx.app.log(TAG, "Stealing " + artTagScreen.getCurrentArt());
 		// TODO play steal sound
-		inventory.add(artTagScreen.currentArt);
-		// artTagScreen.artList.removeValue(artTagScreen.currentArt, true);
-		artTagScreen.currentArt.isStolen = true;
-		Box2DUtils.destroyFixtures(artTagScreen.currentArt.artTrigger);
-		artTagScreen.world.destroyBody(artTagScreen.currentArt.artTrigger);
-		artTagScreen.currentArt = null;
+		inventory.add(artTagScreen.getCurrentArt());
+		artTagScreen.artList.removeValue(artTagScreen.getCurrentArt(), true);
+		artTagScreen.getCurrentArt().setStolen(true);
+		Box2DUtils.destroyFixtures(artTagScreen.getCurrentArt().getArtTrigger());
+		artTagScreen.world.destroyBody(artTagScreen.getCurrentArt().getArtTrigger());
+		artTagScreen.setCurrentArt(null);
 		isAbleToSteal = false;
 		Assets.assetsManager.get(AssetSounds.steal, Sound.class).play(0.3f);
 	}
@@ -349,4 +349,11 @@ public class Player {
 		isExitActivated = true;
 		artTagScreen.setInstruction(MSG_EXIT);
 	}
+
+	public void dispose() {
+		for (final Art art : inventory) {
+			art.dispose();
+		}
+	}
+
 }

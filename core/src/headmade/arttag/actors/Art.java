@@ -3,7 +3,6 @@ package headmade.arttag.actors;
 import headmade.arttag.JobDescription;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
-import headmade.arttag.service.ImageService;
 import headmade.arttag.service.RandomService;
 import headmade.arttag.utils.RandomUtil;
 
@@ -17,37 +16,36 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Art {
 
 	private static final String	TAG			= Art.class.getName();
 
-	public String				name;
-	public String				artistName;
-	public int					year;
+	private final String		name;
+	private final String		artistName;
+	private final int			year;
 
-	public NinePatch			frame;
-	public Texture				image;
-	public Drawable				drawable;
-	public Rectangle			rectangle;
+	private final Rectangle		rectangle;
+	private NinePatch			frame;
+	private final TextureRegion	placeholder;
+	private Drawable			drawable;
 
-	public String				assetName;
-	public String				imageId;
+	private Texture				image;
+	private WebArt				webArt;
 
-	public String				fitsTag;
-	public Set<String>			fitsTagNot	= new HashSet<String>();
+	private String				imageId;
 
-	public Body					artTrigger;
+	private String				fitsTag;
+	private Set<String>			fitsTagNot	= new HashSet<String>();
 
-	public boolean				isScanned;
-	public boolean				isStolen;
+	private Body				artTrigger;
+
+	private boolean				isScanned;
+	private boolean				isStolen;
 
 	public Art(Rectangle rectangle) {
 		super();
-		this.imageId = ImageService.instance.getUnusedImage();
-		this.image = Assets.assetsManager.get(imageId, Texture.class);
-		this.drawable = new TextureRegionDrawable(new TextureRegion(image));
+		this.placeholder = Assets.instance.skin.getRegion(RandomUtil.random(AssetTextures.ALL_PLACEHOLDERS));
 		this.rectangle = rectangle;
 		this.name = RandomService.instance.generateArtName();
 		this.artistName = RandomService.instance.generateArtistName();
@@ -69,29 +67,16 @@ public class Art {
 	}
 
 	public void draw(Batch batch) {
-		// batch.draw(image, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-		// frame.draw(batch, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-
-		// final Matrix4 oldTransMat = batch.getTransformMatrix();
-		// batch.setTransformMatrix(stageCamera.combined);
-		// frame.draw(batch, rectangle.x / ArtTag.UNIT_SCALE, rectangle.y / ArtTag.UNIT_SCALE, rectangle.width / ArtTag.UNIT_SCALE,
-		// rectangle.height / ArtTag.UNIT_SCALE);
-		// batch.setTransformMatrix(oldTransMat);
-
-		// final float width = rectangle.width - frame.getPadLeft() - frame.getPadRight();
-		// final float height = rectangle.height - frame.getPadTop() - frame.getPadBottom();
-		// final float aspectRatio = new Float(image.getWidth()) / new Float(image.getHeight());
-		// if (aspectRatio > 1) {
-		// batch.draw(image, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom()
-		// + (rectangle.height / 2 - (height / aspectRatio) / 2), width, height / aspectRatio);
-		// } else {
-		// batch.draw(image, rectangle.x + frame.getPadLeft() + (rectangle.width / 2 - (width * aspectRatio) / 2),
-		// rectangle.y + frame.getPadBottom(), width * aspectRatio, height);
-		// }
-
 		if (!isStolen) {
-			batch.draw(image, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom(), rectangle.width - frame.getPadLeft()
-					- frame.getPadRight(), rectangle.height - frame.getPadTop() - frame.getPadBottom());
+			// drawable.draw(batch, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom(), rectangle.width -
+			// frame.getPadLeft()
+			// - frame.getPadRight(), rectangle.height - frame.getPadTop() - frame.getPadBottom());
+
+			batch.draw(placeholder, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom(),
+					rectangle.width - frame.getPadLeft() - frame.getPadRight(), rectangle.height - frame.getPadTop() - frame.getPadBottom());
+
+			// batch.draw(draw, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom(), rectangle.width - frame.getPadLeft()
+			// - frame.getPadRight(), rectangle.height - frame.getPadTop() - frame.getPadBottom());
 		}
 
 		frame.draw(batch, rectangle.x, rectangle.y, rectangle.getWidth(), rectangle.height);
@@ -112,4 +97,67 @@ public class Art {
 		}
 		return false;
 	}
+
+	public Set<String> getFitsTagNot() {
+		return fitsTagNot;
+	}
+
+	public String getFitsTag() {
+		return fitsTag;
+	}
+
+	public String getImageId() {
+		return webArt == null ? imageId : webArt.getImageId();
+	}
+
+	public Texture getTexture() {
+		return webArt == null ? image : webArt.getImage();
+	}
+
+	public Drawable getDrawable() {
+		return webArt == null ? drawable : webArt.getDrawable();
+	}
+
+	public boolean isScanned() {
+		return isScanned;
+	}
+
+	public void dispose() {
+		if (webArt != null) {
+			webArt.dispose();
+		}
+	}
+
+	public void setFitsTag(String fitsTag) {
+		this.fitsTag = fitsTag;
+	}
+
+	public Body getArtTrigger() {
+		return artTrigger;
+	}
+
+	public void setArtTrigger(Body artTrigger) {
+		this.artTrigger = artTrigger;
+	}
+
+	public boolean isStolen() {
+		return isStolen;
+	}
+
+	public void setStolen(boolean isStolen) {
+		this.isStolen = isStolen;
+	}
+
+	public void setScanned(boolean isScanned) {
+		this.isScanned = isScanned;
+	}
+
+	public WebArt getWebArt() {
+		return webArt;
+	}
+
+	public void setWebArt(WebArt webArt) {
+		this.webArt = webArt;
+	}
+
 }

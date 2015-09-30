@@ -4,12 +4,15 @@ import headmade.arttag.assets.Assets;
 import headmade.arttag.screens.IntroScreen;
 import headmade.arttag.screens.transitions.ScreenTransition;
 import headmade.arttag.screens.transitions.ScreenTransitionFade;
+import headmade.arttag.service.FlickrService;
 import headmade.arttag.service.MusicService;
 import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ArtTag extends DirectedGame {
+
+	private static final String	TAG					= ArtTag.class.getName();
 
 	public static final String	BUTTON_A			= "Shift";
 	public static final String	BUTTON_B			= "Space";
@@ -55,6 +58,8 @@ public class ArtTag extends DirectedGame {
 	public void create() {
 		Box2DUtils.autoCache = true;
 
+		FlickrService.instance.init();
+
 		batch = new SpriteBatch();
 
 		// Load all assets
@@ -65,12 +70,15 @@ public class ArtTag extends DirectedGame {
 		// Start game with Playground Screen
 		final ScreenTransition transition = ScreenTransitionFade.init(0.0f);
 		setScreen(new IntroScreen(this), transition);
+
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
 		Assets.instance.dispose();
+		Player.instance.dispose();
+		FlickrService.instance.dispose();
 	}
 
 }

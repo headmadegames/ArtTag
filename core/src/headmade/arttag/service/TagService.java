@@ -14,7 +14,7 @@ public class TagService {
 	private static final String			TAG			= TagService.class.getName();
 
 	public static final String[]		TAGS		= { "Architecture", "a Drawing", "Fauna", "Heraldy", "Typography", "a Map",
-		"Sheet Music", "a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
+			"Sheet Music", "a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
 
 	public static TagService			instance	= new TagService();
 
@@ -66,13 +66,13 @@ public class TagService {
 		if (jobDescription.artTagNot != null && jobDescription.artTagNot.size() > 0) {
 			for (final String tagNnot : jobDescription.artTagNot) {
 				Gdx.app.log(TAG, "Tagging " + art + " as NOT a " + jobDescription.artTag);
-				art.fitsTagNot.add(tagNnot);
+				art.getFitsTagNot().add(tagNnot);
 			}
-			art.fitsTag = null;
+			art.setFitsTag(null);
 		} else {
 			Gdx.app.log(TAG, "Tagging " + art + " as " + jobDescription.artTag);
-			art.fitsTag = jobDescription.artTag;
-			art.fitsTagNot.clear();
+			art.setFitsTag(jobDescription.artTag);
+			art.getFitsTagNot().clear();
 		}
 	}
 
@@ -87,9 +87,9 @@ public class TagService {
 			// we can't say for sure which tag it matches
 		} else {
 			// tag it only if it wasn't positivley tagged before
-			if (art.fitsTag == null) {
+			if (art.getFitsTag() == null) {
 				Gdx.app.log(TAG, "Tagging " + art + " as NOT a" + jobDescription.artTag);
-				art.fitsTagNot.add(jobDescription.artTag);
+				art.getFitsTagNot().add(jobDescription.artTag);
 			}
 		}
 	}
@@ -101,12 +101,12 @@ public class TagService {
 	 */
 	public void tag(Array<Art> artList) {
 		for (final Art art : artList) {
-			if (art.fitsTagNot != null && art.fitsTagNot.size() > 0) {
-				for (final String tagNot : art.fitsTagNot) {
-					tagNotMatched(art.imageId, tagNot);
+			if (art.getFitsTagNot() != null && art.getFitsTagNot().size() > 0) {
+				for (final String tagNot : art.getFitsTagNot()) {
+					tagNotMatched(art.getImageId(), tagNot);
 				}
 			} else {
-				tag(art.imageId, art.fitsTag);
+				tag(art.getImageId(), art.getFitsTag());
 			}
 		}
 	}

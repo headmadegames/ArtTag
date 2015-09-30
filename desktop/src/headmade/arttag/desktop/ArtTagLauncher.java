@@ -10,8 +10,8 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 
 public class ArtTagLauncher {
 
+	// private static boolean rebuildAtlas = true;
 	private static boolean	rebuildAtlas		= false;
-	// private static boolean rebuildAtlas = false;
 	private static boolean	drawDebugOutline	= false;
 
 	public static void main(String[] arg) {
@@ -38,7 +38,7 @@ public class ArtTagLauncher {
 		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Headmade Game";
 		config.width = 1280;
-		config.height = 720;
+		config.height = 1024;
 		config.samples = 4;
 		new LwjglApplication(new ArtTag(), config);
 	}

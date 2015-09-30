@@ -234,7 +234,7 @@ public class MapUtils {
 		rectangle.height = 0.25f;
 		final Body artTrigger = createSensor(artTagScreen, rectangle, ArtTag.CAT_ARTTRIGGER, ArtTag.MASK_ARTTRIGGER);
 		artTrigger.setUserData(art);
-		art.artTrigger = artTrigger;
+		art.setArtTrigger(artTrigger);
 
 		// ConeLight artLight = new ConeLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, new Color(0xFFFFFFFF), rectangle.width, rectangle.x,
 		// rectangle.y, 45f, 45f);

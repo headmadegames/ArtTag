@@ -70,5 +70,10 @@ public class IntroScreen extends StageScreen {
 		final ScreenTransition transition = ScreenTransitionFade.init(.3f);
 		// game.setScreen(new ArtTagScreen(game), transition);
 		game.setScreen(new MenuScreen(game), transition);
+
+		// final JobDescription jobDescription = new JobDescription();
+		// Player.instance.inventory.add(new Art(new Rectangle()));
+		// Player.instance.inventory.add(new Art(new Rectangle()));
+		// game.setScreen(new RatingScreen(game, jobDescription));
 	}
 }
