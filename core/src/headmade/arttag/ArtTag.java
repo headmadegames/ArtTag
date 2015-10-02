@@ -8,11 +8,16 @@ import headmade.arttag.service.FlickrService;
 import headmade.arttag.service.MusicService;
 import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Json;
 
 public class ArtTag extends DirectedGame {
 
 	private static final String	TAG					= ArtTag.class.getName();
+
+	private static final String	SAVE_FILE			= "art_treachery_save.dat";
 
 	public static final String	BUTTON_A			= "Shift";
 	public static final String	BUTTON_B			= "Space";
@@ -40,7 +45,7 @@ public class ArtTag extends DirectedGame {
 
 	public static final short	MASK_LEVEL			= -1;
 	public static final short	MASK_PLAYER			= CAT_LEVEL | CAT_LIGHT | CAT_GUARD | CAT_ARTTRIGGER | CAT_EXIT | CAT_DOOR
-															| CAT_GUARDLIGHT;
+			| CAT_GUARDLIGHT;
 	public static final short	MASK_PLAYERLIGHT	= CAT_LEVEL | CAT_GUARD | CAT_ARTTRIGGER;
 	public static final short	MASK_LIGHT			= CAT_LEVEL | CAT_PLAYER | CAT_GUARD;
 	public static final short	MASK_GUARD			= CAT_LEVEL | CAT_PLAYER | CAT_LIGHT | CAT_PLAYERLIGHT;
@@ -53,6 +58,8 @@ public class ArtTag extends DirectedGame {
 
 	// settings
 	public static final boolean	TOGGLE_LIGHT		= true;
+
+	public static GameState		gameState;
 
 	@Override
 	public void create() {
@@ -71,6 +78,22 @@ public class ArtTag extends DirectedGame {
 		final ScreenTransition transition = ScreenTransitionFade.init(0.0f);
 		setScreen(new IntroScreen(this), transition);
 
+		// load Game or create save
+		final Json json = new Json();
+		final FileHandle saveFile = Gdx.files.local(SAVE_FILE);
+		if (saveFile.exists()) {
+			gameState = json.fromJson(GameState.class, saveFile);
+		} else {
+			gameState = new GameState();
+			saveGame();
+		}
+		Gdx.app.log(TAG, "Savefile located at " + saveFile.file().getAbsolutePath());
+	}
+
+	private void saveGame() {
+		final Json json = new Json();
+		final FileHandle saveFile = Gdx.files.local(SAVE_FILE);
+		json.toJson(gameState, saveFile);
 	}
 
 	@Override

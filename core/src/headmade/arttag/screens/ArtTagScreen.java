@@ -288,7 +288,7 @@ public class ArtTagScreen extends StageScreen {
 	}
 
 	public void setCurrentArt(Art currentArt) {
-		if (currentArt.getWebArt() == null) {
+		if (currentArt != null && currentArt.getWebArt() == null) {
 			currentArt.setWebArt(FlickrService.instance.getWebArt());
 		}
 		this.currentArt = currentArt;
