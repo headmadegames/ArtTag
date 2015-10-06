@@ -70,11 +70,11 @@ public class RandomService {
 	}
 
 	public int generateYearRange(int minYear, int range) {
-		return MathUtils.clamp(RandomUtil.random(range), 1, 2015 - minYear);
+		return MathUtils.clamp(RandomUtil.random(range), 1, 1900 - minYear);
 	}
 
 	public int generateYear() {
-		return Math.round(2015 - 50 - 200 * RandomUtil.random());
+		return Math.round(1800 + RandomUtil.random(80));
 	}
 
 	public String generateJobDescription(JobDescription job) {

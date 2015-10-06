@@ -8,11 +8,13 @@ import headmade.arttag.actors.Art;
 import headmade.arttag.actors.JigglyImageTextButton;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
+import headmade.arttag.screens.transitions.ScreenTransitionFade;
 import headmade.arttag.service.TagService;
 import headmade.arttag.vo.TagVo;
 
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,6 +40,10 @@ public class RatingScreen extends StageScreen {
 
 	public RatingScreen(DirectedGame game, JobDescription jobDescription) {
 		super(game);
+
+		final OrthographicCamera cam = (OrthographicCamera) camera;
+		cam.zoom = 1f;
+
 		this.jobDesc = jobDescription;
 
 		final Table rootTable = new Table(Assets.instance.skin);
@@ -55,8 +61,11 @@ public class RatingScreen extends StageScreen {
 			artContainer.addActor(img);
 			cash += 100;
 			if (art.matchesDescription(jobDescription)) {
-				cash += 1000 + MathUtils.random(300);
+				cash += 1000 + MathUtils.random(100);
 			}
+		}
+		if (artContainer.getChildren().size == 0) {
+			artContainer.addActor(new Label("You didn't steal anything", Assets.instance.skin));
 		}
 		artContainer.space(20f);
 		artContainer.pad(20f);
@@ -80,6 +89,7 @@ public class RatingScreen extends StageScreen {
 		});
 		continueButton.getLabelCell().padRight(10f);
 
+		Gdx.app.log(TAG, "################# camera.viewportWidth " + camera.viewportWidth + " ###################");
 		rootTable.setFillParent(true);
 		rootTable.add(jobDescActor).pad(10f).width((camera.viewportWidth) / 4);
 		rootTable.add(finchActor).center().expand();
@@ -93,6 +103,7 @@ public class RatingScreen extends StageScreen {
 
 		// buildTagTable(rootTable);
 		rootTable.setDebug(true);
+		rootTable.layout();
 
 		stage.addActor(rootTable);
 
@@ -122,7 +133,8 @@ public class RatingScreen extends StageScreen {
 	}
 
 	protected void nextScreen() {
-
+		Gdx.app.log(TAG, "Changing screen");
+		game.setScreen(new ArtTagScreen(game), ScreenTransitionFade.init(1f));
 	}
 
 	private void buildTagTable(final Table rootTable) {

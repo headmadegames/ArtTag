@@ -225,6 +225,7 @@ public class MapUtils {
 		toWorldScale(rectangle, unitScale);
 
 		final Art art = new Art(rectangle);
+		art.init();
 		artTagScreen.artList.add(art);
 		Gdx.app.log(TAG, "Created new Art " + art);
 

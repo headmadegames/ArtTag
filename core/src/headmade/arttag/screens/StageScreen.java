@@ -24,6 +24,9 @@ public class StageScreen extends AbstractGameScreen {
 
 	public StageScreen(DirectedGame game) {
 		super(game);
+		if (stage != null) {
+			stage.clear();
+		}
 		this.stage = new Stage(viewport, game.getBatch());
 		// stage.addListener(new EventListener() {
 		// @Override

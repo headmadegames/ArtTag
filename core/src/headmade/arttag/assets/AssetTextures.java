@@ -20,6 +20,10 @@ public class AssetTextures {
 
 
 
+
+
+
+
 	private static final String TAG = AssetTextures.class.getName();
 	private static final String IMAGES_FOLDER = "images/";
 
@@ -102,6 +106,8 @@ public class AssetTextures {
 	frame		=	"frame",
 	frame2 		= 	"frame2",
 	frame2Large = 	"frame2_color",
+	scanner		=   "scanner",
+	com			=   "com",
 	player 		= 	"magpie",
 	guard 		= 	"guard00",
 	button 		= 	"button",
@@ -111,7 +117,7 @@ public class AssetTextures {
 	placeholder3 =	"placeholder3", 
 	artTreachery = 	"large/title_roman_caps";
 
-	public static final String[]	ALL_PLACEHOLDERS	= {placeholder1, placeholder2, placeholder3};
+	public static final String[]	ALL_PLACEHOLDERS	= {placeholder1};//, placeholder2, placeholder3};
 
 	//	@formatter:off
 	//	@Asset(NinePatch.class)

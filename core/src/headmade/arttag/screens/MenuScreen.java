@@ -1,6 +1,7 @@
 package headmade.arttag.screens;
 
 import headmade.arttag.DirectedGame;
+import headmade.arttag.Player;
 import headmade.arttag.actions.ActionFactory;
 import headmade.arttag.actors.CreditsActor;
 import headmade.arttag.actors.HowToActor;
@@ -42,6 +43,7 @@ public class MenuScreen extends StageScreen {
 		super(game);
 
 		// FlickrService.instance.getPhotos(1, 1);
+		Player.instance.init();
 
 		jiggleAction = ActionFactory.wiggleRepeat(1f, 0.8f);
 

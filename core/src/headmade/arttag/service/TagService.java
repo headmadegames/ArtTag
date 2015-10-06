@@ -17,7 +17,7 @@ public class TagService {
 	private static final String			TAG			= TagService.class.getName();
 
 	public static final String[]		TAGS		= { "Architecture", "a Drawing", "Fauna", "Heraldy", "Typography", "a Map",
-		"Sheet Music", "a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
+			"Sheet Music", "a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
 
 	public static TagService			instance	= new TagService();
 
@@ -35,7 +35,7 @@ public class TagService {
 		}
 		final TagVo tagVo = getTagVo(imageId, tag);
 		tagVo.countTag += 1;
-		Gdx.app.log(TAG, "Tagging " + imageId + " as " + tag);
+		Gdx.app.log(TAG, "Tagging " + imageId + " as " + tagVo);
 	}
 
 	public void tagNotMatched(String imageId, String tag) {
@@ -44,7 +44,7 @@ public class TagService {
 		}
 		final TagVo tagVo = getTagVo(imageId, tag);
 		tagVo.countTagNotMatched += 1;
-		Gdx.app.log(TAG, "Tagging " + imageId + " as NOT a " + tag);
+		Gdx.app.log(TAG, "Tagging " + imageId + " as NOT a " + tagVo);
 	}
 
 	private TagVo getTagVo(String imageId, String tag) {
@@ -94,6 +94,11 @@ public class TagService {
 		} else {
 			// tag it only if it wasn't positivley tagged before
 			if (art.getFitsTag() == null) {
+				for (final String tag : art.getFitsTagNot()) {
+					if (tag.equals(jobDescription.artTag)) {
+						return;
+					}
+				}
 				Gdx.app.log(TAG, "Tagging " + art + " as NOT a" + jobDescription.artTag);
 				art.getFitsTagNot().add(jobDescription.artTag);
 			}

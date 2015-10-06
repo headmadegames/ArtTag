@@ -3,6 +3,7 @@ package headmade.arttag.actors;
 import headmade.arttag.JobDescription;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
+import headmade.arttag.service.ImageService;
 import headmade.arttag.service.RandomService;
 import headmade.arttag.utils.RandomUtil;
 
@@ -18,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.flickr4java.flickr.tags.Tag;
 
@@ -27,13 +29,13 @@ public class Art {
 
 	private static final String	DATE_TAG_PREFIX	= "date:";
 
-	private final String		name;
-	private final String		artistName;
+	private String				name;
+	private String				artistName;
 	private int					year;
 
 	private final Rectangle		rectangle;
 	private NinePatch			frame;
-	private final TextureRegion	placeholder;
+	private TextureRegion		placeholder;
 	private Drawable			drawable;
 
 	private Texture				image;
@@ -46,6 +48,7 @@ public class Art {
 
 	private Body				artTrigger;
 
+	private boolean				isSeen;
 	private boolean				isScanned;
 	private boolean				isStolen;
 
@@ -53,12 +56,16 @@ public class Art {
 
 	public Art(Rectangle rectangle) {
 		super();
-		this.placeholder = Assets.instance.skin.getRegion(RandomUtil.random(AssetTextures.ALL_PLACEHOLDERS));
 		this.rectangle = rectangle;
+	}
+
+	public void init() {
 		this.name = RandomService.instance.generateArtName();
 		this.artistName = RandomService.instance.generateArtistName();
-		this.year = RandomService.instance.generateYear();
-
+		this.placeholder = Assets.instance.skin.getRegion(RandomUtil.random(AssetTextures.ALL_PLACEHOLDERS));
+		this.imageId = ImageService.instance.getUnusedImage();
+		this.image = Assets.assetsManager.get(imageId, Texture.class);
+		this.drawable = new TextureRegionDrawable(new TextureRegion(image));
 		if (RandomUtil.random() > 0.5) {
 			this.frame = Assets.instance.skin.get(AssetTextures.frame, NinePatch.class);
 		} else {
@@ -80,8 +87,15 @@ public class Art {
 			// frame.getPadLeft()
 			// - frame.getPadRight(), rectangle.height - frame.getPadTop() - frame.getPadBottom());
 
-			batch.draw(placeholder, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom(),
-					rectangle.width - frame.getPadLeft() - frame.getPadRight(), rectangle.height - frame.getPadTop() - frame.getPadBottom());
+			if (isSeen) {
+				batch.draw(getTexture(), rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom(),
+						rectangle.width - frame.getPadLeft() - frame.getPadRight(),
+						rectangle.height - frame.getPadTop() - frame.getPadBottom());
+			} else {
+				batch.draw(placeholder, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom(),
+						rectangle.width - frame.getPadLeft() - frame.getPadRight(),
+						rectangle.height - frame.getPadTop() - frame.getPadBottom());
+			}
 
 			// batch.draw(draw, rectangle.x + frame.getPadLeft(), rectangle.y + frame.getPadBottom(), rectangle.width - frame.getPadLeft()
 			// - frame.getPadRight(), rectangle.height - frame.getPadTop() - frame.getPadBottom());
@@ -92,7 +106,14 @@ public class Art {
 
 	@Override
 	public String toString() {
-		return "Art [name=" + name + ", artistName=" + artistName + ", year=" + year + ", imageId=" + imageId + "]";
+		return "Art [name=" + name + ", artistName=" + artistName + ", year=" + year + ", imageId=" + getImageId() + "]";
+	}
+
+	public void onScanFinished() {
+		setYearFromTags();
+		if (year == 0) {
+			this.year = RandomService.instance.generateYear();
+		}
 	}
 
 	public String resultText() {
@@ -166,14 +187,17 @@ public class Art {
 
 	public void setWebArt(WebArt webArt) {
 		this.webArt = webArt;
+	}
+
+	public void setYearFromTags() {
 		// set year from tag
 		final Collection<Tag> tags = webArt.getPhoto().getTags();
 		for (final Tag tag : tags) {
-			if (tag.getValue().startsWith(DATE_TAG_PREFIX)) {
+			if (tag.getRaw().startsWith(DATE_TAG_PREFIX)) {
 				try {
-					year = Integer.parseInt(tag.getValue().replaceAll(DATE_TAG_PREFIX, ""));
+					year = Integer.parseInt(tag.getRaw().replaceAll(DATE_TAG_PREFIX, ""));
 				} catch (final Exception e) {
-					Gdx.app.log(TAG, "Error parsing tag date " + tag.getValue());
+					Gdx.app.log(TAG, "Error parsing tag date " + tag.getRaw());
 				}
 
 			}
@@ -247,15 +271,27 @@ public class Art {
 				}
 			}
 			if (webArt != null) {
-				final Collection<Tag> tags = webArt.getPhoto().getTags();
-				for (final Tag tag : tags) {
-					if (tag.getValue().toLowerCase().contains(fitsTag.toLowerCase())) {
-						return true;
+				final Collection<Tag> photoTags = webArt.getPhoto().getTags();
+				for (final Tag photoTag : photoTags) {
+					if (photoTag != null && photoTag.getRaw() != null) {
+						for (final String tag : fitsTagNot) {
+							if (photoTag.getRaw().toLowerCase().contains(tag.toLowerCase())) {
+								return true;
+							}
+						}
 					}
 				}
 			}
 		}
 		return false;
+	}
+
+	public boolean isSeen() {
+		return isSeen;
+	}
+
+	public void setSeen(boolean isSeen) {
+		this.isSeen = isSeen;
 	}
 
 }

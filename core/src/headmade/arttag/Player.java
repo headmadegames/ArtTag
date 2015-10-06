@@ -93,13 +93,16 @@ public class Player {
 	private float					playerLightLength				= MAX_PLAYERLIGHT_LENGTH / 2;
 	private float					reactionTime					= MAX_REACTION_TIME;
 	private float					scanTime						= MAX_SCAN_TIME;
-	private int						carryCacity						= 2;
+	private int						carryCacity						= 1;
 	private int						scanProgress;
 
-	private final long				stepSoundId;
-	private final Sound				sound;
+	private long					stepSoundId;
+	private Sound					sound;
 
 	private Player() {
+	}
+
+	public void init() {
 		sound = Assets.assetsManager.get(AssetSounds.step, Sound.class);
 		stepSoundId = sound.loop(0f);
 	}
@@ -279,6 +282,7 @@ public class Player {
 				artTag.setResult(" Scanning " + SCANNING_PROGRESS[scanProgress]);
 				sumDeltaScan += delta;
 				if (sumDeltaScan > scanTime) {
+					artTag.getCurrentArt().onScanFinished();
 					artTag.setResult(artTag.getCurrentArt().resultText());
 					isScanning = false;
 					sumDeltaScan = 0f;
@@ -290,7 +294,8 @@ public class Player {
 			}
 		}
 		isAbleToScan = !isScanning && isTouchingArt && artTag.getCurrentArt() != null && !artTag.getCurrentArt().isScanned();
-		isAbleToSteal = isTouchingArt && artTag.getCurrentArt() != null && artTag.getCurrentArt().isScanned();
+		isAbleToSteal = isTouchingArt && artTag.getCurrentArt() != null && artTag.getCurrentArt().isScanned()
+				&& inventory.size < carryCacity;
 	}
 
 	public void upgradeSpeed() {

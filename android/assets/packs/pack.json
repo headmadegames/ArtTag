@@ -9,6 +9,7 @@ com.badlogic.gdx.graphics.Color: {
 	white: { a: 1, b: 1, g: 1, r: 1 },
 	red: { a: 1, b: 0, g: 0, r: 1 },
 	black: { a: 1, b: 0, g: 0, r: 0 },
+	moneyColor: { a: 1, b: 0.1, g: 0.12, r: 0.11 },
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	dialogDim: { name: ui/white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
@@ -49,9 +50,10 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: { font: typewriter-font, fontColor: black },
-	jobDesc: { font: typewriter-font, fontColor: black, background: paper }
-	info: { font: default-font, fontColor: white, background: ui/default-round }
-	scanner: { font: scanner-font, fontColor: green, background: paper }
+	jobDesc: { font: typewriter-font, fontColor: black, background: paper },
+	info: { font: default-font, fontColor: white, background: com },
+	scanner: { font: scanner-font, fontColor: green, background: scannerPatch },
+	scanner: { font: default-font, fontColor: moneyFont, background: dollar },
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: { selection: ui/selection, background: ui/textfield, font: default-font, fontColor: white, cursor: ui/cursor }

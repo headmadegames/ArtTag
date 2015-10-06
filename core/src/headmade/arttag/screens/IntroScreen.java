@@ -72,8 +72,12 @@ public class IntroScreen extends StageScreen {
 		game.setScreen(new MenuScreen(game), transition);
 
 		// final JobDescription jobDescription = new JobDescription();
-		// Player.instance.inventory.add(new Art(new Rectangle()));
-		// Player.instance.inventory.add(new Art(new Rectangle()));
+		// final Art art1 = new Art(new Rectangle(1, 1, 1, 1));
+		// final Art art2 = new Art(new Rectangle(1, 1, 1, 1));
+		// art1.init();
+		// art2.init();
+		// Player.instance.inventory.add(art1);
+		// Player.instance.inventory.add(art2);
 		// game.setScreen(new RatingScreen(game, jobDescription));
 	}
 }

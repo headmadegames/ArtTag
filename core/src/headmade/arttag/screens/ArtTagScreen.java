@@ -73,6 +73,7 @@ public class ArtTagScreen extends StageScreen {
 
 	public ArtTagScreen(DirectedGame game) {
 		super(game);// , new Stage(new ExtendViewport(MIN_WORLD_WIDTH, MIN_WORLD_HEIGHT), game.getBatch()));
+
 		camera = new OrthographicCamera(MIN_WORLD_WIDTH, MIN_WORLD_HEIGHT);
 		((OrthographicCamera) camera).zoom = 0.5f;
 
@@ -104,9 +105,8 @@ public class ArtTagScreen extends StageScreen {
 		box2dDebugRenderer = new Box2DDebugRenderer();
 		inputController = new ArtTagInputController(game, this);
 
-		jobDescription = new JobDescription();
+		jobDescActor = new Label("", Assets.instance.skin, "jobDesc");
 		imageActor = new Image(Assets.assetsManager.get(AssetTextures.animal4, Texture.class));
-		jobDescActor = new Label(jobDescription.desc, Assets.instance.skin, "jobDesc");
 		jobDescActor.setWrap(true);
 		instructionsActor = new Label("Instructions", Assets.instance.skin, "info");
 		instructionsActor.setWrap(true);
@@ -126,12 +126,18 @@ public class ArtTagScreen extends StageScreen {
 
 		stage.addActor(rootTable);
 
+		newJob();
 		MapUtils.loadMap(this, AssetMaps.map1);
-
 	}
 
 	@Override
 	public void render(float delta) {
+
+		while (FlickrService.instance.getWebArtCount() == 0) {
+			// wait
+			return;
+		}
+
 		world.step(ArtTag.TIME_STEP, ArtTag.VELOCITY_ITERS, ArtTag.POSITION_ITERS);
 
 		// isSpotted will be set by guards
@@ -223,6 +229,7 @@ public class ArtTagScreen extends StageScreen {
 
 			if (alpha > 0.3f) {
 				if (sumDeltaLookAtImage > 0.3f) {
+					currentArt.setSeen(true);
 					TagService.instance.tagNotMatched(currentArt, jobDescription);
 				} else {
 					sumDeltaLookAtImage += delta;
@@ -246,8 +253,23 @@ public class ArtTagScreen extends StageScreen {
 	}
 
 	public void newJob() {
+		final int contolGroupSize = 20;
 		jobDescription = new JobDescription();
 		jobDescActor.setText(jobDescription.desc);
+		if (jobDescription.artTagNot != null && jobDescription.artTagNot.size() > 0) {
+			final String[] tagsNotMatched = new String[jobDescription.artTagNot.size()];
+			for (final String tagNotMatched : tagsNotMatched) {
+				if (FlickrService.instance.getControlWebArt().get(tagNotMatched) == null
+						|| FlickrService.instance.getControlWebArt().get(tagNotMatched).size() == 0) {
+					FlickrService.instance.fetchPhotos(contolGroupSize, 1, tagNotMatched);
+				}
+			}
+		} else {
+			if (FlickrService.instance.getControlWebArt().get(jobDescription.artTag) == null
+					|| FlickrService.instance.getControlWebArt().get(jobDescription.artTag).size() == 0) {
+				FlickrService.instance.fetchPhotos(contolGroupSize, 1, jobDescription.artTag);
+			}
+		}
 	}
 
 	public void endLevel() {

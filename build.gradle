@@ -112,6 +112,7 @@ project(":html") {
 project(":core") {
     apply plugin: "java"
 
+    sourceSets.test.java.srcDirs = ["test/"]
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -123,6 +124,18 @@ project(":core") {
         compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.0"
         compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.13.0"
         compile "com.flickr4java:flickr4java:2.13"
+		
+		testCompile "junit:junit:4.11"                                                     
+        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        testCompile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        testCompile "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        testCompile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        testCompile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        testCompile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.0"
+        testCompile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.13.0"
+        testCompile "com.flickr4java:flickr4java:2.13"
     }
 }
 

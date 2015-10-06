@@ -7,18 +7,20 @@ import com.flickr4java.flickr.photos.Photo;
 
 public class WebArt {
 
-	private static final String			TAG	= WebArt.class.getName();
+	private static final String		TAG	= WebArt.class.getName();
 
-	private Photo						photo;
-	private final Texture				image;
-	private final TextureRegionDrawable	drawable;
-	private final String				imageId;
+	private Photo					photo;
+	private final Texture			image;
+	private final String			imageId;
+	private TextureRegionDrawable	drawable;
 
 	public WebArt(Photo photo, Texture image) {
 		this.photo = photo;
 		this.imageId = photo.getId();
 		this.image = image;
-		this.drawable = new TextureRegionDrawable(new TextureRegion(image));
+		if (image != null) {
+			this.drawable = new TextureRegionDrawable(new TextureRegion(image));
+		}
 	}
 
 	public Photo getPhoto() {

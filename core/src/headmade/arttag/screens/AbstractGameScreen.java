@@ -17,7 +17,7 @@ public abstract class AbstractGameScreen extends InputAdapter implements Screen 
 
 	public static Camera			camera;
 
-	protected static Viewport		viewport;
+	protected Viewport				viewport;
 	protected DirectedGame			game;
 
 	/* At the moment we are going to work with pixel dimensions */
