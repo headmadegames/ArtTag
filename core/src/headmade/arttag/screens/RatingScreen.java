@@ -6,7 +6,6 @@ import headmade.arttag.Player;
 import headmade.arttag.actions.ActionFactory;
 import headmade.arttag.actors.Art;
 import headmade.arttag.actors.JigglyImageTextButton;
-import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
 import headmade.arttag.screens.transitions.ScreenTransitionFade;
 import headmade.arttag.service.TagService;
@@ -17,12 +16,9 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -32,10 +28,7 @@ public class RatingScreen extends StageScreen {
 	private static final String		TAG	= RatingScreen.class.getName();
 
 	private final JobDescription	jobDesc;
-	private final HorizontalGroup	artContainer;
 	private final Label				jobDescActor;
-	private final Image				finchActor;
-	private final Actor				earningActor;
 	private JigglyImageTextButton	continueButton;
 
 	public RatingScreen(DirectedGame game, JobDescription jobDescription) {
@@ -50,34 +43,9 @@ public class RatingScreen extends StageScreen {
 		rootTable.setFillParent(true);
 		// rootTable.setBackground(Assets.instance.skin.getDrawable(AssetTextures.paper));
 
-		int cash = 0;
-		artContainer = new HorizontalGroup();
-		for (int i = 0; i < Player.instance.inventory.size; i++) {
-			final Art art = Player.instance.inventory.get(i);
-			final Image img = new Image(art.getTexture());
-			img.setScaling(Scaling.fit);
-			// img.setWidth(camera.viewportWidth / Player.instance.inventory.size);
-			// img.setHeight(camera.viewportHeight / 5);
-			artContainer.addActor(img);
-			cash += 100;
-			if (art.matchesDescription(jobDescription)) {
-				cash += 1000 + MathUtils.random(100);
-			}
-		}
-		if (artContainer.getChildren().size == 0) {
-			artContainer.addActor(new Label("You didn't steal anything", Assets.instance.skin));
-		}
-		artContainer.space(20f);
-		artContainer.pad(20f);
-
 		jobDescActor = new Label(jobDescription.desc, Assets.instance.skin, "jobDesc");
-		jobDescActor.setWrap(true);
-
-		finchActor = new Image(Assets.assetsManager.get(AssetTextures.portrait4, Texture.class));
-		finchActor.setScaling(Scaling.fit);
-
-		final String earnings = "Earnings:\n$" + cash;
-		earningActor = new Label(earnings, Assets.instance.skin, "jobDesc");
+		// jobDescActor.setWrap(true);
+		jobDescActor.setWidth(camera.viewportWidth / 4);
 
 		continueButton = new JigglyImageTextButton("Continue", Assets.instance.skin, "play", ActionFactory.wiggleRepeat(3f, 0.5f));
 		continueButton.addListener(new InputListener() {
@@ -89,20 +57,48 @@ public class RatingScreen extends StageScreen {
 		});
 		continueButton.getLabelCell().padRight(10f);
 
-		Gdx.app.log(TAG, "################# camera.viewportWidth " + camera.viewportWidth + " ###################");
 		rootTable.setFillParent(true);
-		rootTable.add(jobDescActor).pad(10f).width((camera.viewportWidth) / 4);
-		rootTable.add(finchActor).center().expand();
-		rootTable.add(earningActor).pad(10f).width((camera.viewportWidth) / 4);
+		rootTable.add("Mission").pad(10f).right();
+		rootTable.add(jobDescActor).colspan(2).center().expand();
 		rootTable.row();
-		rootTable.add(artContainer).height(camera.viewportHeight / 5).center().colspan(3);
 
-		rootTable.row();
 		rootTable.add().colspan(2);
-		rootTable.add(continueButton);
+		rootTable.add("Reward").pad(10f);
+		rootTable.row();
+
+		if (Player.instance.inventory.size == 0) {
+			rootTable.add("You did not steal anything and failed the mission.").colspan(3);
+		} else {
+			for (int i = 0; i < Player.instance.inventory.size; i++) {
+				final Art art = Player.instance.inventory.get(i);
+				final Image img = new Image(art.getTexture());
+				img.setScaling(Scaling.fit);
+				// img.setWidth(camera.viewportWidth / Player.instance.inventory.size);
+				// img.setHeight(camera.viewportHeight / 5);
+				int cash = 100;
+				if (art.matchesDescription(jobDescription)) {
+					cash += 1000 + MathUtils.random(100);
+				}
+				if (art.isCorrectlyTagged()) {
+					cash += 1000 + MathUtils.random(100);
+				} else if (art.isIncorrectlyTagged()) {
+					cash /= 10;
+				}
+
+				final Label earningActor = new Label("$" + cash, Assets.instance.skin, "dollar");
+
+				rootTable.add(i == 0 ? "Loot" : "").pad(10f).right();
+				rootTable.add(img).center().pad(10f).expand();
+				rootTable.add(earningActor).pad(10f);
+				rootTable.row();
+			}
+		}
+
+		rootTable.add().colspan(2);
+		rootTable.add(continueButton).space(20).pad(20);
 
 		// buildTagTable(rootTable);
-		rootTable.setDebug(true);
+		// rootTable.setDebug(true);
 		rootTable.layout();
 
 		stage.addActor(rootTable);

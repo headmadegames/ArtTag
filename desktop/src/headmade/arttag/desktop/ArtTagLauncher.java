@@ -10,8 +10,8 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 
 public class ArtTagLauncher {
 
-	private static boolean	rebuildAtlas		= true;
-	// private static boolean rebuildAtlas = false;
+	// private static boolean rebuildAtlas = true;
+	private static boolean	rebuildAtlas		= false;
 	private static boolean	drawDebugOutline	= false;
 
 	public static void main(String[] arg) {

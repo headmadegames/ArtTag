@@ -238,6 +238,9 @@ public class ArtTagScreen extends StageScreen {
 				sumDeltaLookAtImage = 0f;
 			}
 		}
+		if (Player.instance.inventory.size >= Player.instance.getCarryCacity()) {
+			instructionsActor.setVisible(true);
+		}
 		stage.act(delta);
 		stage.draw();
 

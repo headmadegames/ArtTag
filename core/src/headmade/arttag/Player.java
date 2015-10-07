@@ -27,14 +27,15 @@ import com.badlogic.gdx.utils.Array;
 public class Player {
 	private static final String		MSG_DOOR						= "Press " + ArtTag.BUTTON_A + " Button to walk trough door.";
 	private static final String		MSG_EXIT						= "Do you really want to leave? \nConfirm with the " + ArtTag.BUTTON_A
-			+ " Button.";
+																			+ " Button.";
+	private static final String		MSG_INVENTORY_FULL				= "You can not carry any more. Return your goods to the exit.";
 	private static final String		MSG_SCAN						= "Is the image what our client is looking for?\nScan it's age with "
-																			+ ArtTag.BUTTON_A;
+			+ ArtTag.BUTTON_A;
 	private static final String		MSG_SCAN_2						= "Scanning only reveals the age of the image.\nSo don't waste your "
-																			+ "time scanning artwork that doesn't match the job description.";
+			+ "time scanning artwork that doesn't match the job description.";
 	private static final String		MSG_SCAN_3						= "Is this what our client is looking for?\nCancel with "
-			+ ArtTag.BUTTON_B + " Button.\n" + "Take it with the "
-			+ ArtTag.BUTTON_A + " Button.";
+																			+ ArtTag.BUTTON_B + " Button.\n" + "Take it with the "
+																			+ ArtTag.BUTTON_A + " Button.";
 
 	private static final String		TAG								= Player.class.getName();
 
@@ -42,7 +43,7 @@ public class Player {
 
 	// private static final String[] SCANNING_PROGRESS = { "/", "/\\\\\\", "/\\\\\\/", "/\\\\\\/\\\\\\", "/\\\\\\/\\\\\\/" };
 	private static final String[]	SCANNING_PROGRESS				= { "I          I", "IX         I", "IXX        I", "IXXX       I",
-		"IXXXX      I", "IXXXXX     I", "IXXXXXX    I", "IXXXXXXX   I", "IXXXXXXXX  I", "IXXXXXXXXX I", "IXXXXXXXXXXI" };
+			"IXXXX      I", "IXXXXX     I", "IXXXXXX    I", "IXXXXXXX   I", "IXXXXXXXX  I", "IXXXXXXXXX I", "IXXXXXXXXXXI" };
 
 	private static final float		STEP_VOLUME						= 0.3f;
 	private static final float		PLAYER_RADIUS					= 0.25f;
@@ -76,7 +77,6 @@ public class Player {
 	public boolean					isSpotted;
 	public boolean					isCaught;
 
-	public int						cash;
 	public float					imageAlpha;
 	public Array<Fixture>			artInView						= new Array<Fixture>();
 	public Array<Art>				inventory						= new Array<Art>();
@@ -94,6 +94,7 @@ public class Player {
 	private float					reactionTime					= MAX_REACTION_TIME;
 	private float					scanTime						= MAX_SCAN_TIME;
 	private int						carryCacity						= 1;
+	private int						cash;
 	private int						scanProgress;
 
 	private long					stepSoundId;
@@ -265,6 +266,9 @@ public class Player {
 			}
 		}
 
+		if (inventory.size >= carryCacity) {
+			artTag.setInstruction(MSG_INVENTORY_FULL);
+		}
 		if (isTouchingDoor) {
 			artTag.setInstruction(MSG_DOOR);
 		}
@@ -359,6 +363,22 @@ public class Player {
 		for (final Art art : inventory) {
 			art.dispose();
 		}
+	}
+
+	public int getCash() {
+		return cash;
+	}
+
+	public void setCash(int cash) {
+		this.cash = cash;
+	}
+
+	public int getCarryCacity() {
+		return carryCacity;
+	}
+
+	public void setCarryCacity(int carryCacity) {
+		this.carryCacity = carryCacity;
 	}
 
 }

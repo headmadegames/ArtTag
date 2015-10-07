@@ -18,18 +18,19 @@ public class JobDescription {
 	public Integer				artYearRange;
 
 	public JobDescription() {
-		if (RandomUtil.random() > 0.2f) {
-			artTag = RandomUtil.random(TagService.TAGS);
-		} else {
-			for (int i = 0; i < 1 + RandomUtil.random(2); i++) {
-				artTagNot.add(RandomUtil.random(TagService.TAGS));
-			}
-		}
+		// if (RandomUtil.random() > 0.2f) {
+		artTag = RandomUtil.random(TagService.TAGS);
+		// } else {
+		// for (int i = 0; i < 1 + RandomUtil.random(2); i++) {
+		// artTagNot.add(RandomUtil.random(TagService.TAGS));
+		// }
+		// }
+
 		// if (RandomUtil.random() > 0.5f) {
 		// artArtist = RandomService.instance.generateArtistName();
 		// } else {
 		artYearFrom = RandomService.instance.generateYear();
-		artYearRange = 10;
+		artYearRange = 40;
 		// artYearRange = RandomService.instance.generateYearRange(artYearFrom, 40);
 		// }
 		desc = RandomService.instance.generateJobDescription(this);

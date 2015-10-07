@@ -221,9 +221,9 @@ public class FlickrService {
 			Gdx.app.log(TAG, runnable.toString());
 		}
 		if (executor.isTerminated()) {
-			Gdx.app.log(TAG, "...DWH ExecutorService shutdown complete.");
+			Gdx.app.log(TAG, "...Flickr ExecutorService shutdown complete.");
 		} else {
-			Gdx.app.error(TAG, "...FAILED DWH ExecutorService shutdown.");
+			Gdx.app.error(TAG, "...FAILED Flickr ExecutorService shutdown.");
 		}
 	}
 
