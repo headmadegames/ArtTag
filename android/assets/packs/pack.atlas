@@ -20,7 +20,7 @@ com
   orig: 64, 64
   offset: 0, 0
   index: -1
-dollar
+dollarPatch
   rotate: false
   xy: 149, 1
   size: 64, 64

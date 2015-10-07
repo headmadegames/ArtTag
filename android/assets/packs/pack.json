@@ -2,14 +2,15 @@
 com.badlogic.gdx.graphics.g2d.BitmapFont: { 
 	default-font: { file: fonts/default.fnt },
 	typewriter-font: { file: fonts/typewriter.fnt },
-	scanner-font: { file: fonts/scanner.fnt }
+	scanner-font: { file: fonts/scanner.fnt },
+	dollar-font: { file: fonts/dollar.fnt }
 },
 com.badlogic.gdx.graphics.Color: {
 	green: { a: 1, b: 0, g: 1, r: 0 },
 	white: { a: 1, b: 1, g: 1, r: 1 },
 	red: { a: 1, b: 0, g: 0, r: 1 },
 	black: { a: 1, b: 0, g: 0, r: 0 },
-	moneyColor: { a: 1, b: 0.1, g: 0.12, r: 0.11 },
+	dollarColor: { a: 0.6, b: 0.2, g: 0.28, r: 0.24 },
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	dialogDim: { name: ui/white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
@@ -53,7 +54,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	jobDesc: { font: typewriter-font, fontColor: black, background: paper },
 	info: { font: default-font, fontColor: white, background: com },
 	scanner: { font: scanner-font, fontColor: green, background: scannerPatch },
-	scanner: { font: default-font, fontColor: moneyFont, background: dollar },
+	dollar: { font: dollar-font, fontColor: dollarColor, background: dollarPatch },
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: { selection: ui/selection, background: ui/textfield, font: default-font, fontColor: white, cursor: ui/cursor }
