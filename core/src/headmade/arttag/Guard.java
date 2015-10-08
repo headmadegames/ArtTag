@@ -1,12 +1,5 @@
 package headmade.arttag;
 
-import headmade.arttag.assets.AssetSounds;
-import headmade.arttag.assets.AssetTextures;
-import headmade.arttag.assets.Assets;
-import headmade.arttag.screens.ArtTagScreen;
-import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
-import box2dLight.ConeLight;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,48 +15,55 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.utils.Array;
 
+import box2dLight.ConeLight;
+import headmade.arttag.assets.AssetSounds;
+import headmade.arttag.assets.AssetTextures;
+import headmade.arttag.assets.Assets;
+import headmade.arttag.screens.ArtTagScreen;
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+
 public class Guard {
 
-	private static final String		TAG							= Guard.class.getName();
+	private static final String TAG = Guard.class.getName();
 
-	private static final float		STEP_VOLUME					= 0.3f;
-	private static final float		BODY_RADIUS					= 0.25f;
-	private static final float		LIGHT_CONE_LENGTH_FACTOR	= 0.7f;
-	private static final float		MAX_RUN_FACTOR				= 2f;
-	private static final float		MAX_SPEED_WALK				= 1f;
-	private static final float		MAX_LIGHT_ANGLE				= 35f;
-	private static final float		MAX_LIGHT_LENGTH			= 8f;
-	private static final float		MAX_LIGHT_CONE_LENGTH		= MAX_LIGHT_LENGTH * 0.7f;
-	private static final float		MAX_REACTION_TIME			= 0.1f;
-	private static final float		MAX_ROTATION_SPEED			= 1f;
+	private static final float	STEP_VOLUME					= 0.3f;
+	private static final float	BODY_RADIUS					= 0.25f;
+	private static final float	LIGHT_CONE_LENGTH_FACTOR	= 0.7f;
+	private static final float	MAX_RUN_FACTOR				= 2f;
+	private static final float	MAX_SPEED_WALK				= 1f;
+	private static final float	MAX_LIGHT_ANGLE				= 35f;
+	private static final float	MAX_LIGHT_LENGTH			= 8f;
+	private static final float	MAX_LIGHT_CONE_LENGTH		= MAX_LIGHT_LENGTH * 0.7f;
+	private static final float	MAX_REACTION_TIME			= 0.1f;
+	private static final float	MAX_ROTATION_SPEED			= 1f;
 
-	public Body						body;
-	public Array<Vector2>			path						= new Array<Vector2>();
-	public Array<Fixture>			playerInView				= new Array<Fixture>();
-	public ConeLight				light;
-	public boolean					isInitialised;
-	public boolean					isRunning;
-	public boolean					isAlert;
-	public boolean					isSuspicious;
-	public boolean					isTouchingPlayerLightCone;
-	public boolean					isLightOn					= true;
+	public Body				body;
+	public Array<Vector2>	path			= new Array<Vector2>();
+	public Array<Fixture>	playerInView	= new Array<Fixture>();
+	public ConeLight		light;
+	public boolean			isInitialised;
+	public boolean			isRunning;
+	public boolean			isAlert;
+	public boolean			isSuspicious;
+	public boolean			isTouchingPlayerLightCone;
+	public boolean			isLightOn		= true;
 
-	private final Array<Vector2>	backToPath					= new Array<Vector2>();
+	private final Array<Vector2>	backToPath		= new Array<Vector2>();
 	private Vector2					lastVisibleVecBackToPath;
 	private Vector2					playerLastSeenVec;
-	private Vector2					targetMoveVec				= new Vector2();
+	private Vector2					targetMoveVec	= new Vector2();
 	private float					sumDeltaSinceMoveChange;
 	private int						currentPathIndex;
 
-	private final float				lightAngle					= MAX_LIGHT_ANGLE;
+	private final float	lightAngle		= MAX_LIGHT_ANGLE;
 	// upgradable stats
-	private float					runFactor					= MAX_RUN_FACTOR;
-	private float					maxMoveSpeed				= MAX_SPEED_WALK;
-	private float					lightLength					= MAX_LIGHT_LENGTH / 2;
-	private float					reactionTime				= MAX_REACTION_TIME;
+	private float		runFactor		= MAX_RUN_FACTOR;
+	private float		maxMoveSpeed	= MAX_SPEED_WALK;
+	private float		lightLength		= MAX_LIGHT_LENGTH / 2;
+	private float		reactionTime	= MAX_REACTION_TIME;
 
-	private final long				stepSoundId;
-	private final Sound				sound;
+	private final long	stepSoundId;
+	private final Sound	sound;
 
 	public Guard() {
 		sound = Assets.assetsManager.get(AssetSounds.step, Sound.class);
@@ -83,7 +83,7 @@ public class Guard {
 			final FixtureDef fd = new FixtureDef();
 			fd.shape = circle;
 			fd.restitution = 1.5f;
-			fd.friction = 0.1f;
+			fd.friction = 0.0f;
 			fd.filter.categoryBits = ArtTag.CAT_GUARD;
 			fd.filter.maskBits = ArtTag.MASK_GUARD;
 
@@ -166,7 +166,9 @@ public class Guard {
 					final Vector2 outOfBodyVec = diffVec.scl(fixture.getShape().getRadius() * 1.3f);
 					targetPoint.add(outOfBodyVec);
 					seesPlayer = light.contains(targetPoint.x, targetPoint.y);
-					playerLastSeenVec = fixture.getBody().getWorldCenter().cpy();
+					if (seesPlayer) {
+						playerLastSeenVec = fixture.getBody().getWorldCenter().cpy();
+					}
 				}
 				// Gdx.app.log(TAG, light.contains(targetPoint.x, targetPoint.y) + " diffVec.length " + diffVec.len());
 				if (seesPlayer) {
@@ -177,15 +179,15 @@ public class Guard {
 					if (isAlert) {
 						// TODO play huh sound
 						reactionTime = MAX_REACTION_TIME;
+						isSuspicious = true;
 					}
 					isAlert = false;
-					isSuspicious = true;
 				}
 			}
 		}
 
 		if (isTouchingPlayerLightCone && Player.instance.isLightOn) {
-			isAlert = true;
+			// isAlert = true;
 		}
 
 		if (isAlert || isSuspicious) {
@@ -198,6 +200,7 @@ public class Guard {
 				checkPoint = backToPath.get(backToPath.size - 1);
 			}
 			if (BODY_RADIUS < checkPoint.dst(body.getWorldCenter())) {
+				// not touching checkpoint
 				final RayCastCallback callback = new RayCastCallback() {
 					@Override
 					public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
@@ -265,10 +268,11 @@ public class Guard {
 		final Vector2 bodyRotVec = new Vector2(1f, 0f);
 		bodyRotVec.setAngleRad(body.getAngle());
 		final float angleDiff = bodyRotVec.angleRad(targetMoveVec.cpy().rotate90(-1));
-		final float rotByRad = MathUtils.clamp(angleDiff, -(MAX_ROTATION_SPEED * delta) / reactionTime, (MAX_ROTATION_SPEED * delta)
-				/ reactionTime);
-		// Gdx.app.log(TAG, "angleDiff: " + angleDiff + " rotByRad: " + rotByRad + " bodyRotVec: " + bodyRotVec + " -  targetMoveVec: "
-		// + targetMoveVec);
+		final float rotByRad = MathUtils.clamp(angleDiff, -(MAX_ROTATION_SPEED * delta) / reactionTime,
+				MAX_ROTATION_SPEED * delta / reactionTime);
+				// Gdx.app.log(TAG, "angleDiff: " + angleDiff + " rotByRad: " + rotByRad + " bodyRotVec: " + bodyRotVec + " - targetMoveVec:
+				// "
+				// + targetMoveVec);
 
 		// is moving?
 		if (!MathUtils.isEqual(targetMoveVec.len2(), 0f)) {
@@ -306,4 +310,7 @@ public class Guard {
 		reactionTime = MathUtils.clamp(reactionTime * 0.8f, 0f, MAX_REACTION_TIME);
 	}
 
+	public Array<Vector2> getBackToPath() {
+		return backToPath;
+	}
 }

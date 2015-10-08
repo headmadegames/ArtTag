@@ -1,7 +1,5 @@
 package headmade.arttag;
 
-import headmade.arttag.screens.ArtTagScreen;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -9,10 +7,12 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-public class ArtTagContactListener implements ContactListener {
-	private static final String	TAG	= ArtTagContactListener.class.getName();
+import headmade.arttag.screens.ArtTagScreen;
 
-	private final ArtTagScreen	artTag;
+public class ArtTagContactListener implements ContactListener {
+	private static final String TAG = ArtTagContactListener.class.getName();
+
+	private final ArtTagScreen artTag;
 
 	public ArtTagContactListener(ArtTagScreen artTagScreen) {
 		this.artTag = artTagScreen;
@@ -113,10 +113,9 @@ public class ArtTagContactListener implements ContactListener {
 
 	private void handleBeginContactWithGuardLight(Contact contact, Fixture fixLight, Fixture fixOther) {
 		if (isPlayer(fixOther)) {
-			Gdx.app.log(TAG, "Guard sees player!");
+			Gdx.app.log(TAG, "Player entered Guards FOV!");
 			final Guard g = (Guard) fixLight.getUserData();
 			g.playerInView.add(fixOther);
-			g.isAlert = true;
 		}
 	}
 

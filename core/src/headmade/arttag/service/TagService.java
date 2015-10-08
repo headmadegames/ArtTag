@@ -17,7 +17,7 @@ public class TagService {
 	private static final String			TAG			= TagService.class.getName();
 
 	public static final String[]		TAGS		= { "Architecture", "a Drawing", "Fauna", "Heraldy", "Typography", "a Map",
-			"Sheet Music", "a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
+		"Sheet Music", "a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
 
 	public static TagService			instance	= new TagService();
 
@@ -132,7 +132,7 @@ public class TagService {
 
 	public void writeToFile() {
 		if (Gdx.files.isExternalStorageAvailable()) {
-			final FileHandle csv = Gdx.files.external("tagging.csv");
+			final FileHandle csv = Gdx.files.external("art-treachery-tagging.csv");
 			Gdx.app.log(TAG, "CSV located at " + csv.file().getAbsolutePath());
 
 			if (!csv.exists()) {

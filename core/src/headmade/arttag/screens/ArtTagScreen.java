@@ -1,5 +1,28 @@
 package headmade.arttag.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.DestructionListener;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
+
+import box2dLight.Light;
+import box2dLight.RayHandler;
 import headmade.arttag.ArtTag;
 import headmade.arttag.ArtTagContactListener;
 import headmade.arttag.ArtTagInputController;
@@ -17,35 +40,14 @@ import headmade.arttag.service.TagService;
 import headmade.arttag.utils.MapUtils;
 import headmade.arttag.utils.RandomUtil;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
-import box2dLight.Light;
-import box2dLight.RayHandler;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.DestructionListener;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 
 public class ArtTagScreen extends StageScreen {
 
-	private static final String			TAG					= ArtTagScreen.class.getName();
+	private static final String TAG = ArtTagScreen.class.getName();
 
 	private static final float			MIN_WORLD_WIDTH		= Gdx.graphics.getWidth() * ArtTag.UNIT_SCALE;
 	private static final float			MIN_WORLD_HEIGHT	= Gdx.graphics.getHeight() * ArtTag.UNIT_SCALE;
+	private final ShapeRenderer			shapeRenderer;
 	private final Box2DDebugRenderer	box2dDebugRenderer;
 	private final ArtTagInputController	inputController;
 	private final ContactListener		contactListener;
@@ -55,19 +57,19 @@ public class ArtTagScreen extends StageScreen {
 	public TiledMap						map;
 	public final World					world;
 	public final RayHandler				rayHandler;
-	public Array<Light>					lights				= new Array<Light>();
-	public Array<Guard>					guards				= new Array<Guard>();
-	public Array<Art>					artList				= new Array<Art>();
+	public Array<Light>					lights	= new Array<Light>();
+	public Array<Guard>					guards	= new Array<Guard>();
+	public Array<Art>					artList	= new Array<Art>();
 	public JobDescription				jobDescription;
 	public boolean						debugEnabled;
 
-	private final Table					rootTable;
-	private final Image					imageActor;
-	private final Label					jobDescActor;
-	private final Label					instructionsActor;
-	private final Label					resultActor;
+	private final Table	rootTable;
+	private final Image	imageActor;
+	private final Label	jobDescActor;
+	private final Label	instructionsActor;
+	private final Label	resultActor;
 
-	private float						sumDeltaLookAtImage;
+	private float sumDeltaLookAtImage;
 
 	// private final Map map;
 
@@ -102,6 +104,7 @@ public class ArtTagScreen extends StageScreen {
 		// rayHandler.setBlur(false);
 		/** BOX2D LIGHT STUFF END */
 
+		shapeRenderer = new ShapeRenderer();
 		box2dDebugRenderer = new Box2DDebugRenderer();
 		inputController = new ArtTagInputController(game, this);
 
@@ -118,11 +121,11 @@ public class ArtTagScreen extends StageScreen {
 		Gdx.app.log(TAG, "camera.viewportWidth " + camera.viewportWidth + " Gdx.graphics.getWidth(): " + Gdx.graphics.getWidth());
 		rootTable = new Table(Assets.instance.skin);
 		rootTable.setFillParent(true);
-		rootTable.add(jobDescActor).pad(10f).width((camera.viewportWidth / ArtTag.UNIT_SCALE) / 4);
+		rootTable.add(jobDescActor).pad(10f).width(camera.viewportWidth / ArtTag.UNIT_SCALE / 4);
 		rootTable.add(imageActor).center().expand();
-		rootTable.add(instructionsActor).top().right().pad(10f).width((camera.viewportWidth / ArtTag.UNIT_SCALE) / 4);
+		rootTable.add(instructionsActor).top().right().pad(10f).width(camera.viewportWidth / ArtTag.UNIT_SCALE / 4);
 		rootTable.row();
-		rootTable.add(resultActor).center().colspan(3).width((camera.viewportWidth / ArtTag.UNIT_SCALE) / 4);
+		rootTable.add(resultActor).center().colspan(3).width(camera.viewportWidth / ArtTag.UNIT_SCALE / 4);
 
 		stage.addActor(rootTable);
 
@@ -210,7 +213,7 @@ public class ArtTagScreen extends StageScreen {
 			imageActor.setDrawable(null);
 		}
 		// show scan result?
-		if (Player.instance.isTouchingArt && (Player.instance.isScanning || (currentArt != null && currentArt.isScanned()))) {
+		if (Player.instance.isTouchingArt && (Player.instance.isScanning || currentArt != null && currentArt.isScanned())) {
 			resultActor.setVisible(true);
 		} else {
 			resultActor.setVisible(false);
@@ -245,6 +248,25 @@ public class ArtTagScreen extends StageScreen {
 		stage.draw();
 
 		if (debugEnabled) {
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			shapeRenderer.setAutoShapeType(true);
+			shapeRenderer.begin();
+			for (final Guard g : guards) {
+				if (g.getBackToPath().size == 0) {
+					continue;
+				}
+				final float[] vertices = new float[2 + g.getBackToPath().size * 2];
+				vertices[0] = g.body.getPosition().x;
+				vertices[1] = g.body.getPosition().y;
+				int index = 1;
+				for (int i = g.getBackToPath().size - 1; i >= 0; i--) {
+					vertices[index * 2] = g.getBackToPath().get(i).x;
+					vertices[index * 2 + 1] = g.getBackToPath().get(i).y;
+					index++;
+				}
+				shapeRenderer.polyline(vertices);
+			}
+			shapeRenderer.end();
 			box2dDebugRenderer.render(world, camera.combined);
 		}
 	}
