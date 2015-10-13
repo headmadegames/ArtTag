@@ -6,9 +6,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -30,13 +34,18 @@ import headmade.arttag.DirectedGame;
 import headmade.arttag.Guard;
 import headmade.arttag.JobDescription;
 import headmade.arttag.Player;
+import headmade.arttag.Room;
 import headmade.arttag.actors.Art;
 import headmade.arttag.assets.AssetMaps;
+import headmade.arttag.assets.AssetParticles;
+import headmade.arttag.assets.AssetSounds;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
 import headmade.arttag.screens.transitions.ScreenTransitionFade;
 import headmade.arttag.service.FlickrService;
 import headmade.arttag.service.TagService;
+import headmade.arttag.spriter.LibGdxDrawer;
+import headmade.arttag.spriter.Loader;
 import headmade.arttag.utils.MapUtils;
 import headmade.arttag.utils.RandomUtil;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
@@ -45,8 +54,11 @@ public class ArtTagScreen extends StageScreen {
 
 	private static final String TAG = ArtTagScreen.class.getName();
 
-	private static final float			MIN_WORLD_WIDTH		= Gdx.graphics.getWidth() * ArtTag.UNIT_SCALE;
-	private static final float			MIN_WORLD_HEIGHT	= Gdx.graphics.getHeight() * ArtTag.UNIT_SCALE;
+	private static final float	MIN_WORLD_WIDTH		= Gdx.graphics.getWidth() * ArtTag.UNIT_SCALE;
+	private static final float	MIN_WORLD_HEIGHT	= Gdx.graphics.getHeight() * ArtTag.UNIT_SCALE;
+
+	public static final int MAX_ROOM_SIZE = 9;
+
 	private final ShapeRenderer			shapeRenderer;
 	private final Box2DDebugRenderer	box2dDebugRenderer;
 	private final ArtTagInputController	inputController;
@@ -54,12 +66,14 @@ public class ArtTagScreen extends StageScreen {
 	private Art							currentArt;
 
 	public OrthogonalTiledMapRenderer	mapRenderer;
-	public TiledMap						map;
+	public Room[][]						rooms				= new Room[MAX_ROOM_SIZE][MAX_ROOM_SIZE];
+	public Room							currentRoom;
+	public int							currentRoomIndexX	= MAX_ROOM_SIZE / 2;
+	public int							currentRoomIndexY	= MAX_ROOM_SIZE / 2;
 	public final World					world;
 	public final RayHandler				rayHandler;
-	public Array<Light>					lights	= new Array<Light>();
-	public Array<Guard>					guards	= new Array<Guard>();
-	public Array<Art>					artList	= new Array<Art>();
+	public Array<Light>					lights				= new Array<Light>();
+	public Array<Guard>					guards				= new Array<Guard>();
 	public JobDescription				jobDescription;
 	public boolean						debugEnabled;
 
@@ -71,10 +85,26 @@ public class ArtTagScreen extends StageScreen {
 
 	private float sumDeltaLookAtImage;
 
+	private final Array<headmade.arttag.spriter.Player> players = new Array<headmade.arttag.spriter.Player>();
+
+	private final LibGdxDrawer drawer;
+
+	private final ParticleEffect		smokeEffect;
+	private final ParticleEffectPool	smokeEffectPool;
+	private final Array<PooledEffect>	effects	= new Array();
+
+	private boolean isGameOver;
+
+	private float gameOverDelta;
+
 	// private final Map map;
 
 	public ArtTagScreen(DirectedGame game) {
 		super(game);// , new Stage(new ExtendViewport(MIN_WORLD_WIDTH, MIN_WORLD_HEIGHT), game.getBatch()));
+
+		Player.instance.setControlArtCount(0);
+		Player.instance.setArtScanCount(0);
+		Player.instance.setArtViewCount(0);
 
 		camera = new OrthographicCamera(MIN_WORLD_WIDTH, MIN_WORLD_HEIGHT);
 		((OrthographicCamera) camera).zoom = 0.5f;
@@ -131,6 +161,19 @@ public class ArtTagScreen extends StageScreen {
 
 		newJob();
 		MapUtils.loadMap(this, AssetMaps.map1);
+
+		final Loader<Sprite> loader = Assets.instance.getSpriterLoader();
+		drawer = new LibGdxDrawer(loader, game.getBatch(), shapeRenderer);
+		final headmade.arttag.spriter.Player player = new headmade.arttag.spriter.Player(Assets.instance.getMaggieSpriterData());
+		player.setAnimation("run");
+		player.setScale(ArtTag.UNIT_SCALE * 0.8f);
+		players.add(player);
+
+		smokeEffect = new ParticleEffect();
+		smokeEffect.load(Gdx.files.internal(AssetParticles.smoke), Assets.instance.atlas);
+		smokeEffect.scaleEffect(ArtTag.UNIT_SCALE);
+		smokeEffectPool = new ParticleEffectPool(smokeEffect, 2, 4);
+
 	}
 
 	@Override
@@ -141,14 +184,40 @@ public class ArtTagScreen extends StageScreen {
 			return;
 		}
 
-		world.step(ArtTag.TIME_STEP, ArtTag.VELOCITY_ITERS, ArtTag.POSITION_ITERS);
-
-		// isSpotted will be set by guards
-		Player.instance.isSpotted = false;
-		for (final Guard g : guards) {
-			g.update(this, delta);
+		if (gameOverDelta > 3f) {
+			endLevel();
+			gameOverDelta = 0f;
 		}
-		Player.instance.update(this, delta);
+
+		if (Player.instance.isCaught) {
+			final PooledEffect effect = smokeEffectPool.obtain();
+			effect.setPosition(Player.instance.body.getWorldCenter().x, Player.instance.body.getWorldCenter().y);
+			effects.add(effect);
+			Assets.instance.playSound(AssetSounds.smoke);
+			Assets.instance.playSound(AssetSounds.cough);
+			Player.instance.isCaught = false;
+			Player.instance.destroyBody(this);
+			isGameOver = true;
+		}
+
+		if (!isGameOver) {
+			// isSpotted will be set by guards
+			Player.instance.isSpotted = false;
+			for (final Guard g : guards) {
+				g.update(this, delta);
+			}
+			Player.instance.update(this, delta);
+			world.step(ArtTag.TIME_STEP, ArtTag.VELOCITY_ITERS, ArtTag.POSITION_ITERS);
+		} else {
+			gameOverDelta += delta;
+		}
+
+		if (Player.instance.isTouchingWarp) {
+			newRoom();
+			final PooledEffect effect = smokeEffectPool.obtain();
+			effect.setPosition(Player.instance.body.getWorldCenter().x, Player.instance.body.getWorldCenter().y - 0.5f);
+			effects.add(effect);
+		}
 
 		// camera.position.x = camera.position.x * ArtTag.UNIT_SCALE;
 		// camera.position.y = camera.position.y * ArtTag.UNIT_SCALE;
@@ -159,6 +228,7 @@ public class ArtTagScreen extends StageScreen {
 		}
 
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+		// Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		// Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT
 				| (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
@@ -172,35 +242,44 @@ public class ArtTagScreen extends StageScreen {
 
 		{ // player and goards
 			batch.begin();
+			shapeRenderer.begin(ShapeType.Line);
+
 			Box2DSprite.draw(batch, world);
+
+			for (final headmade.arttag.spriter.Player player : players) {
+				player.update();
+				if (Player.instance.body != null) {
+					player.setPosition(Player.instance.body.getWorldCenter().x, Player.instance.body.getWorldCenter().y);
+				}
+				drawer.draw(player);
+			}
+
 			batch.end();
+			shapeRenderer.end();
 		}
 
 		mapRenderer.render(MapUtils.MAP_LAYERS_HIGH);
 
-		batch.begin();
 		{
-			// final Matrix4 oldTransMat = batch.getTransformMatrix();
-			for (final Art art : artList) {
-				art.draw(batch);
-				// art.drawFrame(batch);
+			batch.begin();
+			{
+				// final Matrix4 oldTransMat = batch.getTransformMatrix();
+				for (final Art art : currentRoom.getArtList()) {
+					art.draw(batch);
+					// art.drawFrame(batch);
+				}
+
+				for (int i = effects.size - 1; i >= 0; i--) {
+					final PooledEffect effect = effects.get(i);
+					effect.draw(batch, delta);
+					if (effect.isComplete()) {
+						effect.free();
+						effects.removeIndex(i);
+					}
+				}
 			}
-			// batch.setTransformMatrix(stage.getCamera().combined);
-			// batch.flush();
-			// for (final Art art : artList) {
-			// art.drawFrame(batch);
-			// }
-			// batch.setTransformMatrix(oldTransMat);
-			// batch.flush();
-
-			// final Texture tex = Assets.assetsManager.get(AssetTextures.portrait1, Texture.class);
-			// final NinePatch frame = Assets.instance.skin.get(AssetTextures.frame2Large, NinePatch.class);
-			// tex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			// batch.draw(tex, 0, 0);
-			// frame.draw(batch, 0, 0, tex.getWidth(), tex.getHeight());
-
+			batch.end();
 		}
-		batch.end();
 
 		rayHandler.setCombinedMatrix((OrthographicCamera) camera);
 		rayHandler.updateAndRender();
@@ -252,19 +331,34 @@ public class ArtTagScreen extends StageScreen {
 			shapeRenderer.setAutoShapeType(true);
 			shapeRenderer.begin();
 			for (final Guard g : guards) {
-				if (g.getBackToPath().size == 0) {
-					continue;
+				{
+					if (g.getBackToPath().size > 0) {
+						final float[] vertices = new float[2 + g.getBackToPath().size * 2];
+						vertices[0] = g.body.getPosition().x;
+						vertices[1] = g.body.getPosition().y;
+						int index = 1;
+						for (int i = g.getBackToPath().size - 1; i >= 0; i--) {
+							vertices[index * 2] = g.getBackToPath().get(i).x;
+							vertices[index * 2 + 1] = g.getBackToPath().get(i).y;
+							index++;
+						}
+						shapeRenderer.polyline(vertices);
+					}
 				}
-				final float[] vertices = new float[2 + g.getBackToPath().size * 2];
-				vertices[0] = g.body.getPosition().x;
-				vertices[1] = g.body.getPosition().y;
-				int index = 1;
-				for (int i = g.getBackToPath().size - 1; i >= 0; i--) {
-					vertices[index * 2] = g.getBackToPath().get(i).x;
-					vertices[index * 2 + 1] = g.getBackToPath().get(i).y;
-					index++;
+				{
+					if (g.path.size > 0) {
+						final float[] vertices = new float[2 + g.path.size * 2];
+						vertices[0] = g.body.getPosition().x;
+						vertices[1] = g.body.getPosition().y;
+						int index = 1;
+						for (int i = g.path.size - 1; i >= 0; i--) {
+							vertices[index * 2] = g.path.get(i).x;
+							vertices[index * 2 + 1] = g.path.get(i).y;
+							index++;
+						}
+						shapeRenderer.polyline(vertices);
+					}
 				}
-				shapeRenderer.polyline(vertices);
 			}
 			shapeRenderer.end();
 			box2dDebugRenderer.render(world, camera.combined);
@@ -298,7 +392,7 @@ public class ArtTagScreen extends StageScreen {
 	}
 
 	public void endLevel() {
-		TagService.instance.tag(artList);
+		TagService.instance.tag(currentRoom.getArtList());
 		Gdx.app.log(TAG, TagService.instance.tagVos.toString());
 		Player.instance.body = null;
 		Player.instance.artInView.clear();
@@ -314,19 +408,32 @@ public class ArtTagScreen extends StageScreen {
 		resultActor.setText(text);
 	}
 
-	public void newLevel() {
+	public void newRoom() {
+		Player.instance.isTouchingWarp = false;
 		MapUtils.loadMap(this, RandomUtil.random(AssetMaps.ALL_MAPS));
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
+
 		mapRenderer.dispose();
 		rayHandler.dispose();
 		world.dispose();
+		smokeEffect.dispose();
 		box2dDebugRenderer.dispose();
-		for (final Art art : artList) {
-			art.dispose();
+
+		for (final Guard g : guards) {
+			g.dispose();
+		}
+		for (int x = 0; x < MAX_ROOM_SIZE; x++) {
+			for (int y = 0; y < MAX_ROOM_SIZE; y++) {
+				if (rooms[x][y] != null) {
+					for (final Art art : rooms[x][y].getArtList()) {
+						art.dispose();
+					}
+				}
+			}
 		}
 	}
 
@@ -336,7 +443,18 @@ public class ArtTagScreen extends StageScreen {
 
 	public void setCurrentArt(Art currentArt) {
 		if (currentArt != null && currentArt.getWebArt() == null) {
-			currentArt.setWebArt(FlickrService.instance.getWebArt());
+			Player.instance.setArtViewCount(Player.instance.getArtViewCount() + 1);
+			final int controlCountRand = Player.instance.getControlArtCount() + 2;
+			if (RandomUtil.random(controlCountRand * controlCountRand) == 1) {
+				Gdx.app.log(TAG, "Adding control web art");
+				currentArt.setWebArt(FlickrService.instance.getControlWebArt(jobDescription.artTag));
+			} else {
+				if (RandomUtil.random(Player.instance.getArtScanCount() + 1) > 5) {
+					currentArt.setWebArt(FlickrService.instance.getControlWebArt(jobDescription.artTag));
+				} else {
+					currentArt.setWebArt(FlickrService.instance.getWebArt());
+				}
+			}
 		}
 		this.currentArt = currentArt;
 	}

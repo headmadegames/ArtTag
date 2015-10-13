@@ -1,8 +1,5 @@
 package headmade.arttag.service;
 
-import headmade.arttag.actors.WebArt;
-import headmade.arttag.utils.RandomUtil;
-
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -26,18 +23,22 @@ import com.flickr4java.flickr.photos.Photo;
 import com.flickr4java.flickr.photos.PhotoList;
 import com.flickr4java.flickr.photos.SearchParameters;
 
+import headmade.arttag.Player;
+import headmade.arttag.actors.WebArt;
+import headmade.arttag.utils.RandomUtil;
+
 public class FlickrService {
-	private static final String						TAG				= FlickrService.class.getName();
+	private static final String TAG = FlickrService.class.getName();
 
-	private static final int						BATCH_SIZE		= 40;
+	private static final int	BATCH_SIZE	= 40;
 	// TODO find out actual size of image catalogue
-	private static final int						MAX_PAGE		= 1000000 / BATCH_SIZE;
+	private static final int	MAX_PAGE	= 1000000 / BATCH_SIZE;
 
-	public static FlickrService						instance		= new FlickrService();
+	public static FlickrService instance = new FlickrService();
 
-	private final Flickr							flickr;
-	private final ExecutorService					executor;
-	private final ExecutorService					executor2;
+	private final Flickr			flickr;
+	private final ExecutorService	executor;
+	private final ExecutorService	executor2;
 
 	private final Array<Integer>					usedPages		= new Array<Integer>();
 	private final ArrayList<WebArt>					availableWebArt	= new ArrayList<WebArt>();
@@ -119,7 +120,7 @@ public class FlickrService {
 
 	/**
 	 * fetches Tags synchronously
-	 * 
+	 *
 	 * @param photo
 	 *            for which tags will be fetched
 	 * @param webart
@@ -148,8 +149,9 @@ public class FlickrService {
 			int readBytes = 0;
 			while (true) {
 				final int length = in.read(out, readBytes, out.length - readBytes);
-				if (length == -1)
+				if (length == -1) {
 					break;
+				}
 				readBytes += length;
 			}
 			return readBytes;
@@ -192,6 +194,12 @@ public class FlickrService {
 			fetchMorePhotos();
 		}
 		return availableWebArt.remove(RandomUtil.random(availableWebArt.size() - 1));
+	}
+
+	public WebArt getControlWebArt(String tag) {
+		Player.instance.setControlArtCount(Player.instance.getControlArtCount() + 1);
+		final ArrayList<WebArt> controlArt = controlWebArt.get(tag);
+		return controlArt.get(RandomUtil.random(controlWebArt.size() - 1));
 	}
 
 	public void dispose() {

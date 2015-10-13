@@ -34,7 +34,7 @@ public class Guard {
 	private static final float	MAX_LIGHT_ANGLE				= 35f;
 	private static final float	MAX_LIGHT_LENGTH			= 8f;
 	private static final float	MAX_LIGHT_CONE_LENGTH		= MAX_LIGHT_LENGTH * 0.7f;
-	private static final float	MAX_REACTION_TIME			= 0.1f;
+	private static final float	MAX_REACTION_TIME			= 0.2f;
 	private static final float	MAX_ROTATION_SPEED			= 1f;
 
 	public Body				body;
@@ -157,13 +157,13 @@ public class Guard {
 		Vector2 targetPoint = null;
 		if (isLightOn) {
 			for (final Fixture fixture : playerInView) {
-				targetPoint = fixture.getBody().getWorldCenter();
+				targetPoint = fixture.getBody().getWorldCenter().cpy();
 				final Vector2 diffVec = body.getWorldCenter().cpy().sub(targetPoint);
 				boolean seesPlayer = false;
-				if (diffVec.len() < 1f) {
+				if (diffVec.len() < BODY_RADIUS) {
 					seesPlayer = true;
 				} else {
-					final Vector2 outOfBodyVec = diffVec.scl(fixture.getShape().getRadius() * 1.3f);
+					final Vector2 outOfBodyVec = diffVec.scl(fixture.getShape().getRadius() * 1.01f);
 					targetPoint.add(outOfBodyVec);
 					seesPlayer = light.contains(targetPoint.x, targetPoint.y);
 					if (seesPlayer) {
@@ -172,12 +172,16 @@ public class Guard {
 				}
 				// Gdx.app.log(TAG, light.contains(targetPoint.x, targetPoint.y) + " diffVec.length " + diffVec.len());
 				if (seesPlayer) {
+					Gdx.app.log(TAG, "Guard sees player");
+					if (!isAlert) {
+						Assets.instance.playSound(AssetSounds.whosThere);
+					}
 					isAlert = true;
 					Player.instance.isSpotted = true;
 					reactionTime = 0f;
 				} else {
 					if (isAlert) {
-						// TODO play huh sound
+						Assets.instance.playSound(AssetSounds.huh);
 						reactionTime = MAX_REACTION_TIME;
 						isSuspicious = true;
 					}
@@ -224,6 +228,7 @@ public class Guard {
 			targetPoint = playerLastSeenVec;
 			if (BODY_RADIUS / 10 > targetPoint.dst2(body.getPosition())) {
 				// Lost player
+				Assets.instance.playSound(AssetSounds.hm);
 				Gdx.app.log(TAG, "Guard no longer suspicious");
 				isSuspicious = false;
 			}
@@ -312,5 +317,9 @@ public class Guard {
 
 	public Array<Vector2> getBackToPath() {
 		return backToPath;
+	}
+
+	public void dispose() {
+		sound.stop(stepSoundId);
 	}
 }

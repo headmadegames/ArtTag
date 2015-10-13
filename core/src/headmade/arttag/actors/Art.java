@@ -1,12 +1,5 @@
 package headmade.arttag.actors;
 
-import headmade.arttag.JobDescription;
-import headmade.arttag.assets.AssetTextures;
-import headmade.arttag.assets.Assets;
-import headmade.arttag.service.ImageService;
-import headmade.arttag.service.RandomService;
-import headmade.arttag.utils.RandomUtil;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,36 +16,43 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.flickr4java.flickr.tags.Tag;
 
+import headmade.arttag.JobDescription;
+import headmade.arttag.assets.AssetTextures;
+import headmade.arttag.assets.Assets;
+import headmade.arttag.service.ImageService;
+import headmade.arttag.service.RandomService;
+import headmade.arttag.utils.RandomUtil;
+
 public class Art {
 
-	private static final String	TAG				= Art.class.getName();
+	private static final String TAG = Art.class.getName();
 
-	private static final String	DATE_TAG_PREFIX	= "date:";
+	private static final String DATE_TAG_PREFIX = "date:";
 
-	private String				name;
-	private String				artistName;
-	private int					year;
+	private String	name;
+	private String	artistName;
+	private int		year;
 
-	private final Rectangle		rectangle;
-	private NinePatch			frame;
-	private TextureRegion		placeholder;
-	private Drawable			drawable;
+	private final Rectangle	rectangle;
+	private NinePatch		frame;
+	private TextureRegion	placeholder;
+	private Drawable		drawable;
 
-	private Texture				image;
-	private WebArt				webArt;
+	private Texture	image;
+	private WebArt	webArt;
 
-	private String				imageId;
+	private String imageId;
 
-	private String				fitsTag;
-	private Set<String>			fitsTagNot		= new HashSet<String>();
+	private String		fitsTag;
+	private Set<String>	fitsTagNot	= new HashSet<String>();
 
-	private Body				artTrigger;
+	private Body artTrigger;
 
-	private boolean				isSeen;
-	private boolean				isScanned;
-	private boolean				isStolen;
+	private boolean	isSeen;
+	private boolean	isScanned;
+	private boolean	isStolen;
 
-	private final Array<String>	knownTags		= new Array<String>();
+	private final Array<String> knownTags = new Array<String>();
 
 	public Art(Rectangle rectangle) {
 		super();
@@ -292,6 +292,10 @@ public class Art {
 
 	public void setSeen(boolean isSeen) {
 		this.isSeen = isSeen;
+	}
+
+	public Rectangle getRectangle() {
+		return rectangle;
 	}
 
 }

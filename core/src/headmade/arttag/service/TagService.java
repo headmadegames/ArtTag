@@ -1,30 +1,31 @@
 package headmade.arttag.service;
 
-import headmade.arttag.ArtTag;
-import headmade.arttag.GameState;
-import headmade.arttag.JobDescription;
-import headmade.arttag.actors.Art;
-import headmade.arttag.vo.ImageTagVo;
-import headmade.arttag.vo.TagVo;
-
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 
+import headmade.arttag.ArtTag;
+import headmade.arttag.GameState;
+import headmade.arttag.JobDescription;
+import headmade.arttag.Player;
+import headmade.arttag.actors.Art;
+import headmade.arttag.vo.ImageTagVo;
+import headmade.arttag.vo.TagVo;
+
 public class TagService {
-	private static final String			TAG			= TagService.class.getName();
+	private static final String TAG = TagService.class.getName();
 
-	public static final String[]		TAGS		= { "Architecture", "a Drawing", "Fauna", "Heraldy", "Typography", "a Map",
-		"Sheet Music", "a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
+	public static final String[] TAGS = { "Architecture", "a Drawing", "Fauna", "Heraldy", "Typography", "a Map", "Sheet Music",
+			"a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
 
-	public static TagService			instance	= new TagService();
+	public static TagService instance = new TagService();
 
-	public HashMap<String, ImageTagVo>	tagVos		= new HashMap<String, ImageTagVo>();
+	public HashMap<String, ImageTagVo> tagVos = new HashMap<String, ImageTagVo>();
 
-	private int							correctTagCount;
-	private int							incorrectTagCount;
+	private int	correctTagCount;
+	private int	incorrectTagCount;
 
 	private TagService() {
 	}
@@ -135,12 +136,14 @@ public class TagService {
 			final FileHandle csv = Gdx.files.external("art-treachery-tagging.csv");
 			Gdx.app.log(TAG, "CSV located at " + csv.file().getAbsolutePath());
 
-			if (!csv.exists()) {
-				csv.writeString(buildCsvHeader(), false);
-			}
 			float accuracy = new Float(correctTagCount) / new Float(correctTagCount + incorrectTagCount);
 			if (accuracy == Float.NaN) {
 				accuracy = 0.5f;
+			}
+			Player.instance.setAccuracy(accuracy);
+
+			if (!csv.exists()) {
+				csv.writeString(buildCsvHeader(), false);
 			}
 			for (final String imageId : tagVos.keySet()) {
 				writeCsvLine(csv, imageId, ArtTag.gameState, accuracy, tagVos.get(imageId));

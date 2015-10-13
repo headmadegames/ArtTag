@@ -1,16 +1,5 @@
 package headmade.arttag.screens;
 
-import headmade.arttag.DirectedGame;
-import headmade.arttag.JobDescription;
-import headmade.arttag.Player;
-import headmade.arttag.actions.ActionFactory;
-import headmade.arttag.actors.Art;
-import headmade.arttag.actors.JigglyImageTextButton;
-import headmade.arttag.assets.Assets;
-import headmade.arttag.screens.transitions.ScreenTransitionFade;
-import headmade.arttag.service.TagService;
-import headmade.arttag.vo.TagVo;
-
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -24,8 +13,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Scaling;
 
+import headmade.arttag.DirectedGame;
+import headmade.arttag.JobDescription;
+import headmade.arttag.Player;
+import headmade.arttag.actions.ActionFactory;
+import headmade.arttag.actors.Art;
+import headmade.arttag.actors.JigglyImageTextButton;
+import headmade.arttag.assets.Assets;
+import headmade.arttag.screens.transitions.ScreenTransitionFade;
+import headmade.arttag.service.TagService;
+import headmade.arttag.vo.TagVo;
+
 public class RatingScreen extends StageScreen {
-	private static final String		TAG	= RatingScreen.class.getName();
+	private static final String TAG = RatingScreen.class.getName();
 
 	private final JobDescription	jobDesc;
 	private final Label				jobDescActor;
@@ -85,6 +85,8 @@ public class RatingScreen extends StageScreen {
 					cash /= 10;
 				}
 
+				cash *= Player.instance.getAccuracy();
+
 				final Label earningActor = new Label("$" + cash, Assets.instance.skin, "dollar");
 
 				rootTable.add(i == 0 ? "Loot" : "").pad(10f).right();
@@ -120,6 +122,9 @@ public class RatingScreen extends StageScreen {
 			public boolean keyDown(InputEvent event, int keycode) {
 				if (keycode == Keys.F12) {
 					rootTable.setDebug(!rootTable.getDebug());
+					return true;
+				} else if (keycode == Keys.ALT_LEFT || keycode == Keys.ALT_RIGHT || keycode == Keys.Z || keycode == Keys.SPACE) {
+					nextScreen();
 					return true;
 				}
 				return super.keyDown(event, keycode);

@@ -1,15 +1,5 @@
 package headmade.arttag;
 
-import headmade.arttag.actors.Art;
-import headmade.arttag.assets.AssetSounds;
-import headmade.arttag.assets.AssetTextures;
-import headmade.arttag.assets.Assets;
-import headmade.arttag.screens.ArtTagScreen;
-import headmade.arttag.service.TagService;
-import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
-import net.dermetfan.gdx.physics.box2d.Box2DUtils;
-import box2dLight.ConeLight;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -24,91 +14,105 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 
+import box2dLight.ConeLight;
+import headmade.arttag.actors.Art;
+import headmade.arttag.assets.AssetSounds;
+import headmade.arttag.assets.AssetTextures;
+import headmade.arttag.assets.Assets;
+import headmade.arttag.screens.ArtTagScreen;
+import headmade.arttag.service.TagService;
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+import net.dermetfan.gdx.physics.box2d.Box2DUtils;
+
 public class Player {
-	private static final String		MSG_DOOR						= "Press " + ArtTag.BUTTON_A + " Button to walk trough door.";
-	private static final String		MSG_EXIT						= "Do you really want to leave? \nConfirm with the " + ArtTag.BUTTON_A
-																			+ " Button.";
-	private static final String		MSG_INVENTORY_FULL				= "You can not carry any more. Return your goods to the exit.";
-	private static final String		MSG_SCAN						= "Is the image what our client is looking for?\nScan it's age with "
-			+ ArtTag.BUTTON_A;
-	private static final String		MSG_SCAN_2						= "Scanning only reveals the age of the image.\nSo don't waste your "
+	private static final String	MSG_DOOR			= "Press " + ArtTag.BUTTON_A + " Button to walk trough door.";
+	private static final String	MSG_EXIT			= "Do you really want to leave? \nConfirm with the " + ArtTag.BUTTON_A + " Button.";
+	private static final String	MSG_INVENTORY_FULL	= "You can not carry any more. Return your goods to the exit.";
+	private static final String	MSG_SCAN			= "Is the image what our client is looking for?\nScan it's age with " + ArtTag.BUTTON_A;
+	private static final String	MSG_SCAN_2			= "Scanning only reveals the age of the image.\nSo don't waste your "
 			+ "time scanning artwork that doesn't match the job description.";
-	private static final String		MSG_SCAN_3						= "Is this what our client is looking for?\nCancel with "
-																			+ ArtTag.BUTTON_B + " Button.\n" + "Take it with the "
-																			+ ArtTag.BUTTON_A + " Button.";
+	private static final String	MSG_SCAN_3			= "Is this what our client is looking for?\nCancel with " + ArtTag.BUTTON_B
+			+ " Button.\n" + "Take it with the " + ArtTag.BUTTON_A + " Button.";
 
-	private static final String		TAG								= Player.class.getName();
+	private static final String TAG = Player.class.getName();
 
-	public static final Player		instance						= new Player();															// Singleton
+	public static final Player instance = new Player(); // Singleton
 
 	// private static final String[] SCANNING_PROGRESS = { "/", "/\\\\\\", "/\\\\\\/", "/\\\\\\/\\\\\\", "/\\\\\\/\\\\\\/" };
-	private static final String[]	SCANNING_PROGRESS				= { "I          I", "IX         I", "IXX        I", "IXXX       I",
-			"IXXXX      I", "IXXXXX     I", "IXXXXXX    I", "IXXXXXXX   I", "IXXXXXXXX  I", "IXXXXXXXXX I", "IXXXXXXXXXXI" };
+	private static final String[] SCANNING_PROGRESS = { "I          I", "IX         I", "IXX        I", "IXXX       I", "IXXXX      I",
+			"IXXXXX     I", "IXXXXXX    I", "IXXXXXXX   I", "IXXXXXXXX  I", "IXXXXXXXXX I", "IXXXXXXXXXXI" };
 
-	private static final float		STEP_VOLUME						= 0.3f;
-	private static final float		PLAYER_RADIUS					= 0.25f;
-	private static final float		PLAYERLIGHT_CONE_LENGTH_FACTOR	= 0.7f;
-	private static final float		MAX_RUN_FACTOR					= 2f;
-	private static final float		MAX_SPEED_WALK					= 2.2f;
-	private static final float		MAX_PLAYERLIGHT_ANGLE			= 35f;
-	private static final float		MAX_PLAYERLIGHT_LENGTH			= 5f;
-	private static final float		MAX_PLAYERLIGHT_CONE_LENGTH		= MAX_PLAYERLIGHT_LENGTH * 0.7f;
-	private static final float		MAX_REACTION_TIME				= 0.1f;
-	private static final float		MIN_SCAN_TIME					= 1f;
-	private static final float		MAX_SCAN_TIME					= 2f;
-	private static final float		MAX_ROTATION_SPEED				= 1f;
+	private static final float	STEP_VOLUME						= 0.3f;
+	private static final float	PLAYER_RADIUS					= 0.2f;
+	private static final float	PLAYERLIGHT_CONE_LENGTH_FACTOR	= 0.7f;
+	private static final float	MAX_RUN_FACTOR					= 2f;
+	private static final float	MAX_SPEED_WALK					= 2.2f;
+	private static final float	MAX_PLAYERLIGHT_ANGLE			= 35f;
+	private static final float	MAX_PLAYERLIGHT_LENGTH			= 5f;
+	private static final float	MAX_PLAYERLIGHT_CONE_LENGTH		= MAX_PLAYERLIGHT_LENGTH * 0.7f;
+	private static final float	MAX_REACTION_TIME				= 0.1f;
+	private static final float	MIN_SCAN_TIME					= 1f;
+	private static final float	MAX_SCAN_TIME					= 2f;
+	private static final float	MAX_ROTATION_SPEED				= 1f;
 
-	public Body						body;
-	public ConeLight				playerLight;
-	public boolean					isInitialised					= false;
-	public boolean					isMoveLeft;
-	public boolean					isMoveRight;
-	public boolean					isMoveUp;
-	public boolean					isMoveDown;
-	public boolean					isRunning;
-	public boolean					isAbleToSteal;
-	public boolean					isAbleToScan;
-	public boolean					isLightOn;
-	public boolean					isScanning;
-	public boolean					isTouchingArt;
-	public boolean					isTouchingExit;
-	public boolean					isTouchingDoor;
-	public boolean					isExitActivated;
-	public boolean					isSpotted;
-	public boolean					isCaught;
+	public Body			body;
+	public ConeLight	playerLight;
+	public boolean		isInitialised	= false;
+	public boolean		isMoveLeft;
+	public boolean		isMoveRight;
+	public boolean		isMoveUp;
+	public boolean		isMoveDown;
+	public boolean		isRunning;
+	public boolean		isAbleToSteal;
+	public boolean		isAbleToScan;
+	public boolean		isLightOn;
+	public boolean		isScanning;
+	public boolean		isTouchingArt;
+	public boolean		isTouchingExit;
+	public boolean		isTouchingWarp;
+	public boolean		isExitActivated;
+	public boolean		isSpotted;
+	public boolean		isCaught;
+	public String		warpDirection;
 
-	public float					imageAlpha;
-	public Array<Fixture>			artInView						= new Array<Fixture>();
-	public Array<Art>				inventory						= new Array<Art>();
+	public float			imageAlpha;
+	public Array<Fixture>	artInView	= new Array<Fixture>();
+	public Array<Art>		inventory	= new Array<Art>();
 
-	private final Vector2			targetMoveVec					= new Vector2();
-	private final Vector2			moveVec							= new Vector2();
-	private float					sumDeltaSinceMoveChange;
-	private float					sumDeltaScan;
+	private float			accuracy		= 0.5f;
+	private float			deltaInLevel;
+	private int				artScanCount;
+	private int				controlArtCount;
+	private int				artViewCount;
+	private final Vector2	targetMoveVec	= new Vector2();
+	private final Vector2	moveVec			= new Vector2();
+	private float			sumDeltaSinceMoveChange;
+	private float			sumDeltaScan;
 
-	private final float				playerlightAngle				= MAX_PLAYERLIGHT_ANGLE;
+	private final float	playerlightAngle	= MAX_PLAYERLIGHT_ANGLE;
 	// upgradable stats
-	private float					runFactor						= MAX_RUN_FACTOR * 0.75f;
-	private float					walkSpeed						= MAX_SPEED_WALK * 0.75f;
-	private float					playerLightLength				= MAX_PLAYERLIGHT_LENGTH / 2;
-	private float					reactionTime					= MAX_REACTION_TIME;
-	private float					scanTime						= MAX_SCAN_TIME;
-	private int						carryCacity						= 1;
-	private int						cash;
-	private int						scanProgress;
+	private float		runFactor			= MAX_RUN_FACTOR * 0.75f;
+	private float		walkSpeed			= MAX_SPEED_WALK * 0.75f;
+	private float		playerLightLength	= MAX_PLAYERLIGHT_LENGTH / 2;
+	private float		reactionTime		= MAX_REACTION_TIME;
+	private float		scanTime			= MAX_SCAN_TIME;
+	private int			carryCacity			= 1;
+	private int			cash;
+	private int			scanProgress;
 
-	private long					stepSoundId;
-	private Sound					sound;
+	private long	stepSoundId;
+	private Sound	stepSound;
 
 	private Player() {
 	}
 
 	public void init() {
-		sound = Assets.assetsManager.get(AssetSounds.step, Sound.class);
-		stepSoundId = sound.loop(0f);
+		setStepSound(Assets.assetsManager.get(AssetSounds.step, Sound.class));
+		stepSoundId = getStepSound().loop(0f);
 	}
 
 	public void createBody(ArtTagScreen artTagScreen, float x, float y) {
+		Gdx.app.log(TAG, "Creating player at " + x + ", " + y);
 		{ // body
 			final CircleShape circle = new CircleShape();
 			circle.setRadius(PLAYER_RADIUS);
@@ -188,7 +192,15 @@ public class Player {
 		}
 	}
 
+	public void destroyBody(ArtTagScreen artTagScreen) {
+		Box2DUtils.destroyFixtures(body);
+		artTagScreen.world.destroyBody(body);
+		body = null;
+	}
+
 	public void update(ArtTagScreen artTag, float delta) {
+		deltaInLevel += delta;
+
 		if (body == null) {
 			return;
 		}
@@ -227,19 +239,20 @@ public class Player {
 		final Vector2 bodyRotVec = new Vector2(1f, 0f);
 		bodyRotVec.setAngleRad(body.getAngle());
 		final float angleDiff = bodyRotVec.angleRad(targetMoveVec.cpy().rotate90(-1));
-		final float rotByRad = MathUtils.clamp(angleDiff, -(MAX_ROTATION_SPEED * delta) / reactionTime, (MAX_ROTATION_SPEED * delta)
-				/ reactionTime);
-		// Gdx.app.log(TAG, "angleDiff: " + angleDiff + " rotByRad: " + rotByRad + " bodyRotVec: " + bodyRotVec + " -  targetMoveVec: "
-		// + targetMoveVec);
+		final float rotByRad = MathUtils.clamp(angleDiff, -(MAX_ROTATION_SPEED * delta) / reactionTime,
+				MAX_ROTATION_SPEED * delta / reactionTime);
+				// Gdx.app.log(TAG, "angleDiff: " + angleDiff + " rotByRad: " + rotByRad + " bodyRotVec: " + bodyRotVec + " - targetMoveVec:
+				// "
+				// + targetMoveVec);
 
 		// is player moving?
 		if (!MathUtils.isEqual(targetMoveVec.len2(), 0f)) {
-			sound.setVolume(stepSoundId, isRunning ? STEP_VOLUME * 2 : STEP_VOLUME);
-			sound.setPitch(stepSoundId, isRunning ? runFactor : 1f);
+			getStepSound().setVolume(stepSoundId, isRunning ? STEP_VOLUME * 2 : STEP_VOLUME);
+			getStepSound().setPitch(stepSoundId, isRunning ? runFactor : 1f);
 			body.setTransform(body.getPosition(), body.getAngle() + rotByRad);
 		} else {
-			sound.setVolume(stepSoundId, 0f);
-			sound.setPitch(stepSoundId, 1f);
+			getStepSound().setVolume(stepSoundId, 0f);
+			getStepSound().setPitch(stepSoundId, 1f);
 		}
 
 		playerLight.setActive(isLightOn);
@@ -269,7 +282,7 @@ public class Player {
 		if (inventory.size >= carryCacity) {
 			artTag.setInstruction(MSG_INVENTORY_FULL);
 		}
-		if (isTouchingDoor) {
+		if (isTouchingExit) {
 			artTag.setInstruction(MSG_DOOR);
 		}
 
@@ -333,7 +346,7 @@ public class Player {
 		Gdx.app.log(TAG, "Stealing " + artTagScreen.getCurrentArt());
 		// TODO play steal sound
 		inventory.add(artTagScreen.getCurrentArt());
-		artTagScreen.artList.removeValue(artTagScreen.getCurrentArt(), true);
+		artTagScreen.currentRoom.getArtList().removeValue(artTagScreen.getCurrentArt(), true);
 		artTagScreen.getCurrentArt().setStolen(true);
 		Box2DUtils.destroyFixtures(artTagScreen.getCurrentArt().getArtTrigger());
 		artTagScreen.world.destroyBody(artTagScreen.getCurrentArt().getArtTrigger());
@@ -350,6 +363,7 @@ public class Player {
 		// TODO play scan sound
 		isScanning = true;
 		sumDeltaScan = 0f;
+		artScanCount++;
 		Assets.assetsManager.get(AssetSounds.scan, Sound.class).play(0.3f);
 	}
 
@@ -379,6 +393,54 @@ public class Player {
 
 	public void setCarryCacity(int carryCacity) {
 		this.carryCacity = carryCacity;
+	}
+
+	public float getAccuracy() {
+		return accuracy;
+	}
+
+	public void setAccuracy(float accuracy) {
+		this.accuracy = accuracy;
+	}
+
+	public float getDeltaInLevel() {
+		return deltaInLevel;
+	}
+
+	public void setDeltaInLevel(float deltaInLevel) {
+		this.deltaInLevel = deltaInLevel;
+	}
+
+	public int getArtScanCount() {
+		return artScanCount;
+	}
+
+	public void setArtScanCount(int artScanCount) {
+		this.artScanCount = artScanCount;
+	}
+
+	public int getArtViewCount() {
+		return artViewCount;
+	}
+
+	public void setArtViewCount(int artViewCount) {
+		this.artViewCount = artViewCount;
+	}
+
+	public Sound getStepSound() {
+		return stepSound;
+	}
+
+	public void setStepSound(Sound stepSound) {
+		this.stepSound = stepSound;
+	}
+
+	public int getControlArtCount() {
+		return controlArtCount;
+	}
+
+	public void setControlArtCount(int controlArtCount) {
+		this.controlArtCount = controlArtCount;
 	}
 
 }

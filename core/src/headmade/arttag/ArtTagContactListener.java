@@ -91,11 +91,14 @@ public class ArtTagContactListener implements ContactListener {
 		} else if (isExit(fixOther)) {
 			Gdx.app.log(TAG, "Start touching exit");
 			Player.instance.isTouchingExit = true;
-		} else if (isDoor(fixOther)) {
-			Gdx.app.log(TAG, "Start touching door");
-			Player.instance.isTouchingDoor = true;
+		} else if (isWarp(fixOther)) {
+			Gdx.app.log(TAG, "Start touching warp");
+			final String direction = (String) fixOther.getBody().getUserData();
+			Player.instance.isTouchingWarp = true;
+			Player.instance.warpDirection = direction;
 		} else if (isGuard(fixOther)) {
 			Gdx.app.log(TAG, "Game Over!");
+			Player.instance.isCaught = true;
 		} else if (isGuardLight(fixOther)) {
 			handleBeginContactWithGuardLight(contact, fixOther, fixPlayer);
 		}
@@ -126,9 +129,9 @@ public class ArtTagContactListener implements ContactListener {
 		} else if (isExit(fixOther)) {
 			Gdx.app.log(TAG, "End touching exit");
 			Player.instance.isTouchingExit = false;
-		} else if (isDoor(fixOther)) {
-			Gdx.app.log(TAG, "End touching door");
-			Player.instance.isTouchingDoor = false;
+		} else if (isWarp(fixOther)) {
+			Gdx.app.log(TAG, "End touching warp");
+			Player.instance.isTouchingWarp = false;
 		}
 	}
 
@@ -179,7 +182,7 @@ public class ArtTagContactListener implements ContactListener {
 		return fix.getFilterData().categoryBits == ArtTag.CAT_EXIT;
 	}
 
-	private boolean isDoor(Fixture fix) {
-		return fix.getFilterData().categoryBits == ArtTag.CAT_DOOR;
+	private boolean isWarp(Fixture fix) {
+		return fix.getFilterData().categoryBits == ArtTag.CAT_WARP;
 	}
 }

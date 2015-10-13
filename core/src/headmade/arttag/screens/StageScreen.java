@@ -1,11 +1,11 @@
 package headmade.arttag.screens;
 
-import headmade.arttag.DirectedGame;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+
+import headmade.arttag.DirectedGame;
 
 public class StageScreen extends AbstractGameScreen {
 
@@ -13,9 +13,9 @@ public class StageScreen extends AbstractGameScreen {
 		return stage;
 	}
 
-	private static final String	TAG	= StageScreen.class.getName();
+	private static final String TAG = StageScreen.class.getName();
 
-	protected Stage				stage;
+	protected Stage stage;
 
 	public StageScreen(DirectedGame game, Stage stage) {
 		super(game);
@@ -54,6 +54,7 @@ public class StageScreen extends AbstractGameScreen {
 		stage.act(delta);
 		preDraw(delta);
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+		// Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 		// Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT
 				| (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));

@@ -1,17 +1,17 @@
 package headmade.arttag.desktop;
 
-import headmade.arttag.ArtTag;
-import headmade.arttag.assets.Assets;
-
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 
+import headmade.arttag.ArtTag;
+import headmade.arttag.assets.Assets;
+
 public class ArtTagLauncher {
 
-	// private static boolean rebuildAtlas = true;
-	private static boolean	rebuildAtlas		= false;
+	private static boolean	rebuildAtlas		= true;
+	// private static boolean rebuildAtlas = false;
 	private static boolean	drawDebugOutline	= false;
 
 	public static void main(String[] arg) {

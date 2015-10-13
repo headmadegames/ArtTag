@@ -1,7 +1,5 @@
 package headmade.arttag.assets;
 
-import headmade.arttag.ArtTag;
-
 import java.io.File;
 
 import com.badlogic.gdx.Gdx;
@@ -23,24 +21,34 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 
+import headmade.arttag.ArtTag;
+import headmade.arttag.spriter.Data;
+import headmade.arttag.spriter.Entity;
+import headmade.arttag.spriter.LibGdxAtlasLoader;
+import headmade.arttag.spriter.SCMLReader;
+
 //import com.kotcrab.vis.ui.VisUI;
 
 public class Assets implements Disposable, AssetErrorListener {
 
-	private static final String	TAG				= Assets.class.getName();
+	private static final String TAG = Assets.class.getName();
 
 	public static final String	HEADMADE_LOGO	= "headmade_large.png";
-	public static final String	PACKS_BASE		= "packs/";					// + File.separator;
+	public static final String	PACKS_BASE		= "packs/";						// + File.separator;
 	public static final String	PACK			= "pack";
 	public static final String	GAME_ATLAS		= PACKS_BASE + PACK + ".atlas";
 	public static final String	RAW_ASSETS		= "assets-raw/images";
 
-	public static final Assets	instance		= new Assets();				// Singleton
+	public static final Assets instance = new Assets(); // Singleton
 
-	public static AssetManager	assetsManager;
+	public static AssetManager assetsManager;
 
-	public TextureAtlas			atlas;											// Don't make this static!!!
-	public Skin					skin;
+	public TextureAtlas	atlas;	// Don't make this static!!!
+	public Skin			skin;
+
+	private Data				spriterData;
+	private LibGdxAtlasLoader	spriterLoader;
+	private Entity				maggieSpriterData;
 
 	// singleton: prevent instantiation from other classes
 	private Assets() {
@@ -78,6 +86,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public void dispose() {
 		Gdx.app.debug(TAG, "Disposing assets...");
 		assetsManager.dispose();
+		spriterLoader.dispose();
 	}
 
 	@Override
@@ -115,19 +124,37 @@ public class Assets implements Disposable, AssetErrorListener {
 		assetsManager.load(AssetMusic.normal, Music.class);
 		assetsManager.load(AssetMusic.spotted, Music.class);
 
-		assetsManager.load(AssetSounds.steal, Sound.class);
+		assetsManager.load(AssetSounds.cough, Sound.class);
+		assetsManager.load(AssetSounds.hm, Sound.class);
+		assetsManager.load(AssetSounds.huh, Sound.class);
 		assetsManager.load(AssetSounds.scan, Sound.class);
+		assetsManager.load(AssetSounds.smoke, Sound.class);
+		assetsManager.load(AssetSounds.steal, Sound.class);
 		assetsManager.load(AssetSounds.step, Sound.class);
+		assetsManager.load(AssetSounds.stop, Sound.class);
+		assetsManager.load(AssetSounds.whosThere, Sound.class);
 
 		assetsManager.load(AssetTextures.skin, Skin.class, AssetTextures.skinParameter);
 
-		assetsManager.load(AssetMaps.map1, TiledMap.class);
+		for (final String map : AssetMaps.ALL_MAPS) {
+			assetsManager.load(map, TiledMap.class);
+		}
+
 	}
 
 	public void onFinishLoading() {
 		atlas = assetsManager.get(GAME_ATLAS, TextureAtlas.class);
 		skin = assetsManager.get(AssetTextures.skin, Skin.class);
 		setTextureFilter(atlas, TextureFilter.Nearest);
+
+		try {
+			spriterData = new SCMLReader(Gdx.files.internal("maggie.scml").read()).getData();
+			spriterLoader = new LibGdxAtlasLoader(spriterData, atlas);
+			spriterLoader.load(Gdx.files.internal("maggie.scml").file());
+			maggieSpriterData = spriterData.getEntity(0);
+		} catch (final Exception e) {
+			Gdx.app.error(TAG, "Error loading spriter stuff", e);
+		}
 	}
 
 	public void playSound(String name) {
@@ -173,5 +200,13 @@ public class Assets implements Disposable, AssetErrorListener {
 		ninepatch = skin.get(AssetTextures.frame2, NinePatch.class);
 		ninepatch.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		ninepatch.scale(ArtTag.UNIT_SCALE / 3, ArtTag.UNIT_SCALE / 3);
+	}
+
+	public Entity getMaggieSpriterData() {
+		return maggieSpriterData;
+	}
+
+	public LibGdxAtlasLoader getSpriterLoader() {
+		return spriterLoader;
 	}
 }

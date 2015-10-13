@@ -1,7 +1,5 @@
 package headmade.arttag;
 
-import headmade.arttag.screens.ArtTagScreen;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
@@ -10,9 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
+import headmade.arttag.screens.ArtTagScreen;
+
 public class ArtTagInputController extends InputAdapter {
 
-	private static final String	TAG	= ArtTagInputController.class.getName();
+	private static final String TAG = ArtTagInputController.class.getName();
 
 	private final DirectedGame	game;
 	private final ArtTagScreen	artTagScreen;
@@ -61,9 +61,6 @@ public class ArtTagInputController extends InputAdapter {
 					Player.instance.activateExit(artTagScreen);
 				}
 				Player.instance.scan(artTagScreen);
-				return true;
-			} else if (Player.instance.isTouchingDoor) {
-				artTagScreen.newLevel();
 				return true;
 			}
 
@@ -116,7 +113,7 @@ public class ArtTagInputController extends InputAdapter {
 		if (artTagScreen.debugEnabled) {
 			final OrthographicCamera cam = (OrthographicCamera) artTagScreen.camera;
 			cam.zoom += amount * 0.5f;
-			cam.zoom = MathUtils.clamp(cam.zoom, 0.5f, 10f);
+			cam.zoom = MathUtils.clamp(cam.zoom, 0.5f, 50f);
 			cam.update();
 			Gdx.app.log(TAG, "Zoom changed to " + cam.zoom);
 		}

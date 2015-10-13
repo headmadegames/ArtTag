@@ -19,8 +19,8 @@ public class AssetParticles {
 
 	// @formatter:off
 	// @Asset(Particle.class)
-	// public static final String
-	// sound1 = PARTICLES_PATH + "smoke.fx";
+	 public static final String
+	 smoke = PARTICLES_PATH + "smokebomb.fx";
 	// sound2 = SOUNDS_PATH + "sound2.wav";
 
 }

@@ -1,18 +1,6 @@
 package headmade.arttag.utils;
 
-import headmade.arttag.ArtTag;
-import headmade.arttag.Guard;
-import headmade.arttag.Player;
-import headmade.arttag.actors.Art;
-import headmade.arttag.assets.Assets;
-import headmade.arttag.screens.ArtTagScreen;
-
 import java.util.HashMap;
-
-import net.dermetfan.gdx.physics.box2d.Box2DMapObjectParser;
-import net.dermetfan.gdx.physics.box2d.Box2DUtils;
-import box2dLight.ConeLight;
-import box2dLight.PointLight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -37,28 +25,85 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 
+import box2dLight.ConeLight;
+import box2dLight.Light;
+import box2dLight.PointLight;
+import headmade.arttag.ArtTag;
+import headmade.arttag.Guard;
+import headmade.arttag.Player;
+import headmade.arttag.Room;
+import headmade.arttag.actors.Art;
+import headmade.arttag.screens.ArtTagScreen;
+import net.dermetfan.gdx.physics.box2d.Box2DMapObjectParser;
+import net.dermetfan.gdx.physics.box2d.Box2DUtils;
+
 public class MapUtils {
-	private static final String	TAG				= MapUtils.class.getName();
+
+	private static final String TAG = MapUtils.class.getName();
 
 	public static final int[]	MAP_LAYERS_LOW	= { 0, 1, 2 };
 	public static final int[]	MAP_LAYERS_HIGH	= { 3 };
 
-	private static final String	OBJ_PLAYER		= "player";
-	private static final String	OBJ_GUARD		= "guard";
-	private static final String	OBJ_PATH		= "path";
-	private static final String	OBJ_DOOR		= "door";
-	private static final String	OBJ_EXIT		= "exit";
-	private static final String	OBJ_ART			= "art";
+	private static final String	OBJ_PLAYER	= "player";
+	private static final String	OBJ_GUARD	= "guard";
+	private static final String	OBJ_PATH	= "path";
+	private static final String	OBJ_WARP	= "warp";
+	private static final String	OBJ_EXIT	= "exit";
+	private static final String	OBJ_ART		= "art";
 
-	private static final String	LIGTH_POINT		= "point";
-	private static final String	LIGTH_CONE		= "cone";
+	private static final String	PROP_DIRECTION		= "direction";
+	private static final String	DIRECTION_LEFT		= "left";
+	private static final String	DIRECTION_RIGHT		= "right";
+	private static final String	DIRECTION_TOP		= "top";
+	private static final String	DIRECTION_BOTTOM	= "bottom";
+
+	private static final String	LIGTH_POINT	= "point";
+	private static final String	LIGTH_CONE	= "cone";
 
 	public static void loadMap(ArtTagScreen artTagScreen, String mapName) {
-		if (artTagScreen.map != null) {
+		if (artTagScreen.currentRoom != null) {
 			unloadMap(artTagScreen);
 		}
-		Gdx.app.log(TAG, "Loading map " + mapName);
-		artTagScreen.map = Assets.assetsManager.get(mapName, TiledMap.class);
+
+		if (null != Player.instance.warpDirection) {
+			Gdx.app.log(TAG, "Loading map " + mapName);
+			if (DIRECTION_LEFT.equalsIgnoreCase(Player.instance.warpDirection)) {
+				if (artTagScreen.currentRoomIndexX == 0) {
+					artTagScreen.currentRoomIndexX = ArtTagScreen.MAX_ROOM_SIZE - 1;
+				} else {
+					artTagScreen.currentRoomIndexX--;
+				}
+			} else if (DIRECTION_RIGHT.equalsIgnoreCase(Player.instance.warpDirection)) {
+				if (artTagScreen.currentRoomIndexX == ArtTagScreen.MAX_ROOM_SIZE - 1) {
+					artTagScreen.currentRoomIndexX = 0;
+				} else {
+					artTagScreen.currentRoomIndexX++;
+				}
+			} else if (DIRECTION_TOP.equalsIgnoreCase(Player.instance.warpDirection)) {
+				if (artTagScreen.currentRoomIndexY == ArtTagScreen.MAX_ROOM_SIZE - 1) {
+					artTagScreen.currentRoomIndexY = 0;
+				} else {
+					artTagScreen.currentRoomIndexY++;
+				}
+			} else if (DIRECTION_BOTTOM.equalsIgnoreCase(Player.instance.warpDirection)) {
+				if (artTagScreen.currentRoomIndexY == 0) {
+					artTagScreen.currentRoomIndexY = ArtTagScreen.MAX_ROOM_SIZE - 1;
+				} else {
+					artTagScreen.currentRoomIndexY--;
+				}
+			}
+
+		}
+
+		boolean isNewRoom = true;
+		if (artTagScreen.rooms[artTagScreen.currentRoomIndexX][artTagScreen.currentRoomIndexY] == null) {
+			artTagScreen.currentRoom = new Room(mapName);
+			artTagScreen.rooms[artTagScreen.currentRoomIndexX][artTagScreen.currentRoomIndexY] = artTagScreen.currentRoom;
+		} else {
+			artTagScreen.currentRoom = artTagScreen.rooms[artTagScreen.currentRoomIndexX][artTagScreen.currentRoomIndexY];
+			isNewRoom = false;
+		}
+
 		final Box2DMapObjectParser parser = new Box2DMapObjectParser(ArtTag.UNIT_SCALE);
 		// final Box2DMapObjectParser.Listener.Adapter listener = new Box2DMapObjectParser.Listener.Adapter() {
 		//
@@ -72,40 +117,61 @@ public class MapUtils {
 		// };
 		// parser.setListener(listener);
 
-		parser.load(artTagScreen.world, artTagScreen.map);
+		final TiledMap map = artTagScreen.currentRoom.getMap();
+		parser.load(artTagScreen.world, map);
 		if (null == artTagScreen.mapRenderer) {
 			// artTagScreen.mapRenderer = new OrthogonalTiledMapRenderer(artTagScreen.map, artTagScreen.getGame().getBatch());
-			artTagScreen.mapRenderer = new OrthogonalTiledMapRenderer(artTagScreen.map, parser.getUnitScale(), artTagScreen.getGame()
-					.getBatch());
+			artTagScreen.mapRenderer = new OrthogonalTiledMapRenderer(map, parser.getUnitScale(), artTagScreen.getGame().getBatch());
 		} else {
-			artTagScreen.mapRenderer.setMap(artTagScreen.map);
+			artTagScreen.mapRenderer.setMap(map);
 		}
 
-		MapLayer layer = artTagScreen.map.getLayers().get("objects");
+		MapLayer layer = map.getLayers().get("objects");
 		for (final MapObject mapObject : layer.getObjects()) {
 			if (OBJ_ART.equals(mapObject.getName())) {
-				if (mapObject instanceof RectangleMapObject) {
-					createNewArt(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
-				} else {
-					Gdx.app.error(TAG, OBJ_ART + " has to be a Rectangle");
+				if (isNewRoom) {
+					// add Art only if this a new room. If this is an old room the art was created before.
+					if (mapObject instanceof RectangleMapObject) {
+						createNewArt(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
+					} else {
+						Gdx.app.error(TAG, OBJ_ART + " has to be a Rectangle");
+					}
 				}
-			} else if (OBJ_DOOR.equals(mapObject.getName())) {
-				createDoor(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
+			} else if (OBJ_WARP.equals(mapObject.getName())) {
+				final Body warp = createWarp(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
+				final String direction = mapObject.getProperties().get(PROP_DIRECTION, String.class);
+				warp.setUserData(direction);
 			} else if (OBJ_EXIT.equals(mapObject.getName())) {
 				createExit(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
 			} else if (OBJ_PLAYER.equals(mapObject.getName())) {
 				final Ellipse e = ((EllipseMapObject) mapObject).getEllipse();
 				if (null == Player.instance.body) {
-					Player.instance.createBody(artTagScreen, (e.x + e.width / 2f) * parser.getUnitScale(),
-							(e.y + e.height / 2f) * parser.getUnitScale());
+					final String direction = mapObject.getProperties().get("direction", String.class);
+					if (null != Player.instance.warpDirection) {
+						if (Player.instance.warpDirection.equalsIgnoreCase(direction)) {
+							Player.instance.createBody(artTagScreen, (e.x + e.width / 2f) * parser.getUnitScale(),
+									(e.y + e.height / 2f) * parser.getUnitScale());
+							Player.instance.warpDirection = null;
+						}
+					} else if (direction == null) {
+						Player.instance.createBody(artTagScreen, (e.x + e.width / 2f) * parser.getUnitScale(),
+								(e.y + e.height / 2f) * parser.getUnitScale());
+					}
 				}
+			}
+		}
+
+		if (!isNewRoom) {
+			// create ArtSensors for old Art
+			for (final Art art : artTagScreen.currentRoom.getArtList()) {
+				createArtSensor(artTagScreen, art);
 			}
 		}
 
 		{ // guards
 			final HashMap<String, Guard> guards = new HashMap<String, Guard>();
 			final Array<MapObject> paths = new Array<MapObject>();
-			layer = artTagScreen.map.getLayers().get("guards");
+			layer = map.getLayers().get("guards");
 			for (final MapObject mapObject : layer.getObjects()) {
 				if (mapObject.getName() != null && mapObject.getName().contains(OBJ_GUARD)) {
 					final Ellipse e = ((EllipseMapObject) mapObject).getEllipse();
@@ -124,9 +190,10 @@ public class MapUtils {
 				final Guard g = guards.get(ownerName.trim());
 				Gdx.app.log(TAG, "guards " + guards.keySet());
 				if (g != null) {
-					final Polyline p = pl.getPolyline();
+					final Polyline orgPolyline = pl.getPolyline();
+					final Polyline p = new Polyline(orgPolyline.getVertices());
 					p.setScale(parser.getUnitScale(), parser.getUnitScale());
-					p.setPosition(p.getX() * parser.getUnitScale(), p.getY() * parser.getUnitScale());
+					p.setPosition(orgPolyline.getX() * parser.getUnitScale(), orgPolyline.getY() * parser.getUnitScale());
 					final float[] vertices = p.getTransformedVertices();
 					for (int i = 0; i < vertices.length; i += 2) {
 						g.path.add(new Vector2(vertices[i], vertices[i + 1]));
@@ -139,7 +206,7 @@ public class MapUtils {
 
 		}
 
-		layer = artTagScreen.map.getLayers().get("lights");
+		layer = map.getLayers().get("lights");
 		for (final MapObject mapObject : layer.getObjects()) {
 			if (mapObject.getProperties().get("type", String.class).contains(LIGTH_POINT)) {
 				if (mapObject instanceof EllipseMapObject) {
@@ -158,24 +225,24 @@ public class MapUtils {
 
 	}
 
-	private static void createDoor(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
+	private static Body createWarp(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
 		Gdx.app.log(TAG, "Creating door");
-		toWorldScale(rectangle, unitScale);
-		createSensor(artTagScreen, rectangle, ArtTag.CAT_DOOR, ArtTag.MASK_DOOR);
+		final Rectangle rect = toWorldScale(rectangle, unitScale);
+		return createSensor(artTagScreen, rect, ArtTag.CAT_WARP, ArtTag.MASK_WARP);
 	}
 
 	private static void createExit(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
 		Gdx.app.log(TAG, "Creating exit");
-		toWorldScale(rectangle, unitScale);
-		createSensor(artTagScreen, rectangle, ArtTag.CAT_EXIT, ArtTag.MASK_EXIT);
+		final Rectangle rect = toWorldScale(rectangle, unitScale);
+		createSensor(artTagScreen, rect, ArtTag.CAT_EXIT, ArtTag.MASK_EXIT);
 	}
 
 	private static void createPointLight(ArtTagScreen artTagScreen, EllipseMapObject mapObject, float unitScale) {
 		final Ellipse e = mapObject.getEllipse();
 		final Color color = getColor(mapObject);
 
-		final PointLight light = new PointLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, color, unitScale * e.width, unitScale
-				* (e.x + e.width / 2), unitScale * (e.y + e.width / 2));
+		final PointLight light = new PointLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, color, unitScale * e.width,
+				unitScale * (e.x + e.width / 2), unitScale * (e.y + e.width / 2));
 		light.setContactFilter(ArtTag.CAT_LIGHT, ArtTag.GROUP_LIGHT, ArtTag.MASK_LIGHT);
 		light.setSoftnessLength(0.5f);
 
@@ -184,7 +251,14 @@ public class MapUtils {
 
 	private static void createConeLight(ArtTagScreen artTagScreen, PolygonMapObject mapObject, float unitScale) {
 		final Polygon poly = mapObject.getPolygon();
-		final float[] vertices = poly.getTransformedVertices();
+		Float objRot = 0f;
+		if (null != mapObject.getProperties()) {
+			objRot = mapObject.getProperties().get("rotation", Float.class);
+		}
+		if (objRot == null) {
+			objRot = 0f;
+		}
+		final float[] vertices = poly.getVertices();// getTransformedVertices();
 		if (vertices.length < 6) {
 			Gdx.app.error(TAG, "Invalid Polygon for conelight. It has less than 3 vertices " + mapObject);
 			return;
@@ -195,12 +269,14 @@ public class MapUtils {
 		}
 
 		final Color color = getColor(mapObject);
+		final Vector2 halfBetweenV1AndV2 = vecs.get(2).cpy().add(vecs.get(1).cpy().sub(vecs.get(2)).scl(0.5f));
 		final float length = vecs.get(2).dst(vecs.first());
 		final float angle = Math.abs(vecs.get(1).angle(vecs.get(2)));
-		final float rotation = vecs.get(1).cpy().sub(vecs.get(2)).scl(0.5f).angle();
+		final float rotation = halfBetweenV1AndV2.cpy().sub(vecs.first()).angle() - objRot;
+		// final float rotation = poly.getRotation();
 		// Gdx.app.log(TAG, "rotation " + rotation + " length: " + length + " angle:" + angle);
-		final ConeLight light = new ConeLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, color, length, unitScale * poly.getX(), unitScale
-				* poly.getY(), rotation, angle);
+		final ConeLight light = new ConeLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, color, length, unitScale * poly.getX(),
+				unitScale * poly.getY(), rotation, angle);
 		light.setSoftnessLength(0.5f);
 		light.setContactFilter(ArtTag.CAT_LIGHT, ArtTag.GROUP_LIGHT, ArtTag.MASK_LIGHT);
 
@@ -222,20 +298,14 @@ public class MapUtils {
 	}
 
 	private static void createNewArt(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
-		toWorldScale(rectangle, unitScale);
+		final Rectangle rect = toWorldScale(rectangle, unitScale);
 
-		final Art art = new Art(rectangle);
+		final Art art = new Art(rect);
 		art.init();
-		artTagScreen.artList.add(art);
+		artTagScreen.currentRoom.getArtList().add(art);
 		Gdx.app.log(TAG, "Created new Art " + art);
 
-		// art sensor
-		rectangle = new Rectangle(rectangle);
-		rectangle.y = MathUtils.floor(rectangle.y) + 0.1f;
-		rectangle.height = 0.25f;
-		final Body artTrigger = createSensor(artTagScreen, rectangle, ArtTag.CAT_ARTTRIGGER, ArtTag.MASK_ARTTRIGGER);
-		artTrigger.setUserData(art);
-		art.setArtTrigger(artTrigger);
+		createArtSensor(artTagScreen, art);
 
 		// ConeLight artLight = new ConeLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, new Color(0xFFFFFFFF), rectangle.width, rectangle.x,
 		// rectangle.y, 45f, 45f);
@@ -246,6 +316,17 @@ public class MapUtils {
 		// artLight.setStaticLight(true);
 		// artTagScreen.lights.add(artLight);
 
+	}
+
+	private static void createArtSensor(ArtTagScreen artTagScreen, final Art art) {
+		Rectangle rectangle;
+		// art sensor
+		rectangle = new Rectangle(art.getRectangle());
+		rectangle.y = MathUtils.floor(rectangle.y) + 0.1f;
+		rectangle.height = 0.25f;
+		final Body artTrigger = createSensor(artTagScreen, rectangle, ArtTag.CAT_ARTTRIGGER, ArtTag.MASK_ARTTRIGGER);
+		artTrigger.setUserData(art);
+		art.setArtTrigger(artTrigger);
 	}
 
 	private static Body createSensor(ArtTagScreen artTagScreen, Rectangle rectangle, short catBits, short maskBits) {
@@ -266,19 +347,23 @@ public class MapUtils {
 		return artTrigger;
 	}
 
-	private static void toWorldScale(Rectangle rectangle, float unitScale) {
+	private static Rectangle toWorldScale(Rectangle orgRect, float unitScale) {
+		final Rectangle rectangle = new Rectangle(orgRect);
 		rectangle.x *= unitScale;
 		rectangle.y *= unitScale;
 		rectangle.height *= unitScale;
 		rectangle.width *= unitScale;
+		return rectangle;
 	}
 
 	private static void unloadMap(ArtTagScreen artTagScreen) {
-		artTagScreen.map = null;
+		Gdx.app.log(TAG, "Unloading map");
+		artTagScreen.currentRoom = null;
 		artTagScreen.world.clearForces();
 
 		final Array<Body> bodies = new Array<Body>();
 		artTagScreen.world.getBodies(bodies);
+		Gdx.app.log(TAG, "Destroying all fixtures and bodies");
 		for (final Body body : bodies) {
 			Box2DUtils.destroyFixtures(body);
 			// for (final Fixture fixture : body.getFixtureList()) {
@@ -286,6 +371,18 @@ public class MapUtils {
 			// }
 			artTagScreen.world.destroyBody(body);
 		}
+		Gdx.app.log(TAG, "Removing lights");
+		for (final Light light : artTagScreen.lights) {
+			light.remove(true);
+		}
+		artTagScreen.lights.clear();
+		for (final Guard g : artTagScreen.guards) {
+			g.dispose();
+		}
+		artTagScreen.guards.clear();
+
+		Player.instance.body = null;
+		// Player.instance.getStepSound().stop();
 
 		artTagScreen.world.step(1f / 60f, 1, 1);
 	}
