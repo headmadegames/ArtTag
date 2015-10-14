@@ -1,0 +1,14 @@
+architecture=Architecture
+advertisement=Advertisement
+cover=a cover
+decoration=decoration
+diagram=a diagram
+fashion=Fashion
+fauna=Fauna
+typography=Typography
+map=a Map
+music=Music
+people=People
+flora=Flora
+portrait=a Portrait
+ship=a Ship

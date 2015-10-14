@@ -36,6 +36,7 @@ import headmade.arttag.JobDescription;
 import headmade.arttag.Player;
 import headmade.arttag.Room;
 import headmade.arttag.actors.Art;
+import headmade.arttag.actors.WebArt;
 import headmade.arttag.assets.AssetMaps;
 import headmade.arttag.assets.AssetParticles;
 import headmade.arttag.assets.AssetSounds;
@@ -102,6 +103,7 @@ public class ArtTagScreen extends StageScreen {
 	public ArtTagScreen(DirectedGame game) {
 		super(game);// , new Stage(new ExtendViewport(MIN_WORLD_WIDTH, MIN_WORLD_HEIGHT), game.getBatch()));
 
+		Player.instance.inventory.clear();
 		Player.instance.setControlArtCount(0);
 		Player.instance.setArtScanCount(0);
 		Player.instance.setArtViewCount(0);
@@ -214,9 +216,6 @@ public class ArtTagScreen extends StageScreen {
 
 		if (Player.instance.isTouchingWarp) {
 			newRoom();
-			final PooledEffect effect = smokeEffectPool.obtain();
-			effect.setPosition(Player.instance.body.getWorldCenter().x, Player.instance.body.getWorldCenter().y - 0.5f);
-			effects.add(effect);
 		}
 
 		// camera.position.x = camera.position.x * ArtTag.UNIT_SCALE;
@@ -246,13 +245,13 @@ public class ArtTagScreen extends StageScreen {
 
 			Box2DSprite.draw(batch, world);
 
-			for (final headmade.arttag.spriter.Player player : players) {
-				player.update();
-				if (Player.instance.body != null) {
-					player.setPosition(Player.instance.body.getWorldCenter().x, Player.instance.body.getWorldCenter().y);
-				}
-				drawer.draw(player);
-			}
+			// for (final headmade.arttag.spriter.Player player : players) {
+			// player.update();
+			// if (Player.instance.body != null) {
+			// player.setPosition(Player.instance.body.getWorldCenter().x, Player.instance.body.getWorldCenter().y);
+			// }
+			// drawer.draw(player);
+			// }
 
 			batch.end();
 			shapeRenderer.end();
@@ -445,15 +444,20 @@ public class ArtTagScreen extends StageScreen {
 		if (currentArt != null && currentArt.getWebArt() == null) {
 			Player.instance.setArtViewCount(Player.instance.getArtViewCount() + 1);
 			final int controlCountRand = Player.instance.getControlArtCount() + 2;
-			if (RandomUtil.random(controlCountRand * controlCountRand) == 1) {
+			final int controlArtScanCount = Player.instance.getArtScanCount() + 1;
+			final int controlArtViewCount = Player.instance.getArtViewCount() + 1;
+			if (RandomUtil.random(controlCountRand * controlCountRand) == 1 // no or little control art sofar
+					|| RandomUtil.random(controlArtScanCount) > 5 // many scans
+					|| RandomUtil.random(controlArtViewCount) > 30) { // many photos looked at
 				Gdx.app.log(TAG, "Adding control web art");
-				currentArt.setWebArt(FlickrService.instance.getControlWebArt(jobDescription.artTag));
-			} else {
-				if (RandomUtil.random(Player.instance.getArtScanCount() + 1) > 5) {
-					currentArt.setWebArt(FlickrService.instance.getControlWebArt(jobDescription.artTag));
-				} else {
-					currentArt.setWebArt(FlickrService.instance.getWebArt());
+				WebArt webart = FlickrService.instance.getControlWebArt(jobDescription.artTag);
+				if (webart == null) {
+					Gdx.app.error(TAG, "Control Webart was null for tag " + jobDescription.artTag);
+					webart = FlickrService.instance.getWebArt();
 				}
+				currentArt.setWebArt(webart);
+			} else {
+				currentArt.setWebArt(FlickrService.instance.getWebArt());
 			}
 		}
 		this.currentArt = currentArt;

@@ -5,11 +5,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -90,11 +88,12 @@ public class FlickrService {
 						Gdx.app.postRunnable(new Runnable() {
 							@Override
 							public void run() {
-								Gdx.app.log(TAG, "Successfully downloaded image from flickr " + url);
+								// Gdx.app.log(TAG, "Successfully downloaded image from flickr " + url);
 								final Texture image = new Texture(pixmap);
 								final WebArt webart = new WebArt(photo, image);
 								if (tags != null && tags.length > 0) {
 									for (final String tag : tags) {
+										Gdx.app.log(TAG, "Putting photo as control art for tag" + tag);
 										if (controlWebArt.get(tag) == null) {
 											controlWebArt.put(tag, new ArrayList<WebArt>());
 										}
@@ -129,6 +128,7 @@ public class FlickrService {
 	public void fetchTags(final Photo photo, final WebArt webart) {
 		try {
 			final Photo flickrTags = flickr.getTagsInterface().getListPhoto(photo.getId());
+			// Gdx.app.log(TAG, "Flickr returned tags for " + photo.getMedium640Url());
 			webart.getPhoto().setTags(flickrTags.getTags());
 		} catch (final FlickrException e) {
 			Gdx.app.error(TAG, "Failed fetching tags for " + photo.getId());
@@ -138,7 +138,7 @@ public class FlickrService {
 	private int download(byte[] out, String url) {
 		InputStream in = null;
 		try {
-			Gdx.app.log(TAG, "Fetching image from flickr " + url);
+			// Gdx.app.log(TAG, "Fetching image from flickr " + url);
 			HttpURLConnection conn = null;
 			conn = (HttpURLConnection) new URL(url).openConnection();
 			conn.setDoInput(true);
@@ -174,9 +174,9 @@ public class FlickrService {
 						params.setTags(tags);
 					}
 					final PhotoList<Photo> photos = flickr.getPhotosInterface().search(params, count, page);
-					for (final Photo photo : photos) {
-						Gdx.app.log(TAG, "flickr delivered photo: " + photo.getId() + ", " + photo.getUrl());
-					}
+					// for (final Photo photo : photos) {
+					// Gdx.app.log(TAG, "flickr delivered photo: " + photo.getId() + ", " + photo.getUrl());
+					// }
 					downloadAvailablePhotos(photos, tags);
 				} catch (final Exception e) {
 					Gdx.app.error(TAG, "failed contacting flickr for page " + page, e);
@@ -197,9 +197,14 @@ public class FlickrService {
 	}
 
 	public WebArt getControlWebArt(String tag) {
-		Player.instance.setControlArtCount(Player.instance.getControlArtCount() + 1);
 		final ArrayList<WebArt> controlArt = controlWebArt.get(tag);
-		return controlArt.get(RandomUtil.random(controlWebArt.size() - 1));
+		if (controlArt != null && controlArt.size() > 0) {
+			Gdx.app.log(TAG, "returning controlArt " + controlArt + " for tag " + tag);
+			Player.instance.setControlArtCount(Player.instance.getControlArtCount() + 1);
+			return controlArt.get(RandomUtil.random(controlArt.size() - 1));
+		} else {
+			return null;
+		}
 	}
 
 	public void dispose() {
@@ -211,28 +216,8 @@ public class FlickrService {
 
 	private void shutdownExecutor() {
 		Gdx.app.log(TAG, "Shutting down FlickrService Executor");
-		final long timeStarted = System.currentTimeMillis();
-		executor.shutdown();
-		try {
-			if (executor.awaitTermination(3, TimeUnit.SECONDS)) {
-				Gdx.app.log(TAG, "All workers finished. Shutdown complete after " + (System.currentTimeMillis() - timeStarted) + "ms");
-				return;
-			}
-		} catch (final InterruptedException e) {
-			Gdx.app.error(TAG, "Error while awaiting termination of Flickr executor", e);
-		}
-
-		Gdx.app.log(TAG, "...some Flickr workers did not finish, shutting down now");
-		final List<Runnable> workers = executor.shutdownNow();
-		Gdx.app.log(TAG, "workers left: " + workers.size());
-		for (final Runnable runnable : workers) {
-			Gdx.app.log(TAG, runnable.toString());
-		}
-		if (executor.isTerminated()) {
-			Gdx.app.log(TAG, "...Flickr ExecutorService shutdown complete.");
-		} else {
-			Gdx.app.error(TAG, "...FAILED Flickr ExecutorService shutdown.");
-		}
+		executor.shutdownNow();
+		executor2.shutdownNow();
 	}
 
 	public Map<String, ArrayList<WebArt>> getControlWebArt() {

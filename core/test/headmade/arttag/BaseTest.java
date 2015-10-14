@@ -1,4 +1,4 @@
-package headmade.arttag.actors;
+package headmade.arttag;
 
 import org.junit.BeforeClass;
 
@@ -15,7 +15,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Clipboard;
 
 public class BaseTest {
-	private static final String	TAG	= BaseTest.class.getName();
+	private static final String TAG = BaseTest.class.getName();
 
 	@BeforeClass
 	public static void init() {

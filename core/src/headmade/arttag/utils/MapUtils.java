@@ -226,13 +226,13 @@ public class MapUtils {
 	}
 
 	private static Body createWarp(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
-		Gdx.app.log(TAG, "Creating door");
+		// Gdx.app.log(TAG, "Creating door");
 		final Rectangle rect = toWorldScale(rectangle, unitScale);
 		return createSensor(artTagScreen, rect, ArtTag.CAT_WARP, ArtTag.MASK_WARP);
 	}
 
 	private static void createExit(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
-		Gdx.app.log(TAG, "Creating exit");
+		// Gdx.app.log(TAG, "Creating exit");
 		final Rectangle rect = toWorldScale(rectangle, unitScale);
 		createSensor(artTagScreen, rect, ArtTag.CAT_EXIT, ArtTag.MASK_EXIT);
 	}
@@ -303,7 +303,7 @@ public class MapUtils {
 		final Art art = new Art(rect);
 		art.init();
 		artTagScreen.currentRoom.getArtList().add(art);
-		Gdx.app.log(TAG, "Created new Art " + art);
+		// Gdx.app.log(TAG, "Created new Art " + art);
 
 		createArtSensor(artTagScreen, art);
 

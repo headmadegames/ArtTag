@@ -1,7 +1,5 @@
 package headmade.arttag.actors;
 
-import headmade.arttag.service.FlickrService;
-
 import java.util.Collection;
 
 import org.junit.Assert;
@@ -11,8 +9,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.flickr4java.flickr.photos.Photo;
 import com.flickr4java.flickr.tags.Tag;
 
+import headmade.arttag.BaseTest;
+import headmade.arttag.service.FlickrService;
+
 public class ArtTest extends BaseTest {
-	private static final String	TAG	= ArtTest.class.getName();
+	private static final String TAG = ArtTest.class.getName();
 
 	@Test
 	public void testIsTaggedCorrectly() {

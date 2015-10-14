@@ -85,7 +85,12 @@ public class RatingScreen extends StageScreen {
 					cash /= 10;
 				}
 
-				cash *= Player.instance.getAccuracy();
+				Gdx.app.log(TAG,
+						"Cash reward " + cash + " art.matchesDescription() " + art.matchesDescription(jobDescription)
+								+ " art.isCorrectlyTagged() " + art.isCorrectlyTagged() + " art.isIncorrectlyTagged() "
+								+ art.isIncorrectlyTagged());
+				Gdx.app.log(TAG, "Multiplying by Player Accuracy " + Player.instance.getAccuracy());
+				cash *= (0.2f + Player.instance.getAccuracy());
 
 				final Label earningActor = new Label("$" + cash, Assets.instance.skin, "dollar");
 

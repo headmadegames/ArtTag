@@ -17,17 +17,33 @@ import headmade.arttag.vo.TagVo;
 public class TagService {
 	private static final String TAG = TagService.class.getName();
 
-	public static final String[] TAGS = { "Architecture", "a Drawing", "Fauna", "Heraldy", "Typography", "a Map", "Sheet Music",
-			"a Painting", "People", "Flora", "a Portrait", "a Symbol", "a Vehicle" };
+	public static final String[] TAGS = { "architecture", "advertisement", "cover", "decoration", "diagram", "fashion", "fauna",
+			"typography", "map", "music", "people", "flora", "portrait", "ship" };
 
 	public static TagService instance = new TagService();
 
 	public HashMap<String, ImageTagVo> tagVos = new HashMap<String, ImageTagVo>();
 
-	private int	correctTagCount;
-	private int	incorrectTagCount;
+	private int								correctTagCount;
+	private int								incorrectTagCount;
+	private final HashMap<String, String>	labels;
 
 	private TagService() {
+		labels = new HashMap<String, String>();
+		labels.put("architecture", "Architecture");
+		labels.put("advertisement", "Advertisement");
+		labels.put("cover", "a cover");
+		labels.put("decoration", "decoration");
+		labels.put("diagram", "a diagram");
+		labels.put("fashion", "Fashion");
+		labels.put("fauna", "Fauna");
+		labels.put("typography", "Typography");
+		labels.put("map", "a Map");
+		labels.put("music", "Music");
+		labels.put("people", "People");
+		labels.put("flora", "Flora");
+		labels.put("portrait", "a Portrait");
+		labels.put("ship", "a Ship");
 	}
 
 	public void tag(String imageId, String tag) {
@@ -136,8 +152,8 @@ public class TagService {
 			final FileHandle csv = Gdx.files.external("art-treachery-tagging.csv");
 			Gdx.app.log(TAG, "CSV located at " + csv.file().getAbsolutePath());
 
-			float accuracy = new Float(correctTagCount) / new Float(correctTagCount + incorrectTagCount);
-			if (accuracy == Float.NaN) {
+			Float accuracy = new Float(correctTagCount) / new Float(correctTagCount + incorrectTagCount);
+			if (accuracy.isNaN()) {
 				accuracy = 0.5f;
 			}
 			Player.instance.setAccuracy(accuracy);
@@ -176,12 +192,12 @@ public class TagService {
 	private String buildCsvHeader() {
 		final StringBuilder sb = new StringBuilder("image_id,player_id,timestamp,accuracy,accuracy_alltime");
 		for (final String tag : TAGS) {
-			sb.append(',').append(normaliseTag(tag));
+			sb.append(',').append(tag);
 		}
 		return sb.append('\n').toString();
 	}
 
-	private String normaliseTag(String tag) {
-		return tag.replaceAll("a ", "").toLowerCase();
+	public String getLabel(String tag) {
+		return labels.get(tag);
 	}
 }
