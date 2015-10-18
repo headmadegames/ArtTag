@@ -138,7 +138,7 @@ public class ArtTagContactListener implements ContactListener {
 	private void handleEndContactWithPlayerLight(Contact contact, Fixture fixLight, Fixture fixOther) {
 		if (isArtTrigger(fixOther)) {
 			if (Player.instance.artInView.removeValue(fixOther, true)) {
-				Gdx.app.log(TAG, "removing art from view");
+				// Gdx.app.log(TAG, "removing art from view");
 			} else {
 				Gdx.app.error(TAG, "Tried to remove art from view, but it found no match");
 			}

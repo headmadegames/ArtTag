@@ -30,7 +30,7 @@ public class Guard {
 	private static final float	BODY_RADIUS					= 0.25f;
 	private static final float	LIGHT_CONE_LENGTH_FACTOR	= 0.7f;
 	private static final float	MAX_RUN_FACTOR				= 2f;
-	private static final float	MAX_SPEED_WALK				= 1f;
+	private static final float	MAX_SPEED_WALK				= 1.3f;
 	private static final float	MAX_LIGHT_ANGLE				= 35f;
 	private static final float	MAX_LIGHT_LENGTH			= 8f;
 	private static final float	MAX_LIGHT_CONE_LENGTH		= MAX_LIGHT_LENGTH * 0.7f;
@@ -45,20 +45,27 @@ public class Guard {
 	public boolean			isRunning;
 	public boolean			isAlert;
 	public boolean			isSuspicious;
+	private boolean			isCautious;
+	public boolean			isHeardPlayer;
 	public boolean			isTouchingPlayerLightCone;
 	public boolean			isLightOn		= true;
+	private boolean			isHearingObstructed;
 
-	private final Array<Vector2>	backToPath		= new Array<Vector2>();
+	private final Array<Vector2>	backToPath					= new Array<Vector2>();
 	private Vector2					lastVisibleVecBackToPath;
 	private Vector2					playerLastSeenVec;
-	private Vector2					targetMoveVec	= new Vector2();
+	private Vector2					playerLastHeardVec;
+	private Vector2					playerLastHeardVisibleVec;
+	private Vector2					targetMoveVec				= new Vector2();
 	private float					sumDeltaSinceMoveChange;
+	private float					sumDeltaSinceHeardPlayer	= 100f;
 	private int						currentPathIndex;
 
 	private final float	lightAngle		= MAX_LIGHT_ANGLE;
 	// upgradable stats
 	private float		runFactor		= MAX_RUN_FACTOR;
 	private float		maxMoveSpeed	= MAX_SPEED_WALK;
+	private float		moveSpeed;
 	private float		lightLength		= MAX_LIGHT_LENGTH / 2;
 	private float		reactionTime	= MAX_REACTION_TIME;
 
@@ -150,29 +157,29 @@ public class Guard {
 		if (body == null) {
 			return;
 		}
-		isRunning = isAlert || isSuspicious;
-		final float moveSpeed = isRunning ? maxMoveSpeed * runFactor : maxMoveSpeed;
+		isRunning = isAlert || isCautious;
+		moveSpeed = isRunning ? maxMoveSpeed * runFactor : isSuspicious ? maxMoveSpeed * 0.75f : isHeardPlayer ? 0.5f : maxMoveSpeed;
 		final Vector2 oldMoveVec = targetMoveVec.cpy();
 
 		Vector2 targetPoint = null;
+		Float distanceToPlayer = null;
 		if (isLightOn) {
 			for (final Fixture fixture : playerInView) {
 				targetPoint = fixture.getBody().getWorldCenter().cpy();
 				final Vector2 diffVec = body.getWorldCenter().cpy().sub(targetPoint);
 				boolean seesPlayer = false;
-				if (diffVec.len() < BODY_RADIUS) {
+				distanceToPlayer = diffVec.len();
+				if (distanceToPlayer < 1f) {
 					seesPlayer = true;
 				} else {
 					final Vector2 outOfBodyVec = diffVec.scl(fixture.getShape().getRadius() * 1.01f);
 					targetPoint.add(outOfBodyVec);
 					seesPlayer = light.contains(targetPoint.x, targetPoint.y);
-					if (seesPlayer) {
-						playerLastSeenVec = fixture.getBody().getWorldCenter().cpy();
-					}
 				}
 				// Gdx.app.log(TAG, light.contains(targetPoint.x, targetPoint.y) + " diffVec.length " + diffVec.len());
 				if (seesPlayer) {
-					Gdx.app.log(TAG, "Guard sees player");
+					// Gdx.app.log(TAG, "Guard sees player");
+					playerLastSeenVec = fixture.getBody().getWorldCenter().cpy();
 					if (!isAlert) {
 						Assets.instance.playSound(AssetSounds.whosThere);
 					}
@@ -183,18 +190,68 @@ public class Guard {
 					if (isAlert) {
 						Assets.instance.playSound(AssetSounds.huh);
 						reactionTime = MAX_REACTION_TIME;
-						isSuspicious = true;
+						isCautious = true;
 					}
 					isAlert = false;
 				}
 			}
 		}
 
+		// handle hearing
+		if (Player.instance.isRunning && null != Player.instance.body) {
+			if (distanceToPlayer == null) {
+				distanceToPlayer = body.getWorldCenter().cpy().sub(Player.instance.body.getWorldCenter()).len();
+			}
+			if (distanceToPlayer < MAX_LIGHT_CONE_LENGTH * 0.9f) {
+				sumDeltaSinceHeardPlayer = 0;
+
+				final RayCastCallback callback = new RayCastCallback() {
+					@Override
+					public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+						Gdx.app.log(TAG, "reportRayFixture " + point + " normal " + normal);
+						if (fixture.isSensor()) {
+							// Gdx.app.log(TAG, "Raycast ignoring sensor");
+							return 1;
+						}
+						if (body.equals(fixture.getBody())) {
+							// this is the guards body so there is nothing inbetween them
+							// Gdx.app.log(TAG, "Guard CAN see the point where the noise happened" + Player.instance.body.getWorldCenter());
+							// playerLastHeardVisibleVec = Player.instance.body.getWorldCenter().cpy();
+							return 1;
+						}
+						// Gdx.app.log(TAG, "Fall through");
+						isHearingObstructed = true;
+						return 0;
+					}
+				};
+				try {
+					isSuspicious = true;
+					playerLastHeardVec = Player.instance.body.getWorldCenter().cpy();
+					isHearingObstructed = false;
+					// Gdx.app.log(TAG, "###################################");
+					// Gdx.app.log(TAG, "Guard " + body.getWorldCenter());
+					// Gdx.app.log(TAG, "Player " + playerLastHeardVec);
+					artTag.world.rayCast(callback, playerLastHeardVec, body.getWorldCenter());
+					if (!isHearingObstructed) {
+						playerLastHeardVisibleVec = Player.instance.body.getWorldCenter().cpy();
+					}
+				} catch (final Exception e) {
+					Gdx.app.error(TAG, "Error Raycasting :(", e);
+				}
+			} else {
+				sumDeltaSinceHeardPlayer += delta;
+			}
+		} else {
+			sumDeltaSinceHeardPlayer += delta;
+		}
+		isHeardPlayer = playerLastHeardVisibleVec != null || sumDeltaSinceHeardPlayer < 3;
+
 		if (isTouchingPlayerLightCone && Player.instance.isLightOn) {
 			// isAlert = true;
 		}
 
-		if (isAlert || isSuspicious) {
+		// handle backToPath
+		if (isAlert || isCautious || (isSuspicious && playerLastHeardVisibleVec != null)) {
 			if (lastVisibleVecBackToPath == null) {
 				lastVisibleVecBackToPath = body.getWorldCenter();
 			}
@@ -205,6 +262,7 @@ public class Guard {
 			}
 			if (BODY_RADIUS < checkPoint.dst(body.getWorldCenter())) {
 				// not touching checkpoint
+				// Gdx.app.log(TAG, "Goard not touching checkpoint");
 				final RayCastCallback callback = new RayCastCallback() {
 					@Override
 					public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
@@ -222,15 +280,27 @@ public class Guard {
 			lastVisibleVecBackToPath = body.getWorldCenter();
 		}
 
+		// determine targetPoint
 		if (isAlert && playerInView.size > 0 && Player.instance.body != null) {
 			targetPoint = Player.instance.body.getWorldCenter();
-		} else if (isSuspicious && playerLastSeenVec != null) {
+		} else if (isCautious && playerLastSeenVec != null) {
 			targetPoint = playerLastSeenVec;
+			if (BODY_RADIUS / 10 > targetPoint.dst2(body.getPosition())) {
+				// Lost player
+				Assets.instance.playSound(AssetSounds.hm);
+				Gdx.app.log(TAG, "Guard no longer cautious");
+				isCautious = false;
+				isSuspicious = true;
+			}
+		} else if (isSuspicious && playerLastHeardVisibleVec != null) {
+			targetPoint = playerLastHeardVisibleVec;
+			// Gdx.app.log(TAG, "Guard going to playerLastHeardVisibleVec");
 			if (BODY_RADIUS / 10 > targetPoint.dst2(body.getPosition())) {
 				// Lost player
 				Assets.instance.playSound(AssetSounds.hm);
 				Gdx.app.log(TAG, "Guard no longer suspicious");
 				isSuspicious = false;
+				playerLastHeardVisibleVec = null;
 			}
 		} else {
 			lastVisibleVecBackToPath = null;
@@ -243,6 +313,7 @@ public class Guard {
 				}
 			} else {
 				// following path
+				isSuspicious = false;
 				targetPoint = path.get(currentPathIndex);
 				if (BODY_RADIUS > targetPoint.dst(body.getPosition())) {
 					// Gdx.app.log(TAG, "Guard reached target point " + targetPoint);
@@ -272,7 +343,13 @@ public class Guard {
 
 		final Vector2 bodyRotVec = new Vector2(1f, 0f);
 		bodyRotVec.setAngleRad(body.getAngle());
-		final float angleDiff = bodyRotVec.angleRad(targetMoveVec.cpy().rotate90(-1));
+		float angleDiff;
+		if (!isAlert && !isSuspicious && isHeardPlayer && null == playerLastHeardVisibleVec && null != playerLastHeardVec) {
+			// look at last heard
+			angleDiff = bodyRotVec.angleRad(playerLastHeardVec.cpy().sub(body.getWorldCenter()).rotate90(-1));
+		} else {
+			angleDiff = bodyRotVec.angleRad(targetMoveVec.cpy().rotate90(-1));
+		}
 		final float rotByRad = MathUtils.clamp(angleDiff, -(MAX_ROTATION_SPEED * delta) / reactionTime,
 				MAX_ROTATION_SPEED * delta / reactionTime);
 				// Gdx.app.log(TAG, "angleDiff: " + angleDiff + " rotByRad: " + rotByRad + " bodyRotVec: " + bodyRotVec + " - targetMoveVec:

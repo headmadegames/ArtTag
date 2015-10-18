@@ -46,7 +46,7 @@ public class Player {
 	private static final float	PLAYER_RADIUS					= 0.2f;
 	private static final float	PLAYERLIGHT_CONE_LENGTH_FACTOR	= 0.7f;
 	private static final float	MAX_RUN_FACTOR					= 2f;
-	private static final float	MAX_SPEED_WALK					= 2.2f;
+	private static final float	MAX_SPEED_WALK					= 3f;
 	private static final float	MAX_PLAYERLIGHT_ANGLE			= 35f;
 	private static final float	MAX_PLAYERLIGHT_LENGTH			= 5f;
 	private static final float	MAX_PLAYERLIGHT_CONE_LENGTH		= MAX_PLAYERLIGHT_LENGTH * 0.7f;

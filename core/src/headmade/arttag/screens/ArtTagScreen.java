@@ -191,7 +191,7 @@ public class ArtTagScreen extends StageScreen {
 			gameOverDelta = 0f;
 		}
 
-		if (Player.instance.isCaught) {
+		if (Player.instance.body != null && Player.instance.isCaught) {
 			final PooledEffect effect = smokeEffectPool.obtain();
 			effect.setPosition(Player.instance.body.getWorldCenter().x, Player.instance.body.getWorldCenter().y);
 			effects.add(effect);
@@ -448,7 +448,7 @@ public class ArtTagScreen extends StageScreen {
 			final int controlArtViewCount = Player.instance.getArtViewCount() + 1;
 			if (RandomUtil.random(controlCountRand * controlCountRand) == 1 // no or little control art sofar
 					|| RandomUtil.random(controlArtScanCount) > 5 // many scans
-					|| RandomUtil.random(controlArtViewCount) > 30) { // many photos looked at
+					|| RandomUtil.random(controlArtViewCount) > 15) { // many photos looked at
 				Gdx.app.log(TAG, "Adding control web art");
 				WebArt webart = FlickrService.instance.getControlWebArt(jobDescription.artTag);
 				if (webart == null) {
