@@ -20,7 +20,7 @@
  </layer>
  <layer name="roof" width="20" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFgxkwATEzkZgFi350MXEglgFieSiWQ9KPLi6JxS3Y7CAX0MI8XOFCyC5cekEAW7iIM2CGDzLAFs6DBahQ2TxlKpuHDxCTD0hRCwD7+gNU
+   eJxjYCAMmKF4FNAfMDEgwp8QZsGiH11MHIhlgFgeiuWQ9KOLS2JxCzY7yAW0MA9XuBCyC5deEMAWLuIMmOGDDLCF82ABKlQ2T5nK5uEDxOQDUtQCABklA1o=
   </data>
  </layer>
  <objectgroup color="#00aa00" name="physics">
@@ -282,7 +282,7 @@
   <object id="80" name="player" type="player" x="136" y="174" width="49" height="49">
    <ellipse/>
   </object>
-  <object id="106" name="warp" type="warp" x="498.666" y="-39.5" width="282.667" height="135">
+  <object id="106" name="warp" type="warp" x="503.999" y="-72.8333" width="282.667" height="135">
    <properties>
     <property name="direction" value="top"/>
    </properties>
@@ -330,7 +330,7 @@
  <objectgroup color="#ffff00" name="lights">
   <object id="69" name="light" type="point" x="111.167" y="127.167" width="92.5" height="92.5">
    <properties>
-    <property name="color" value="44885533"/>
+    <property name="color" value="44995555"/>
    </properties>
    <ellipse/>
   </object>

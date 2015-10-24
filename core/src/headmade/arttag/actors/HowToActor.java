@@ -1,8 +1,5 @@
 package headmade.arttag.actors;
 
-import headmade.arttag.assets.AssetTextures;
-import headmade.arttag.assets.Assets;
-
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -10,11 +7,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
+import headmade.arttag.DirectedGame;
+import headmade.arttag.assets.AssetTextures;
+import headmade.arttag.assets.Assets;
+
 public class HowToActor extends BaseMenuContainer {
 	private static final String	TAG	= HowToActor.class.getName();
 	private Cell<Label>			descCell;
+	private final DirectedGame	game;
 
-	public HowToActor() {
+	public HowToActor(DirectedGame game) {
+		this.game = game;
 		this.setSkin(Assets.instance.skin);
 
 		setFillParent(false);
@@ -41,18 +44,15 @@ public class HowToActor extends BaseMenuContainer {
 
 			add("Move");
 			add("Sprint");
-			add("Flashlight on/off").row();
+			add("Action").row();
 
 			add();
-			add("Scan");
-			add("Cancel").row();
-
 			add();
-			add("Confirm");
-			add().row();
-			row();
+			add("Scan").row();
+
 		}
 		// setDebug(true);
 		setBackground(Assets.instance.skin.getDrawable(AssetTextures.paper));
 	}
+
 }

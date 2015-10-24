@@ -25,14 +25,14 @@ import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 
 public class Player {
-	private static final String	MSG_DOOR			= "Press " + ArtTag.BUTTON_A + " Button to walk trough door.";
-	private static final String	MSG_EXIT			= "Do you really want to leave? \nConfirm with the " + ArtTag.BUTTON_A + " Button.";
-	private static final String	MSG_INVENTORY_FULL	= "You can not carry any more. Return your goods to the exit.";
-	private static final String	MSG_SCAN			= "Is the image what our client is looking for?\nScan it's age with " + ArtTag.BUTTON_A;
+	private static final String	MSG_DOOR			= "Press " + ArtTag.BUTTON_B + " to exit the level.";
+	private static final String	MSG_EXIT			= "Do you really want to leave? \nConfirm with the " + ArtTag.BUTTON_B + " Button.";
+	private static final String	MSG_INVENTORY_FULL	= "You can not carry any more. Return to the exit.";
+	private static final String	MSG_SCAN			= "Is the image what our client is looking for?\nScan its age with " + ArtTag.BUTTON_B;
 	private static final String	MSG_SCAN_2			= "Scanning only reveals the age of the image.\nSo don't waste your "
 			+ "time scanning artwork that doesn't match the job description.";
-	private static final String	MSG_SCAN_3			= "Is this what our client is looking for?\nCancel with " + ArtTag.BUTTON_B
-			+ " Button.\n" + "Take it with the " + ArtTag.BUTTON_A + " Button.";
+	private static final String	MSG_SCAN_3			= "Is this what our client is looking for?\nSteal it with the " + ArtTag.BUTTON_B
+			+ " Button \n" + "or just walk away if it doesn't match.";
 
 	private static final String TAG = Player.class.getName();
 
@@ -65,7 +65,7 @@ public class Player {
 	public boolean		isRunning;
 	public boolean		isAbleToSteal;
 	public boolean		isAbleToScan;
-	public boolean		isLightOn;
+	public boolean		isLightOn		= true;
 	public boolean		isScanning;
 	public boolean		isTouchingArt;
 	public boolean		isTouchingExit;
@@ -74,6 +74,8 @@ public class Player {
 	public boolean		isSpotted;
 	public boolean		isCaught;
 	public String		warpDirection;
+	public String		warpRoom;
+	public String		hintText;
 
 	public float			imageAlpha;
 	public Array<Fixture>	artInView	= new Array<Fixture>();
@@ -205,6 +207,10 @@ public class Player {
 			return;
 		}
 
+		if (hintText != null) {
+			artTag.setInstruction(hintText);
+		}
+
 		final float moveSpeed = isRunning ? walkSpeed * runFactor : walkSpeed;
 		final Vector2 oldMoveVec = targetMoveVec.cpy();
 		targetMoveVec.x = 0f;
@@ -270,9 +276,9 @@ public class Player {
 						imageAlpha = newAlpha;
 						artTag.setCurrentArt((Art) fixture.getBody().getUserData());
 						if (artTag.getCurrentArt().isScanned()) {
-							artTag.setInstruction(MSG_SCAN + ArtTag.BUTTON_A);
+							artTag.setInstruction(MSG_SCAN_3);
 						} else {
-							artTag.setInstruction(MSG_SCAN + ArtTag.BUTTON_A);
+							artTag.setInstruction(MSG_SCAN);
 						}
 					}
 				}

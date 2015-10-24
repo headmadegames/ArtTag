@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 import headmade.arttag.screens.ArtTagScreen;
+import headmade.arttag.vo.WarpVo;
 
 public class ArtTagContactListener implements ContactListener {
 	private static final String TAG = ArtTagContactListener.class.getName();
@@ -88,14 +89,18 @@ public class ArtTagContactListener implements ContactListener {
 			Player.instance.isTouchingArt = true;
 			Gdx.app.log(TAG, "Player touching " + artTag.getCurrentArt());
 			// }
+		} else if (isHint(fixOther)) {
+			Gdx.app.log(TAG, "Start touching hint");
+			Player.instance.hintText = (String) fixOther.getBody().getUserData();
 		} else if (isExit(fixOther)) {
 			Gdx.app.log(TAG, "Start touching exit");
 			Player.instance.isTouchingExit = true;
 		} else if (isWarp(fixOther)) {
 			Gdx.app.log(TAG, "Start touching warp");
-			final String direction = (String) fixOther.getBody().getUserData();
+			final WarpVo warpVo = (WarpVo) fixOther.getBody().getUserData();
 			Player.instance.isTouchingWarp = true;
-			Player.instance.warpDirection = direction;
+			Player.instance.warpDirection = warpVo.direction;
+			Player.instance.warpRoom = warpVo.room;
 		} else if (isGuard(fixOther)) {
 			Gdx.app.log(TAG, "Game Over!");
 			Player.instance.isCaught = true;
@@ -126,6 +131,9 @@ public class ArtTagContactListener implements ContactListener {
 		if (isArtTrigger(fixOther)) {
 			Gdx.app.log(TAG, "Player no longer touching " + artTag.getCurrentArt());
 			Player.instance.isTouchingArt = false;
+		} else if (isHint(fixOther)) {
+			Gdx.app.log(TAG, "End touching hint");
+			Player.instance.hintText = null;
 		} else if (isExit(fixOther)) {
 			Gdx.app.log(TAG, "End touching exit");
 			Player.instance.isTouchingExit = false;
@@ -156,6 +164,10 @@ public class ArtTagContactListener implements ContactListener {
 			g.playerInView.removeValue(fixOther, true);
 			g.isAlert = false;
 		}
+	}
+
+	private boolean isHint(Fixture fixOther) {
+		return fixOther.getFilterData().categoryBits == ArtTag.CAT_HINT;
 	}
 
 	private boolean isArtTrigger(Fixture fixOther) {

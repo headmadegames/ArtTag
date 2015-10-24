@@ -28,7 +28,7 @@
   <object id="210" name="art" type="art" x="2841.33" y="2330.67" width="78.6667" height="45.3333"/>
   <object id="211" name="art" type="art" x="2390" y="2316.69" width="84.6667" height="72.64"/>
   <object id="212" name="art" type="art" x="2465.67" y="2057.67" width="58.6667" height="77.3333"/>
-  <object id="224" name="warp" type="warp" x="1280.03" y="2148.48" width="502.995" height="240.227">
+  <object id="224" name="warp" type="warp" x="1225.03" y="2148.48" width="502.995" height="240.227">
    <properties>
     <property name="direction" value="left"/>
    </properties>
@@ -39,7 +39,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="226" name="warp" type="warp" x="2391.63" y="1425.85" width="502.995" height="240.227">
+  <object id="226" name="warp" type="warp" x="2400.96" y="1360.52" width="502.995" height="240.227">
    <properties>
     <property name="direction" value="top"/>
    </properties>
@@ -50,7 +50,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="228" name="warp" type="warp" x="2392.14" y="2880.03" width="502.995" height="240.227">
+  <object id="228" name="warp" type="warp" x="2396.14" y="2944.03" width="502.995" height="240.227">
    <properties>
     <property name="direction" value="bottom"/>
    </properties>
@@ -67,7 +67,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="231" name="warp" type="warp" x="3523.97" y="2143.87" width="502.995" height="240.227">
+  <object id="231" name="warp" type="warp" x="3584.64" y="2141.87" width="502.995" height="240.227">
    <properties>
     <property name="direction" value="right"/>
    </properties>

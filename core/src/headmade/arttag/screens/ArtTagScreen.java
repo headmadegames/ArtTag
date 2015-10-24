@@ -77,6 +77,8 @@ public class ArtTagScreen extends StageScreen {
 	public Array<Guard>					guards				= new Array<Guard>();
 	public JobDescription				jobDescription;
 	public boolean						debugEnabled;
+	public String						onGameOver;
+	public boolean						isHideJobDesc;
 
 	private final Table	rootTable;
 	private final Image	imageActor;
@@ -100,7 +102,7 @@ public class ArtTagScreen extends StageScreen {
 
 	// private final Map map;
 
-	public ArtTagScreen(DirectedGame game) {
+	public ArtTagScreen(DirectedGame game, String map) {
 		super(game);// , new Stage(new ExtendViewport(MIN_WORLD_WIDTH, MIN_WORLD_HEIGHT), game.getBatch()));
 
 		Player.instance.inventory.clear();
@@ -162,7 +164,7 @@ public class ArtTagScreen extends StageScreen {
 		stage.addActor(rootTable);
 
 		newJob();
-		MapUtils.loadMap(this, AssetMaps.map1);
+		MapUtils.loadMap(this, map != null ? map : AssetMaps.map1);
 
 		final Loader<Sprite> loader = Assets.instance.getSpriterLoader();
 		drawer = new LibGdxDrawer(loader, game.getBatch(), shapeRenderer);
@@ -284,6 +286,9 @@ public class ArtTagScreen extends StageScreen {
 		rayHandler.updateAndRender();
 
 		// UI update
+		if (Player.instance.artInView.size == 0) {
+			currentArt = null;
+		}
 		if (currentArt != null) {
 			imageActor.setDrawable(currentArt.getDrawable());
 			rootTable.layout();
@@ -319,6 +324,11 @@ public class ArtTagScreen extends StageScreen {
 				sumDeltaLookAtImage = 0f;
 			}
 		}
+
+		if (isHideJobDesc) {
+			jobDescActor.setVisible(false);
+		}
+
 		if (Player.instance.inventory.size >= Player.instance.getCarryCacity()) {
 			instructionsActor.setVisible(true);
 		}
@@ -391,16 +401,30 @@ public class ArtTagScreen extends StageScreen {
 	}
 
 	public void endLevel() {
-		TagService.instance.tag(currentRoom.getArtList());
-		Gdx.app.log(TAG, TagService.instance.tagVos.toString());
-		Player.instance.body = null;
-		Player.instance.artInView.clear();
-		// Gdx.app.exit();
-		game.setScreen(new RatingScreen(game, jobDescription), ScreenTransitionFade.init(1f));
+		if (onGameOver != null) {
+			TagService.instance.tag(currentRoom.getArtList());
+			Gdx.app.log(TAG, TagService.instance.tagVos.toString());
+			Player.instance.body = null;
+			Player.instance.artInView.clear();
+			// Gdx.app.exit();
+			game.setScreen(new ArtTagScreen(game, this.currentRoom.getId()), ScreenTransitionFade.init(0f));
+		} else {
+			TagService.instance.tag(currentRoom.getArtList());
+			Gdx.app.log(TAG, TagService.instance.tagVos.toString());
+			Player.instance.body = null;
+			Player.instance.artInView.clear();
+			// Gdx.app.exit();
+			game.setScreen(new RatingScreen(game, jobDescription), ScreenTransitionFade.init(1f));
+		}
 	}
 
 	public void setInstruction(String text) {
 		instructionsActor.setText(text);
+		if (text != null) {
+			instructionsActor.setVisible(true);
+		} else {
+			instructionsActor.setVisible(false);
+		}
 	}
 
 	public void setResult(String text) {
@@ -409,7 +433,12 @@ public class ArtTagScreen extends StageScreen {
 
 	public void newRoom() {
 		Player.instance.isTouchingWarp = false;
-		MapUtils.loadMap(this, RandomUtil.random(AssetMaps.ALL_MAPS));
+		if (Player.instance.warpRoom != null) {
+			MapUtils.loadMap(this, AssetMaps.MAPS_PATH + Player.instance.warpRoom);
+			Player.instance.warpRoom = null;
+		} else {
+			MapUtils.loadMap(this, RandomUtil.random(AssetMaps.ALL_MAPS));
+		}
 	}
 
 	@Override

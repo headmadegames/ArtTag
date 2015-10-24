@@ -198,7 +198,9 @@ public class Guard {
 		}
 
 		// handle hearing
-		if (Player.instance.isRunning && null != Player.instance.body) {
+		if (Player.instance.isRunning
+				&& (Player.instance.isMoveDown || Player.instance.isMoveUp || Player.instance.isMoveLeft || Player.instance.isMoveRight)
+				&& null != Player.instance.body) {
 			if (distanceToPlayer == null) {
 				distanceToPlayer = body.getWorldCenter().cpy().sub(Player.instance.body.getWorldCenter()).len();
 			}

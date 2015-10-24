@@ -1,17 +1,5 @@
 package headmade.arttag.screens;
 
-import headmade.arttag.DirectedGame;
-import headmade.arttag.Player;
-import headmade.arttag.actions.ActionFactory;
-import headmade.arttag.actors.CreditsActor;
-import headmade.arttag.actors.HowToActor;
-import headmade.arttag.actors.JigglyImageTextButton;
-import headmade.arttag.assets.AssetTextures;
-import headmade.arttag.assets.Assets;
-import headmade.arttag.screens.transitions.ScreenTransition;
-import headmade.arttag.screens.transitions.ScreenTransitionFade;
-import headmade.arttag.service.MusicService;
-
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -24,20 +12,34 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 
+import headmade.arttag.DirectedGame;
+import headmade.arttag.Player;
+import headmade.arttag.actions.ActionFactory;
+import headmade.arttag.actors.CreditsActor;
+import headmade.arttag.actors.HowToActor;
+import headmade.arttag.actors.JigglyImageTextButton;
+import headmade.arttag.assets.AssetMaps;
+import headmade.arttag.assets.AssetTextures;
+import headmade.arttag.assets.Assets;
+import headmade.arttag.screens.transitions.ScreenTransition;
+import headmade.arttag.screens.transitions.ScreenTransitionFade;
+import headmade.arttag.service.MusicService;
+
 public class MenuScreen extends StageScreen {
-	private static final String					TAG					= MenuScreen.class.getName();
-	private final CreditsActor					credits;
-	private final HowToActor					howTo;
+	private static final String	TAG	= MenuScreen.class.getName();
+	private final CreditsActor	credits;
+	private final HowToActor	howTo;
 
-	private int									activeButtonIndex	= 0;
-	private int									clearActionsButtonIndex;
-	private Action								jiggleAction;
-	private JigglyImageTextButton				playButton;
-	private JigglyImageTextButton				muteButton;
-	private JigglyImageTextButton				howtoButton;
-	private JigglyImageTextButton				creditsButton;
+	private int						activeButtonIndex	= 0;
+	private int						clearActionsButtonIndex;
+	private Action					jiggleAction;
+	private JigglyImageTextButton	playButton;
+	private JigglyImageTextButton	muteButton;
+	private JigglyImageTextButton	howtoButton;
+	private JigglyImageTextButton	creditsButton;
 
-	private final Array<JigglyImageTextButton>	buttons				= new Array<JigglyImageTextButton>();
+	private final Array<JigglyImageTextButton>	buttons	= new Array<JigglyImageTextButton>();
+	private JigglyImageTextButton				tutorialButton;
 
 	public MenuScreen(DirectedGame game) {
 		super(game);
@@ -50,7 +52,7 @@ public class MenuScreen extends StageScreen {
 		final Table rootTable = new Table();
 		rootTable.setFillParent(true);
 
-		howTo = new HowToActor();
+		howTo = new HowToActor(game);
 		credits = new CreditsActor();
 		final Actor artTreachery = new Image(Assets.instance.skin.getRegion(AssetTextures.artTreachery));
 
@@ -168,6 +170,17 @@ public class MenuScreen extends StageScreen {
 		});
 		playButton.getLabelCell().padRight(10f);
 
+		tutorialButton = new JigglyImageTextButton("Tutorial", Assets.instance.skin, "play", jiggleAction);
+		tutorialButton.setName("play");
+		tutorialButton.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				playTutorial();
+				return true;
+			}
+		});
+		tutorialButton.getLabelCell().padRight(10f);
+
 		muteButton = new JigglyImageTextButton("Mute music", Assets.instance.skin, "settings", null);
 		muteButton.addListener(new InputListener() {
 			@Override
@@ -202,11 +215,13 @@ public class MenuScreen extends StageScreen {
 
 		final Table menu = new Table();
 		menu.add(playButton).fill().row();
+		menu.add(tutorialButton).fill().row();
 		menu.add(muteButton).fill().space(5).padRight(20f).row();
 		menu.add(creditsButton).fill().space(5).padRight(20f).row();
 		menu.add(howtoButton).fill().space(5).padRight(20f).row();
 
 		buttons.add(playButton);
+		buttons.add(tutorialButton);
 		buttons.add(muteButton);
 		buttons.add(creditsButton);
 		buttons.add(howtoButton);
@@ -216,7 +231,13 @@ public class MenuScreen extends StageScreen {
 	protected void play() {
 		final ScreenTransition transition = ScreenTransitionFade.init(0.3f);
 		// game.setScreen(new MenuScreen(game), transition);
-		game.setScreen(new ArtTagScreen(game), transition);
+		game.setScreen(new ArtTagScreen(game, null), transition);
+	}
+
+	protected void playTutorial() {
+		final ScreenTransition transition = ScreenTransitionFade.init(0.3f);
+		// game.setScreen(new MenuScreen(game), transition);
+		game.setScreen(new ArtTagScreen(game, AssetMaps.tutorial1), transition);
 	}
 
 	protected void showCredits() {

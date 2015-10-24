@@ -34,6 +34,7 @@ import headmade.arttag.Player;
 import headmade.arttag.Room;
 import headmade.arttag.actors.Art;
 import headmade.arttag.screens.ArtTagScreen;
+import headmade.arttag.vo.WarpVo;
 import net.dermetfan.gdx.physics.box2d.Box2DMapObjectParser;
 import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 
@@ -48,10 +49,15 @@ public class MapUtils {
 	private static final String	OBJ_GUARD	= "guard";
 	private static final String	OBJ_PATH	= "path";
 	private static final String	OBJ_WARP	= "warp";
+	private static final String	OBJ_HINT	= "hint";
 	private static final String	OBJ_EXIT	= "exit";
 	private static final String	OBJ_ART		= "art";
 
+	private static final String	PROP_ONGAMEOVER		= "onGameOver";
+	private static final String	PROP_HIDEJOBDESC	= "hideJobDesc";
 	private static final String	PROP_DIRECTION		= "direction";
+	private static final String	PROP_TEXT			= "text";
+	private static final String	PROP_ROOM			= "room";
 	private static final String	DIRECTION_LEFT		= "left";
 	private static final String	DIRECTION_RIGHT		= "right";
 	private static final String	DIRECTION_TOP		= "top";
@@ -118,6 +124,12 @@ public class MapUtils {
 		// parser.setListener(listener);
 
 		final TiledMap map = artTagScreen.currentRoom.getMap();
+
+		final String onGameOver = map.getProperties().get(PROP_ONGAMEOVER, String.class);
+		final String hideJobDesc = map.getProperties().get(PROP_ONGAMEOVER, String.class);
+		artTagScreen.onGameOver = onGameOver;
+		artTagScreen.isHideJobDesc = hideJobDesc == null ? false : true;
+
 		parser.load(artTagScreen.world, map);
 		if (null == artTagScreen.mapRenderer) {
 			// artTagScreen.mapRenderer = new OrthogonalTiledMapRenderer(artTagScreen.map, artTagScreen.getGame().getBatch());
@@ -140,9 +152,14 @@ public class MapUtils {
 			} else if (OBJ_WARP.equals(mapObject.getName())) {
 				final Body warp = createWarp(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
 				final String direction = mapObject.getProperties().get(PROP_DIRECTION, String.class);
-				warp.setUserData(direction);
+				final String room = mapObject.getProperties().get(PROP_ROOM, String.class);
+				warp.setUserData(new WarpVo(direction, room));
 			} else if (OBJ_EXIT.equals(mapObject.getName())) {
 				createExit(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
+			} else if (OBJ_HINT.equals(mapObject.getName())) {
+				final Body hintBody = createHint(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
+				final String hint = mapObject.getProperties().get(PROP_TEXT, String.class);
+				hintBody.setUserData(hint);
 			} else if (OBJ_PLAYER.equals(mapObject.getName())) {
 				final Ellipse e = ((EllipseMapObject) mapObject).getEllipse();
 				if (null == Player.instance.body) {
@@ -223,6 +240,11 @@ public class MapUtils {
 			}
 		}
 
+	}
+
+	private static Body createHint(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
+		final Rectangle rect = toWorldScale(rectangle, unitScale);
+		return createSensor(artTagScreen, rect, ArtTag.CAT_HINT, ArtTag.MASK_HINT);
 	}
 
 	private static Body createWarp(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
@@ -341,10 +363,10 @@ public class MapUtils {
 		fd.shape = shape;
 		fd.filter.categoryBits = catBits;
 		fd.filter.maskBits = maskBits;
-		final Body artTrigger = artTagScreen.world.createBody(bd);
-		artTrigger.createFixture(fd);
+		final Body body = artTagScreen.world.createBody(bd);
+		body.createFixture(fd);
 		shape.dispose();
-		return artTrigger;
+		return body;
 	}
 
 	private static Rectangle toWorldScale(Rectangle orgRect, float unitScale) {

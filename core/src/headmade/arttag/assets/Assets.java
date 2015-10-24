@@ -139,6 +139,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		for (final String map : AssetMaps.ALL_MAPS) {
 			assetsManager.load(map, TiledMap.class);
 		}
+		assetsManager.load(AssetMaps.tutorial1, TiledMap.class);
+		assetsManager.load(AssetMaps.tutorial2, TiledMap.class);
 
 	}
 

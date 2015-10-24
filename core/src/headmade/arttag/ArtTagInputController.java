@@ -39,14 +39,11 @@ public class ArtTagInputController extends InputAdapter {
 			return true;
 		} else if (keycode == Keys.ALT_LEFT || keycode == Keys.ALT_RIGHT || keycode == Keys.Z || keycode == Keys.SPACE) {
 			// action button 1
-			if (ArtTag.TOGGLE_LIGHT) {
-				Player.instance.isLightOn = !Player.instance.isLightOn;
-			} else {
-				Player.instance.isLightOn = true;
-			}
-			return true;
-		} else if (keycode == Keys.CONTROL_LEFT || keycode == Keys.CONTROL_RIGHT || keycode == Keys.X || keycode == Keys.SHIFT_LEFT
-				|| keycode == Keys.SHIFT_RIGHT) {
+			// if (ArtTag.TOGGLE_LIGHT) {
+			// Player.instance.isLightOn = !Player.instance.isLightOn;
+			// } else {
+			// Player.instance.isLightOn = true;
+			// }
 			// action button 2
 			if (Player.instance.isAbleToSteal) {
 				Player.instance.steal(artTagScreen);
@@ -63,6 +60,9 @@ public class ArtTagInputController extends InputAdapter {
 				Player.instance.scan(artTagScreen);
 				return true;
 			}
+			return true;
+		} else if (keycode == Keys.CONTROL_LEFT || keycode == Keys.CONTROL_RIGHT || keycode == Keys.X || keycode == Keys.SHIFT_LEFT
+				|| keycode == Keys.SHIFT_RIGHT) {
 
 			// default action
 			Player.instance.isRunning = true;
@@ -136,10 +136,10 @@ public class ArtTagInputController extends InputAdapter {
 			return true;
 		} else if (keycode == Keys.ALT_LEFT || keycode == Keys.ALT_RIGHT || keycode == Keys.Z || keycode == Keys.SPACE) {
 			// action button 1
-			if (ArtTag.TOGGLE_LIGHT) {
-			} else {
-				Player.instance.isLightOn = false;
-			}
+			// if (ArtTag.TOGGLE_LIGHT) {
+			// } else {
+			// Player.instance.isLightOn = false;
+			// }
 			return true;
 		} else if (keycode == Keys.CONTROL_LEFT || keycode == Keys.CONTROL_RIGHT || keycode == Keys.X || keycode == Keys.SHIFT_LEFT
 				|| keycode == Keys.SHIFT_RIGHT) {

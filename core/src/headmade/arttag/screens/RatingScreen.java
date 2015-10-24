@@ -140,7 +140,7 @@ public class RatingScreen extends StageScreen {
 
 	protected void nextScreen() {
 		Gdx.app.log(TAG, "Changing screen");
-		game.setScreen(new ArtTagScreen(game), ScreenTransitionFade.init(1f));
+		game.setScreen(new ArtTagScreen(game, null), ScreenTransitionFade.init(1f));
 	}
 
 	private void buildTagTable(final Table rootTable) {

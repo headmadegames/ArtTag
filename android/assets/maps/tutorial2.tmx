@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-up" width="200" height="160" tilewidth="64" tileheight="64" nextobjectid="436">
+ <tileset firstgid="1" name="pack4" tilewidth="64" tileheight="64" spacing="2" margin="2" tilecount="49">
+  <image source="../packs/pack4.png" width="512" height="512"/>
+ </tileset>
+ <layer name="floor" width="200" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt07EJACAMRUGHcP9ZneAHC9Egd5AqKfPGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKjNMCfv0h660wdk6e+rv9YHv6p6uD3Qzesm9AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPsW0rUKPQ==
+  </data>
+ </layer>
+ <layer name="walls" width="200" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt1rENACAMAzDuYOH/L7mg6kIRFbaUKTkgYwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8JMV5OQu6uF1M8jJXdQD0Ef2jyp2PhVdZP+oYudTAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANyzAVphB8w=
+  </data>
+ </layer>
+ <layer name="deco" width="200" height="160">
+  <data encoding="base64" compression="zlib">
+   eJztzkERAAAEADBR6F9SBR/HY0uwCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2FXXAXgsrwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAw1NHFAEI=
+  </data>
+ </layer>
+ <layer name="roof" width="200" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt2cEGwDAQBNAl///P0VMo26iusvEee5vjDCERAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHCWsbnKHHTz1Nt777/k7IOO7AOWN++eypx90IGeQs4+IGcfkLMPyO3+Mf4+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDLBGlnAQw=
+  </data>
+ </layer>
+ <objectgroup color="#ffaaff" name="objects">
+  <object id="224" name="warp" type="warp" x="2440.48" y="4152.67" width="502.995" height="240.227">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
+  </object>
+  <object id="225" name="player" type="player" x="2970.47" y="4243.34" width="59.3153" height="59.3153">
+   <properties>
+    <property name="direction" value="right"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="341" name="exit" type="exit" x="5059.07" y="3946.34" width="56.334" height="87.5"/>
+  <object id="357" name="art" type="art" x="3284" y="3920.33" width="70" height="63.67">
+   <properties>
+    <property name="matchesTag" value="false"/>
+    <property name="matchesYear" value="false"/>
+   </properties>
+  </object>
+  <object id="419" name="hint" type="hint" x="3057.89" y="4082" width="142.105" height="330">
+   <properties>
+    <property name="text" value="Your mission is to steal a specific piece of art."/>
+   </properties>
+  </object>
+  <object id="422" name="art" type="art" x="3418.67" y="3919.16" width="78.66" height="71.67">
+   <properties>
+    <property name="matchesTag" value="false"/>
+    <property name="matchesYear" value="false"/>
+   </properties>
+  </object>
+  <object id="423" name="art" type="art" x="3924.67" y="3918.16" width="61.33" height="75.835">
+   <properties>
+    <property name="matchesTag" value="true"/>
+    <property name="matchesYear" value="false"/>
+   </properties>
+  </object>
+  <object id="424" name="art" type="art" x="4052.67" y="3916.16" width="99.33" height="73.835">
+   <properties>
+    <property name="matchesTag" value="true"/>
+    <property name="matchesYear" value="false"/>
+   </properties>
+  </object>
+  <object id="431" name="art" type="art" x="4673.34" y="3919.42" width="61.33" height="75.835">
+   <properties>
+    <property name="matchesTag" value="true"/>
+    <property name="matchesYear" value="true"/>
+   </properties>
+  </object>
+  <object id="432" name="art" type="art" x="4541.33" y="3923.42" width="89.3317" height="68.5842">
+   <properties>
+    <property name="matchesTag" value="true"/>
+    <property name="matchesYear" value="true"/>
+   </properties>
+  </object>
+  <object id="433" name="hint" type="hint" x="3596.95" y="4067" width="628.386" height="330">
+   <properties>
+    <property name="text" value="Art has two characteristics: Motif and Age. You can see the motif but the age is only revealed by scanning."/>
+   </properties>
+  </object>
+  <object id="434" name="hint" type="hint" x="4288.95" y="4080.33" width="529.719" height="330">
+   <properties>
+    <property name="text" value="Find the piece of art that fits the job description in both characteristics."/>
+   </properties>
+  </object>
+  <object id="435" name="hint" type="hint" x="4912.95" y="4102.67" width="353.719" height="310.333">
+   <properties>
+    <property name="text" value="Once you have stolen a piece of art leave through the exit and earn your reward."/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup color="#ff0000" name="guards"/>
+ <objectgroup color="#ffff00" name="lights">
+  <object id="292" type="cone" x="2761.91" y="4279.15" width="2.95324" height="1.85724" rotation="359.185">
+   <properties>
+    <property name="color" value="99999988"/>
+   </properties>
+   <polygon points="0,0 614.689,-271.767 614.689,273.667"/>
+  </object>
+  <object id="342" name="light" type="point" x="5043.08" y="3963.75" width="92.5" height="92.5">
+   <properties>
+    <property name="color" value="44995555"/>
+   </properties>
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup color="#00aa00" name="physics" visible="0">
+  <object id="201" name="levelStatics" type="fixture" x="2602.36" y="4384.09" width="2767.33" height="590.25">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="409" name="level" type="body" x="2100" y="3764">
+   <properties>
+    <property name="bodyType" value="StaticBody"/>
+   </properties>
+   <polygon points="0,0 127.273,-109.091 136.364,136.364"/>
+  </object>
+  <object id="425" name="levelStatics" type="fixture" x="2576.34" y="3420.88" width="2767.33" height="590.25">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="426" name="levelStatics" type="fixture" x="5184.18" y="3894.09" width="2767.33" height="590.25">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="427" name="levelStatics" type="fixture" x="4224.34" y="3831.88" width="255.165" height="371.125">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="428" name="levelStatics" type="fixture" x="3584.08" y="3831.44" width="255.165" height="371.125">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="429" name="levelStatics" type="fixture" x="2813" y="3832.44" width="386.582" height="371.125">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+  <object id="430" name="levelStatics" type="fixture" x="4799.81" y="3832.59" width="191.189" height="371.125">
+   <properties>
+    <property name="body" value="level"/>
+    <property name="filter.maskBits" value="-1"/>
+    <property name="friction" value="0.8"/>
+    <property name="restitution" value="0.2"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
