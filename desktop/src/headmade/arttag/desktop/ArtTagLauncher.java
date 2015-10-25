@@ -1,7 +1,7 @@
 package headmade.arttag.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.jogamp.JoglNewtApplication;
+import com.badlogic.gdx.backends.jogamp.JoglNewtApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
@@ -36,11 +36,11 @@ public class ArtTagLauncher {
 			TexturePacker.process(settings, "assets-raw/images", "../android/assets/" + Assets.PACKS_BASE, Assets.PACK);
 		}
 
-		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		final JoglNewtApplicationConfiguration config = new JoglNewtApplicationConfiguration();
 		config.title = "Headmade Game";
 		config.width = 1280;
 		config.height = 1024;
 		config.samples = 4;
-		new LwjglApplication(new ArtTag(), config);
+		new JoglNewtApplication(new ArtTag(), config);
 	}
 }
