@@ -132,7 +132,7 @@ public class Guard {
 		}
 
 		{ // player Flashlight
-			light = new ConeLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, null, lightLength, 0, 0, 0f, lightAngle);//
+			light = new ConeLight(artTagScreen.rayHandler, ArtTag.gameSettings.rays, null, lightLength, 0, 0, 0f, lightAngle);//
 			light.attachToBody(body, 0f, 0f, 90);
 			light.setIgnoreAttachedBody(true);
 			light.setSoftnessLength(0.5f);

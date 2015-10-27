@@ -1,11 +1,7 @@
 package headmade.arttag.screens;
 
-import headmade.arttag.DirectedGame;
-import headmade.arttag.assets.Assets;
-import headmade.arttag.screens.transitions.ScreenTransition;
-import headmade.arttag.screens.transitions.ScreenTransitionFade;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
@@ -13,13 +9,21 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
+import headmade.arttag.ArtTag;
+import headmade.arttag.DirectedGame;
+import headmade.arttag.assets.Assets;
+import headmade.arttag.screens.transitions.ScreenTransition;
+import headmade.arttag.screens.transitions.ScreenTransitionFade;
+import headmade.arttag.vo.GameSettings;
+
 public class IntroScreen extends StageScreen {
 
-	private static final String	TAG	= IntroScreen.class.getName();
+	private static final String TAG = IntroScreen.class.getName();
 
-	private final Table			rootTable;
+	private final Table rootTable;
 
-	private boolean				isStarted;
+	private boolean	isStarted;
+	private boolean	isInitialised	= false;
 
 	public IntroScreen(final DirectedGame game) {
 		super(game);
@@ -43,6 +47,28 @@ public class IntroScreen extends StageScreen {
 	@Override
 	public void preDraw(float delta) {
 		super.preDraw(delta);
+
+		if (!isInitialised) {
+			isInitialised = true;
+			ArtTag.gameSettings = new GameSettings();
+			final Preferences prefs = Gdx.app.getPreferences("ArtTreacheryPrefs");
+			ArtTag.gameSettings.screenWidth = prefs.getInteger("screenWidth", 1280);
+			ArtTag.gameSettings.screenHeight = prefs.getInteger("screenHeight", 1024);
+			ArtTag.gameSettings.fullscreen = prefs.getBoolean("fullscreen", false);
+			ArtTag.gameSettings.blur = prefs.getInteger("blur", 1);
+			ArtTag.gameSettings.rays = prefs.getInteger("rays", 64);
+
+			prefs.putInteger("screenWidth", ArtTag.gameSettings.screenWidth);
+			prefs.putInteger("screenHeight", ArtTag.gameSettings.screenHeight);
+			prefs.putBoolean("fullscreen", ArtTag.gameSettings.fullscreen);
+			prefs.putInteger("blur", ArtTag.gameSettings.blur);
+			prefs.putInteger("rays", ArtTag.gameSettings.rays);
+			prefs.flush();
+
+			Gdx.graphics.setDisplayMode(ArtTag.gameSettings.screenWidth, ArtTag.gameSettings.screenHeight, ArtTag.gameSettings.fullscreen);
+			Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+		}
 
 		Assets.assetsManager.update();
 		if (!isStarted && MathUtils.isEqual(1f, Assets.assetsManager.getProgress())) {
@@ -69,7 +95,7 @@ public class IntroScreen extends StageScreen {
 
 		final ScreenTransition transition = ScreenTransitionFade.init(.3f);
 		// game.setScreen(new ArtTagScreen(game), transition);
-		game.setScreen(new MenuScreen(game), transition);
+		game.setScreen(new MenuScreen(game));
 
 		// final JobDescription jobDescription = new JobDescription();
 		// final Art art1 = new Art(new Rectangle(1, 1, 1, 1));
@@ -80,4 +106,5 @@ public class IntroScreen extends StageScreen {
 		// Player.instance.inventory.add(art2);
 		// game.setScreen(new RatingScreen(game, jobDescription));
 	}
+
 }

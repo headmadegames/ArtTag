@@ -165,7 +165,8 @@ public class Player {
 		}
 
 		{ // player Flashlight
-			playerLight = new ConeLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, null, playerLightLength, 0, 0, 0f, playerlightAngle);//
+			playerLight = new ConeLight(artTagScreen.rayHandler, ArtTag.gameSettings.rays, null, playerLightLength, 0, 0, 0f,
+					playerlightAngle);//
 			playerLight.attachToBody(body, 0f, 0f, 90);
 			playerLight.setIgnoreAttachedBody(true);
 			playerLight.setSoftnessLength(0.5f);

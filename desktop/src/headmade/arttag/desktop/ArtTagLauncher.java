@@ -11,12 +11,13 @@ import headmade.arttag.assets.Assets;
 
 public class ArtTagLauncher {
 
+	private static final String TAG = ArtTagLauncher.class.getName();
+
 	// private static boolean rebuildAtlas = true;
 	private static boolean	rebuildAtlas		= false;
 	private static boolean	drawDebugOutline	= false;
 
 	public static void main(String[] arg) {
-
 		if (rebuildAtlas) {
 			final Settings settings = new Settings();
 			settings.maxWidth = 512;
@@ -38,9 +39,11 @@ public class ArtTagLauncher {
 
 		final JoglNewtApplicationConfiguration config = new JoglNewtApplicationConfiguration();
 		config.title = "Headmade Game";
+		// config.foregroundFPS = 30;
 		config.width = 1280;
 		config.height = 1024;
-		config.samples = 4;
-		new JoglNewtApplication(new ArtTag(), config);
+		// config.samples = 4;
+		final JoglNewtApplication app = new JoglNewtApplication(new ArtTag(), config);
 	}
+
 }

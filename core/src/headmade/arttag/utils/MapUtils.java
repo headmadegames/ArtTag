@@ -263,7 +263,7 @@ public class MapUtils {
 		final Ellipse e = mapObject.getEllipse();
 		final Color color = getColor(mapObject);
 
-		final PointLight light = new PointLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, color, unitScale * e.width,
+		final PointLight light = new PointLight(artTagScreen.rayHandler, ArtTag.gameSettings.rays, color, unitScale * e.width,
 				unitScale * (e.x + e.width / 2), unitScale * (e.y + e.width / 2));
 		light.setContactFilter(ArtTag.CAT_LIGHT, ArtTag.GROUP_LIGHT, ArtTag.MASK_LIGHT);
 		light.setSoftnessLength(0.5f);
@@ -297,7 +297,7 @@ public class MapUtils {
 		final float rotation = halfBetweenV1AndV2.cpy().sub(vecs.first()).angle() - objRot;
 		// final float rotation = poly.getRotation();
 		// Gdx.app.log(TAG, "rotation " + rotation + " length: " + length + " angle:" + angle);
-		final ConeLight light = new ConeLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, color, length, unitScale * poly.getX(),
+		final ConeLight light = new ConeLight(artTagScreen.rayHandler, ArtTag.gameSettings.rays, color, length, unitScale * poly.getX(),
 				unitScale * poly.getY(), rotation, angle);
 		light.setSoftnessLength(0.5f);
 		light.setContactFilter(ArtTag.CAT_LIGHT, ArtTag.GROUP_LIGHT, ArtTag.MASK_LIGHT);

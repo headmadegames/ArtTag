@@ -11,6 +11,7 @@ import headmade.arttag.screens.transitions.ScreenTransition;
 import headmade.arttag.screens.transitions.ScreenTransitionFade;
 import headmade.arttag.service.FlickrService;
 import headmade.arttag.service.MusicService;
+import headmade.arttag.vo.GameSettings;
 import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 
 public class ArtTag extends DirectedGame {
@@ -22,7 +23,7 @@ public class ArtTag extends DirectedGame {
 	public static final String	BUTTON_A	= "Shift";
 	public static final String	BUTTON_B	= "Space";
 
-	public final static int		VELOCITY_ITERS		= 6;
+	public final static int		VELOCITY_ITERS		= 3;
 	public final static int		POSITION_ITERS		= 2;
 	public final static int		MAX_FPS				= 60;
 	public final static int		MIN_FPS				= 15;
@@ -31,7 +32,7 @@ public class ArtTag extends DirectedGame {
 	public final static float	MAX_TIME_PER_FRAME	= TIME_STEP * MAX_STEPS;
 
 	public static final float	UNIT_SCALE	= 1f / 64f;
-	public static final int		RAYS_NUM	= 256;
+	public static final int		RAYS_NUM	= 32;
 
 	public static final short	CAT_LEVEL		= 0x0001;
 	public static final short	CAT_PLAYER		= 0x0002;
@@ -64,7 +65,8 @@ public class ArtTag extends DirectedGame {
 	// settings
 	public static final boolean TOGGLE_LIGHT = true;
 
-	public static GameState gameState;
+	public static GameState		gameState;
+	public static GameSettings	gameSettings;
 
 	@Override
 	public void create() {
@@ -107,6 +109,12 @@ public class ArtTag extends DirectedGame {
 		Assets.instance.dispose();
 		Player.instance.dispose();
 		FlickrService.instance.dispose();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		Gdx.gl.glViewport(0, 0, width, height);
+		super.resize(width, height);
 	}
 
 }

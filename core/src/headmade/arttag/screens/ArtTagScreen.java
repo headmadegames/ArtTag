@@ -3,6 +3,7 @@ package headmade.arttag.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -100,15 +101,23 @@ public class ArtTagScreen extends StageScreen {
 
 	private float gameOverDelta;
 
+	private final FPSLogger fpsLogger;
+
 	// private final Map map;
 
 	public ArtTagScreen(DirectedGame game, String map) {
 		super(game);// , new Stage(new ExtendViewport(MIN_WORLD_WIDTH, MIN_WORLD_HEIGHT), game.getBatch()));
 
+		fpsLogger = new FPSLogger();
+
 		Player.instance.inventory.clear();
 		Player.instance.setControlArtCount(0);
 		Player.instance.setArtScanCount(0);
 		Player.instance.setArtViewCount(0);
+		Player.instance.isMoveDown = false;
+		Player.instance.isMoveUp = false;
+		Player.instance.isMoveLeft = false;
+		Player.instance.isMoveRight = false;
 
 		camera = new OrthographicCamera(MIN_WORLD_WIDTH, MIN_WORLD_HEIGHT);
 		((OrthographicCamera) camera).zoom = 0.5f;
@@ -131,7 +140,7 @@ public class ArtTagScreen extends StageScreen {
 		/** BOX2D LIGHT STUFF BEGIN */
 		rayHandler = new RayHandler(world);
 		rayHandler.setAmbientLight(0.08f, 0.08f, 0.16f, 0.1f);
-		rayHandler.setBlurNum(3);
+		rayHandler.setBlurNum(ArtTag.gameSettings.blur);
 		rayHandler.diffuseBlendFunc.set(GL20.GL_DST_COLOR, GL20.GL_SRC_COLOR);
 		// RayHandler.setGammaCorrection(true);
 		RayHandler.useDiffuseLight(true);
@@ -182,6 +191,7 @@ public class ArtTagScreen extends StageScreen {
 
 	@Override
 	public void render(float delta) {
+		fpsLogger.log();
 
 		while (FlickrService.instance.getWebArtCount() == 0) {
 			// wait

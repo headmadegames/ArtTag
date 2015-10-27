@@ -28,7 +28,7 @@ import headmade.arttag.utils.RandomUtil;
 public class FlickrService {
 	private static final String TAG = FlickrService.class.getName();
 
-	private static final int	BATCH_SIZE	= 40;
+	private static final int	BATCH_SIZE	= 10;
 	// TODO find out actual size of image catalogue
 	private static final int	MAX_PAGE	= 1000000 / BATCH_SIZE;
 
@@ -44,8 +44,8 @@ public class FlickrService {
 
 	private FlickrService() {
 		flickr = new Flickr("b906a04cd9cd1b76c8809a01cb66611d", "135a0371bf2e8c02", new REST());
-		executor = Executors.newFixedThreadPool(3);
-		executor2 = Executors.newFixedThreadPool(2);
+		executor = Executors.newFixedThreadPool(1);
+		executor2 = Executors.newFixedThreadPool(1);
 	}
 
 	public void init() {
@@ -57,7 +57,7 @@ public class FlickrService {
 
 		int rand = RandomUtil.random(MAX_PAGE);
 		int countBatches = 0;
-		while (countBatches < 4) {
+		while (countBatches < 3) {
 			if (!usedPages.contains(rand, false)) {
 				usedPages.add(rand);
 				countBatches++;
