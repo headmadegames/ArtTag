@@ -17,8 +17,10 @@ import com.badlogic.gdx.utils.Array;
 import com.flickr4java.flickr.tags.Tag;
 
 import headmade.arttag.JobDescription;
+import headmade.arttag.Player;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
+import headmade.arttag.screens.ArtTagScreen;
 import headmade.arttag.service.ImageService;
 import headmade.arttag.service.RandomService;
 import headmade.arttag.utils.RandomUtil;
@@ -51,6 +53,8 @@ public class Art {
 	private boolean	isSeen;
 	private boolean	isScanned;
 	private boolean	isStolen;
+	private Boolean	isShouldMatchTag;
+	private Boolean	isShouldMatchYear;
 
 	private final Array<String> knownTags = new Array<String>();
 
@@ -109,10 +113,16 @@ public class Art {
 		return "Art [name=" + name + ", artistName=" + artistName + ", year=" + year + ", imageId=" + getImageId() + "]";
 	}
 
-	public void onScanFinished() {
-		setYearFromTags();
-		if (year == 0) {
-			this.year = RandomService.instance.generateYear();
+	public void onScanFinished(ArtTagScreen artTag) {
+		final int artScanCount = Player.instance.getArtScanCount() + 1;
+		if (isShouldMatchYear() // this art should match the tag
+				|| RandomUtil.random(artScanCount) > 5) { // many photos scanned
+			this.year = RandomUtil.random(artTag.jobDescription.artYearRange) + artTag.jobDescription.artYearFrom;
+		} else {
+			setYearFromTags();
+			if (year == 0) {
+				this.year = RandomService.instance.generateYear();
+			}
 		}
 	}
 
@@ -190,6 +200,9 @@ public class Art {
 	}
 
 	public void setYearFromTags() {
+		if (webArt == null) {
+			return;
+		}
 		// set year from tag
 		final Collection<Tag> tags = webArt.getPhoto().getTags();
 		for (final Tag tag : tags) {
@@ -296,6 +309,22 @@ public class Art {
 
 	public Rectangle getRectangle() {
 		return rectangle;
+	}
+
+	public Boolean isShouldMatchTag() {
+		return isShouldMatchTag == null ? false : isShouldMatchTag;
+	}
+
+	public void setShouldMatchTag(Boolean isShouldMatchTag) {
+		this.isShouldMatchTag = isShouldMatchTag;
+	}
+
+	public Boolean isShouldMatchYear() {
+		return isShouldMatchYear == null ? false : isShouldMatchYear;
+	}
+
+	public void setShouldMatchYear(Boolean isShouldMatchYear) {
+		this.isShouldMatchYear = isShouldMatchYear;
 	}
 
 }

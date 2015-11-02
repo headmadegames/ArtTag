@@ -1,11 +1,14 @@
 package headmade.arttag.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
@@ -41,7 +44,21 @@ public class IntroScreen extends StageScreen {
 		// rootTable.setDebug(true);
 		this.stage.addActor(rootTable);
 
+		stage.addListener(new InputListener() {
+
+			@Override
+			public boolean keyDown(InputEvent event, int keycode) {
+				if (keycode == Keys.ESCAPE) {
+					Gdx.app.exit();
+					return true;
+				}
+				return super.keyDown(event, keycode);
+			}
+
+		});
+
 		Assets.instance.loadAll();
+
 	}
 
 	@Override
@@ -49,6 +66,7 @@ public class IntroScreen extends StageScreen {
 		super.preDraw(delta);
 
 		if (!isInitialised) {
+			Gdx.app.log(TAG, "Loading Prefs");
 			isInitialised = true;
 			ArtTag.gameSettings = new GameSettings();
 			final Preferences prefs = Gdx.app.getPreferences("ArtTreacheryPrefs");
@@ -57,16 +75,24 @@ public class IntroScreen extends StageScreen {
 			ArtTag.gameSettings.fullscreen = prefs.getBoolean("fullscreen", false);
 			ArtTag.gameSettings.blur = prefs.getInteger("blur", 1);
 			ArtTag.gameSettings.rays = prefs.getInteger("rays", 64);
+			ArtTag.gameSettings.handleResAuto = prefs.getBoolean("handleResAuto", true);
 
+			Gdx.app.log(TAG, "Saving Prefs");
 			prefs.putInteger("screenWidth", ArtTag.gameSettings.screenWidth);
 			prefs.putInteger("screenHeight", ArtTag.gameSettings.screenHeight);
 			prefs.putBoolean("fullscreen", ArtTag.gameSettings.fullscreen);
 			prefs.putInteger("blur", ArtTag.gameSettings.blur);
 			prefs.putInteger("rays", ArtTag.gameSettings.rays);
+			prefs.putBoolean("handleResAuto", ArtTag.gameSettings.handleResAuto);
 			prefs.flush();
 
-			Gdx.graphics.setDisplayMode(ArtTag.gameSettings.screenWidth, ArtTag.gameSettings.screenHeight, ArtTag.gameSettings.fullscreen);
-			Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			if (Gdx.graphics.supportsDisplayModeChange() && ArtTag.gameSettings.handleResAuto == false) {
+				Gdx.app.log(TAG, "Trying to set Displaymode");
+				Gdx.graphics.setDisplayMode(ArtTag.gameSettings.screenWidth, ArtTag.gameSettings.screenHeight,
+						ArtTag.gameSettings.fullscreen);
+
+				// Gdx.gl.glViewport(0, 0, ArtTag.gameSettings.screenWidth, ArtTag.gameSettings.screenHeight);
+			}
 
 		}
 

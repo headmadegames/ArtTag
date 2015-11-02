@@ -131,15 +131,18 @@ public class ArtTagContactListener implements ContactListener {
 		if (isArtTrigger(fixOther)) {
 			Gdx.app.log(TAG, "Player no longer touching " + artTag.getCurrentArt());
 			Player.instance.isTouchingArt = false;
+			artTag.setInstruction(null);
 		} else if (isHint(fixOther)) {
 			Gdx.app.log(TAG, "End touching hint");
 			Player.instance.hintText = null;
 		} else if (isExit(fixOther)) {
 			Gdx.app.log(TAG, "End touching exit");
 			Player.instance.isTouchingExit = false;
+			artTag.setInstruction(null);
 		} else if (isWarp(fixOther)) {
 			Gdx.app.log(TAG, "End touching warp");
 			Player.instance.isTouchingWarp = false;
+			artTag.setInstruction(null);
 		}
 	}
 

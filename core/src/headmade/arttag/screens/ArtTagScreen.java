@@ -45,6 +45,7 @@ import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
 import headmade.arttag.screens.transitions.ScreenTransitionFade;
 import headmade.arttag.service.FlickrService;
+import headmade.arttag.service.MusicService;
 import headmade.arttag.service.TagService;
 import headmade.arttag.spriter.LibGdxDrawer;
 import headmade.arttag.spriter.Loader;
@@ -160,6 +161,10 @@ public class ArtTagScreen extends StageScreen {
 		resultActor = new Label("Result", Assets.instance.skin, "scanner");
 		resultActor.setVisible(false);
 		resultActor.setAlignment(Align.center);
+		final Label scoreLabel = new Label("Your Score", Assets.instance.skin, "white");
+		final Label highscoreLabel = new Label("Highscore", Assets.instance.skin, "white");
+		final Label scoreActor = new Label("$" + Player.instance.getCash(), Assets.instance.skin, "dollar");
+		final Label highscoreActor = new Label("$" + ArtTag.highScore, Assets.instance.skin, "dollar");
 
 		Gdx.app.log(TAG, "camera.viewportWidth " + camera.viewportWidth + " Gdx.graphics.getWidth(): " + Gdx.graphics.getWidth());
 		rootTable = new Table(Assets.instance.skin);
@@ -168,7 +173,13 @@ public class ArtTagScreen extends StageScreen {
 		rootTable.add(imageActor).center().expand();
 		rootTable.add(instructionsActor).top().right().pad(10f).width(camera.viewportWidth / ArtTag.UNIT_SCALE / 4);
 		rootTable.row();
-		rootTable.add(resultActor).center().colspan(3).width(camera.viewportWidth / ArtTag.UNIT_SCALE / 4);
+		rootTable.add(scoreLabel).left();
+		rootTable.add();
+		rootTable.add(highscoreLabel).right();
+		rootTable.row();
+		rootTable.add(scoreActor).left();
+		rootTable.add(resultActor).center().width(camera.viewportWidth / ArtTag.UNIT_SCALE / 4);
+		rootTable.add(highscoreActor).right();
 
 		stage.addActor(rootTable);
 
@@ -193,10 +204,10 @@ public class ArtTagScreen extends StageScreen {
 	public void render(float delta) {
 		fpsLogger.log();
 
-		while (FlickrService.instance.getWebArtCount() == 0) {
-			// wait
-			return;
-		}
+		// while (FlickrService.instance.getWebArtCount() == 0) {
+		// // wait
+		// return;
+		// }
 
 		if (gameOverDelta > 3f) {
 			endLevel();
@@ -411,6 +422,7 @@ public class ArtTagScreen extends StageScreen {
 	}
 
 	public void endLevel() {
+		MusicService.instance.forceMusicChange();
 		if (onGameOver != null) {
 			TagService.instance.tag(currentRoom.getArtList());
 			Gdx.app.log(TAG, TagService.instance.tagVos.toString());
@@ -418,6 +430,13 @@ public class ArtTagScreen extends StageScreen {
 			Player.instance.artInView.clear();
 			// Gdx.app.exit();
 			game.setScreen(new ArtTagScreen(game, this.currentRoom.getId()), ScreenTransitionFade.init(0f));
+		} else if (isGameOver) {
+			TagService.instance.tag(currentRoom.getArtList());
+			Gdx.app.log(TAG, TagService.instance.tagVos.toString());
+			Player.instance.body = null;
+			Player.instance.artInView.clear();
+			// Gdx.app.exit();
+			game.setScreen(new GameOverScreen(game), ScreenTransitionFade.init(1f));
 		} else {
 			TagService.instance.tag(currentRoom.getArtList());
 			Gdx.app.log(TAG, TagService.instance.tagVos.toString());
@@ -432,6 +451,7 @@ public class ArtTagScreen extends StageScreen {
 		instructionsActor.setText(text);
 		if (text != null) {
 			instructionsActor.setVisible(true);
+			// Assets.instance.playSound(AssetSounds.radio);
 		} else {
 			instructionsActor.setVisible(false);
 		}
@@ -442,6 +462,7 @@ public class ArtTagScreen extends StageScreen {
 	}
 
 	public void newRoom() {
+		MusicService.instance.forceMusicChange();
 		Player.instance.isTouchingWarp = false;
 		if (Player.instance.warpRoom != null) {
 			MapUtils.loadMap(this, AssetMaps.MAPS_PATH + Player.instance.warpRoom);
@@ -480,12 +501,13 @@ public class ArtTagScreen extends StageScreen {
 	}
 
 	public void setCurrentArt(Art currentArt) {
-		if (currentArt != null && currentArt.getWebArt() == null) {
+		if (currentArt != null && currentArt.getWebArt() == null && !currentArt.isSeen()) {
 			Player.instance.setArtViewCount(Player.instance.getArtViewCount() + 1);
 			final int controlCountRand = Player.instance.getControlArtCount() + 2;
 			final int controlArtScanCount = Player.instance.getArtScanCount() + 1;
 			final int controlArtViewCount = Player.instance.getArtViewCount() + 1;
-			if (RandomUtil.random(controlCountRand * controlCountRand) == 1 // no or little control art sofar
+			if (currentArt.isShouldMatchTag() // this art should match the tag
+					|| RandomUtil.random(controlCountRand * controlCountRand) == 1 // no or little control art sofar
 					|| RandomUtil.random(controlArtScanCount) > 5 // many scans
 					|| RandomUtil.random(controlArtViewCount) > 15) { // many photos looked at
 				Gdx.app.log(TAG, "Adding control web art");

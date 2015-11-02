@@ -53,6 +53,8 @@ public class MapUtils {
 	private static final String	OBJ_EXIT	= "exit";
 	private static final String	OBJ_ART		= "art";
 
+	private static final String	PROP_MATCHESTAG		= "matchesTag";
+	private static final String	PROP_MATCHESYEAR	= "matchesYear";
 	private static final String	PROP_ONGAMEOVER		= "onGameOver";
 	private static final String	PROP_HIDEJOBDESC	= "hideJobDesc";
 	private static final String	PROP_DIRECTION		= "direction";
@@ -144,7 +146,7 @@ public class MapUtils {
 				if (isNewRoom) {
 					// add Art only if this a new room. If this is an old room the art was created before.
 					if (mapObject instanceof RectangleMapObject) {
-						createNewArt(artTagScreen, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
+						createNewArt(artTagScreen, mapObject, ((RectangleMapObject) mapObject).getRectangle(), parser.getUnitScale());
 					} else {
 						Gdx.app.error(TAG, OBJ_ART + " has to be a Rectangle");
 					}
@@ -319,15 +321,24 @@ public class MapUtils {
 		return color;
 	}
 
-	private static void createNewArt(ArtTagScreen artTagScreen, Rectangle rectangle, float unitScale) {
+	private static Art createNewArt(ArtTagScreen artTagScreen, MapObject mapObject, Rectangle rectangle, float unitScale) {
 		final Rectangle rect = toWorldScale(rectangle, unitScale);
 
 		final Art art = new Art(rect);
 		art.init();
+		final String matchesTag = mapObject.getProperties().get(PROP_MATCHESTAG, null, String.class);
+		final String matchesYear = mapObject.getProperties().get(PROP_MATCHESYEAR, null, String.class);
+		if (matchesTag != null) {
+			art.setShouldMatchTag("true".equalsIgnoreCase(matchesTag));
+		}
+		if (matchesYear != null) {
+			art.setShouldMatchYear("true".equalsIgnoreCase(matchesYear));
+		}
 		artTagScreen.currentRoom.getArtList().add(art);
 		// Gdx.app.log(TAG, "Created new Art " + art);
 
 		createArtSensor(artTagScreen, art);
+		return art;
 
 		// ConeLight artLight = new ConeLight(artTagScreen.rayHandler, ArtTag.RAYS_NUM, new Color(0xFFFFFFFF), rectangle.width, rectangle.x,
 		// rectangle.y, 45f, 45f);

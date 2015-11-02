@@ -1,9 +1,5 @@
 package headmade.arttag;
 
-import headmade.arttag.screens.AbstractGameScreen;
-import headmade.arttag.screens.transitions.ScreenTransition;
-import headmade.arttag.service.MusicService;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,8 +7,12 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
+import headmade.arttag.screens.AbstractGameScreen;
+import headmade.arttag.screens.transitions.ScreenTransition;
+import headmade.arttag.service.MusicService;
+
 public abstract class DirectedGame extends Game {
-	private static final String	TAG	= DirectedGame.class.getName();
+	private static final String TAG = DirectedGame.class.getName();
 
 	private boolean				init;
 	private AbstractGameScreen	currScreen;
@@ -22,7 +22,7 @@ public abstract class DirectedGame extends Game {
 	private float				time;
 	private ScreenTransition	screenTransition;
 
-	protected SpriteBatch		batch;
+	protected SpriteBatch batch;
 
 	/**
 	 * Called on android when back button is pressed
@@ -161,7 +161,8 @@ public abstract class DirectedGame extends Game {
 		}
 
 		Gdx.input.setInputProcessor(null); // disable input
-		this.screenTransition = screenTransition;
+		// this.screenTransition = screenTransition;
+		this.screenTransition = null;
 		time = 0;
 	}
 

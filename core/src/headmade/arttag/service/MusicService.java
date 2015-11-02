@@ -1,5 +1,8 @@
 package headmade.arttag.service;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.TimeUtils;
+
 import headmade.arttag.ArtTag;
 import headmade.arttag.Player;
 import headmade.arttag.assets.AssetMusic;
@@ -9,20 +12,20 @@ import headmade.arttag.screens.IntroScreen;
 import headmade.arttag.screens.MenuScreen;
 import headmade.arttag.screens.RatingScreen;
 
-import com.badlogic.gdx.audio.Music;
-
 public class MusicService {
 
-	private static final String	TAG				= MusicService.class.getName();
+	private static final String TAG = MusicService.class.getName();
 
-	private static final float	MUSIC_VOLUME	= 0.5f;
+	private static final float MUSIC_VOLUME = 0.5f;
 
-	public static MusicService	instance		= new MusicService();
+	public static MusicService instance = new MusicService();
 
-	private boolean				isMute			= false;
-	private ArtTag				game;
-	private String				currentMusicName;
-	private Music				currentMusic;
+	private boolean	isMute	= false;
+	private ArtTag	game;
+	private String	currentMusicName;
+	private Music	currentMusic;
+
+	private long millisStarted = 0;
 
 	private MusicService() {
 	}
@@ -50,6 +53,12 @@ public class MusicService {
 	}
 
 	private void shouldPlay(String musicName) {
+		// Gdx.app.log(TAG, "millisStarted - TimeUtils.millis() " + (millisStarted - TimeUtils.millis()));
+		if (!musicName.equals(AssetMusic.spotted) && millisStarted - TimeUtils.millis() > -2000) {
+			return;
+		}
+
+		millisStarted = TimeUtils.millis();
 		if (currentMusic != null && !musicName.equals(currentMusicName)) {
 			if (currentMusic != null) {
 				currentMusic.stop();
@@ -82,5 +91,9 @@ public class MusicService {
 		if (currentMusic != null) {
 			currentMusic.setVolume(isMute ? 0f : MUSIC_VOLUME);
 		}
+	}
+
+	public void forceMusicChange() {
+		millisStarted = 0;
 	}
 }

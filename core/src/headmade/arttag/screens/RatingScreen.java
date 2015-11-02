@@ -58,16 +58,15 @@ public class RatingScreen extends StageScreen {
 		continueButton.getLabelCell().padRight(10f);
 
 		rootTable.setFillParent(true);
-		rootTable.add("Mission").pad(10f).right();
-		rootTable.add(jobDescActor).colspan(2).center().expand();
+		rootTable.add("Mission").space(20).pad(20).right();
+		rootTable.add(jobDescActor).center().expand();
 		rootTable.row();
 
-		rootTable.add().colspan(2);
-		rootTable.add("Reward").pad(10f);
-		rootTable.row();
-
+		int cash = 100;
 		if (Player.instance.inventory.size == 0) {
-			rootTable.add("You did not steal anything and failed the mission.").colspan(3);
+			cash = 0;
+			rootTable.add("You did not steal anything and failed the mission.").center().colspan(2).space(20).pad(20);
+			rootTable.row();
 		} else {
 			for (int i = 0; i < Player.instance.inventory.size; i++) {
 				final Art art = Player.instance.inventory.get(i);
@@ -75,7 +74,6 @@ public class RatingScreen extends StageScreen {
 				img.setScaling(Scaling.fit);
 				// img.setWidth(camera.viewportWidth / Player.instance.inventory.size);
 				// img.setHeight(camera.viewportHeight / 5);
-				int cash = 100;
 				if (art.matchesDescription(jobDescription)) {
 					cash += 1000 + MathUtils.random(100);
 				}
@@ -92,17 +90,20 @@ public class RatingScreen extends StageScreen {
 				Gdx.app.log(TAG, "Multiplying by Player Accuracy " + Player.instance.getAccuracy());
 				cash *= (0.2f + Player.instance.getAccuracy());
 
-				final Label earningActor = new Label("$" + cash, Assets.instance.skin, "dollar");
-
-				rootTable.add(i == 0 ? "Loot" : "").pad(10f).right();
+				rootTable.add(i == 0 ? "Loot" : "").space(20).pad(20).right();
 				rootTable.add(img).center().pad(10f).expand();
-				rootTable.add(earningActor).pad(10f);
 				rootTable.row();
 			}
 		}
 
-		rootTable.add().colspan(2);
-		rootTable.add(continueButton).space(20).pad(20);
+		Player.instance.increaseCash(cash);
+		final Label earningActor = new Label("$" + cash, Assets.instance.skin, "dollar");
+
+		rootTable.add("Reward").space(20).pad(20);
+		rootTable.add(earningActor).pad(10f);
+		rootTable.row();
+
+		rootTable.add(continueButton).center().colspan(2).space(20).pad(20);
 
 		// buildTagTable(rootTable);
 		// rootTable.setDebug(true);

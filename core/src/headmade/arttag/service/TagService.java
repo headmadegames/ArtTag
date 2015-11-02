@@ -17,8 +17,8 @@ import headmade.arttag.vo.TagVo;
 public class TagService {
 	private static final String TAG = TagService.class.getName();
 
-	public static final String[] TAGS = { "architecture", "advertisement", "cover", "decoration", "diagram", "fashion", "fauna",
-			"typography", "map", "music", "people", "flora", "portrait", "ship" };
+	public static final String[] TAGS = { "architecture", "decoration", "fauna", "typography", "map", "music", "people", "flora",
+			"portrait", "ship" };
 
 	public static TagService instance = new TagService();
 

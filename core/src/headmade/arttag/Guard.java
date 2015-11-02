@@ -210,7 +210,7 @@ public class Guard {
 				final RayCastCallback callback = new RayCastCallback() {
 					@Override
 					public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-						Gdx.app.log(TAG, "reportRayFixture " + point + " normal " + normal);
+						// Gdx.app.log(TAG, "reportRayFixture " + point + " normal " + normal);
 						if (fixture.isSensor()) {
 							// Gdx.app.log(TAG, "Raycast ignoring sensor");
 							return 1;

@@ -38,9 +38,9 @@ public class HowToActor extends BaseMenuContainer {
 			add(joystick).bottom();
 			add(button).bottom();
 			add(button2).bottom().row();
-			add("Cursor Keys").padBottom(20f);
-			add("Shift Key").padBottom(20f);
-			add("Spacebar").padBottom(20f).row();
+			add("Joystick").padBottom(20f);
+			add("Button A").padBottom(20f);
+			add("Button B").padBottom(20f).row();
 
 			add("Move");
 			add("Sprint");

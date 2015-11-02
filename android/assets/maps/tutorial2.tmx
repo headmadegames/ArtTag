@@ -89,7 +89,7 @@
   </object>
   <object id="435" name="hint" type="hint" x="4912.95" y="4102.67" width="353.719" height="310.333">
    <properties>
-    <property name="text" value="Once you have stolen a piece of art leave through the exit and earn your reward."/>
+    <property name="text" value="Once you have stolen a piece of art leave through the exit and earn your reward. The tutorial ends here."/>
    </properties>
   </object>
  </objectgroup>

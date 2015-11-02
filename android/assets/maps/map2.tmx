@@ -131,12 +131,6 @@
   </object>
  </objectgroup>
  <objectgroup color="#ffff00" name="lights">
-  <object id="67" name="light" type="point" x="2405.6" y="1910.42" width="476.364" height="476.364">
-   <properties>
-    <property name="color" value="99776688"/>
-   </properties>
-   <ellipse/>
-  </object>
   <object id="290" type="cone" x="2666.6" y="1399.48" width="2.95324" height="1.85724" rotation="90.3452">
    <properties>
     <property name="color" value="99999988"/>

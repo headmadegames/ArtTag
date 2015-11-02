@@ -31,7 +31,7 @@ public class JobDescription {
 		// artArtist = RandomService.instance.generateArtistName();
 		// } else {
 		artYearFrom = RandomService.instance.generateYear();
-		artYearRange = 40;
+		artYearRange = 30 + RandomUtil.random(10);
 		// artYearRange = RandomService.instance.generateYearRange(artYearFrom, 40);
 		// }
 		desc = RandomService.instance.generateJobDescription(this);

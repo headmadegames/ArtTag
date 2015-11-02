@@ -190,10 +190,20 @@ public class FlickrService {
 	}
 
 	public WebArt getWebArt() {
-		if (availableWebArt.size() == BATCH_SIZE) {
+		if (availableWebArt.size() == BATCH_SIZE || availableWebArt.size() < BATCH_SIZE / 2) {
 			fetchMorePhotos();
 		}
-		return availableWebArt.remove(RandomUtil.random(availableWebArt.size() - 1));
+		final int size = availableWebArt.size();
+		if (size < 1) {
+			return null;
+		} else {
+			try {
+				return availableWebArt.remove(RandomUtil.random(size - 1));
+			} catch (final Exception e) {
+				Gdx.app.error(TAG, "Error getting webart", e);
+				return null;
+			}
+		}
 	}
 
 	public WebArt getControlWebArt(String tag) {
@@ -201,10 +211,13 @@ public class FlickrService {
 		if (controlArt != null && controlArt.size() > 0) {
 			Gdx.app.log(TAG, "returning controlArt " + controlArt + " for tag " + tag);
 			Player.instance.setControlArtCount(Player.instance.getControlArtCount() + 1);
-			return controlArt.get(RandomUtil.random(controlArt.size() - 1));
-		} else {
-			return null;
+			try {
+				return controlArt.get(RandomUtil.random(controlArt.size() - 1));
+			} catch (final Exception e) {
+				Gdx.app.error(TAG, "Error getting webart", e);
+			}
 		}
+		return null;
 	}
 
 	public void dispose() {

@@ -15,6 +15,7 @@ public class AssetSounds {
 	hm 			= SOUNDS_PATH + "hm.wav",
 	huh 		= SOUNDS_PATH + "huh.wav",
 	stop 		= SOUNDS_PATH + "stop.wav",
+	radio 		= SOUNDS_PATH + "radio.wav",
 	whosThere 	= SOUNDS_PATH + "whos_there.wav",
 	steal		= SOUNDS_PATH + "steal.wav";
 

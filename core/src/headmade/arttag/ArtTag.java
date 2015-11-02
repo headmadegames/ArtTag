@@ -20,8 +20,8 @@ public class ArtTag extends DirectedGame {
 
 	private static final String SAVE_FILE = "art_treachery_save.dat";
 
-	public static final String	BUTTON_A	= "Shift";
-	public static final String	BUTTON_B	= "Space";
+	public static final String	BUTTON_A	= "Button A";
+	public static final String	BUTTON_B	= "Button B";
 
 	public final static int		VELOCITY_ITERS		= 3;
 	public final static int		POSITION_ITERS		= 2;
@@ -66,7 +66,9 @@ public class ArtTag extends DirectedGame {
 	public static final boolean TOGGLE_LIGHT = true;
 
 	public static GameState		gameState;
-	public static GameSettings	gameSettings;
+	public static GameSettings	gameSettings	= new GameSettings();
+
+	public static int highScore = 1000;
 
 	@Override
 	public void create() {
@@ -106,9 +108,9 @@ public class ArtTag extends DirectedGame {
 	@Override
 	public void dispose() {
 		super.dispose();
-		Assets.instance.dispose();
-		Player.instance.dispose();
 		FlickrService.instance.dispose();
+		Player.instance.dispose();
+		Assets.instance.dispose();
 	}
 
 	@Override

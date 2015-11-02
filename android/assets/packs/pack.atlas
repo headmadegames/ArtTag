@@ -183,61 +183,6 @@ large/title_roman_caps
   offset: 0, 0
   index: -1
 
-pack3.png
-size: 512,64
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-maggie/arm
-  rotate: false
-  xy: 2, 2
-  size: 6, 17
-  orig: 6, 17
-  offset: 0, 0
-  index: -1
-maggie/cap
-  rotate: false
-  xy: 45, 2
-  size: 18, 20
-  orig: 18, 20
-  offset: 0, 0
-  index: -1
-maggie/face
-  rotate: false
-  xy: 88, 2
-  size: 14, 15
-  orig: 14, 15
-  offset: 0, 0
-  index: -1
-maggie/hair
-  rotate: false
-  xy: 131, 2
-  size: 22, 25
-  orig: 22, 25
-  offset: 0, 0
-  index: -1
-maggie/leg
-  rotate: false
-  xy: 174, 2
-  size: 15, 30
-  orig: 15, 30
-  offset: 0, 0
-  index: -1
-maggie/shoulders
-  rotate: false
-  xy: 217, 2
-  size: 41, 18
-  orig: 41, 18
-  offset: 0, 0
-  index: -1
-maggie/torso
-  rotate: false
-  xy: 260, 2
-  size: 30, 28
-  orig: 30, 28
-  offset: 0, 0
-  index: -1
-
 pack4.png
 size: 512,512
 format: RGBA8888

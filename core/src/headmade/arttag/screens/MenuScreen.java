@@ -1,5 +1,6 @@
 package headmade.arttag.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -74,7 +75,10 @@ public class MenuScreen extends StageScreen {
 
 			@Override
 			public boolean keyDown(InputEvent event, int keycode) {
-				if (keycode == Keys.LEFT || keycode == Keys.A) {
+				if (keycode == Keys.ESCAPE) {
+					Gdx.app.exit();
+					return true;
+				} else if (keycode == Keys.LEFT || keycode == Keys.A) {
 					activatePrevButton();
 					return true;
 				} else if (keycode == Keys.RIGHT || keycode == Keys.D) {

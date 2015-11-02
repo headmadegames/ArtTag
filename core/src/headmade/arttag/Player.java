@@ -26,13 +26,13 @@ import net.dermetfan.gdx.physics.box2d.Box2DUtils;
 
 public class Player {
 	private static final String	MSG_DOOR			= "Press " + ArtTag.BUTTON_B + " to exit the level.";
-	private static final String	MSG_EXIT			= "Do you really want to leave? \nConfirm with the " + ArtTag.BUTTON_B + " Button.";
+	private static final String	MSG_EXIT			= "Do you really want to leave? \nConfirm with " + ArtTag.BUTTON_B + ".";
 	private static final String	MSG_INVENTORY_FULL	= "You can not carry any more. Return to the exit.";
 	private static final String	MSG_SCAN			= "Is the image what our client is looking for?\nScan its age with " + ArtTag.BUTTON_B;
 	private static final String	MSG_SCAN_2			= "Scanning only reveals the age of the image.\nSo don't waste your "
 			+ "time scanning artwork that doesn't match the job description.";
-	private static final String	MSG_SCAN_3			= "Is this what our client is looking for?\nSteal it with the " + ArtTag.BUTTON_B
-			+ " Button \n" + "or just walk away if it doesn't match.";
+	private static final String	MSG_SCAN_3			= "Is this what our client is looking for?\nSteal it with " + ArtTag.BUTTON_B + " \n"
+			+ "or just walk away if it doesn't match.";
 
 	private static final String TAG = Player.class.getName();
 
@@ -102,7 +102,7 @@ public class Player {
 	private int			cash;
 	private int			scanProgress;
 
-	private long	stepSoundId;
+	private Long	stepSoundId;
 	private Sound	stepSound;
 
 	private Player() {
@@ -110,6 +110,7 @@ public class Player {
 
 	public void init() {
 		setStepSound(Assets.assetsManager.get(AssetSounds.step, Sound.class));
+		stepSound.stop();
 		stepSoundId = getStepSound().loop(0f);
 	}
 
@@ -275,7 +276,9 @@ public class Player {
 					if (newAlpha > imageAlpha) {
 						// Gdx.app.log(TAG, "distance " + distance + " alpha " + newAlpha);
 						imageAlpha = newAlpha;
-						artTag.setCurrentArt((Art) fixture.getBody().getUserData());
+						if (!((Art) fixture.getBody().getUserData()).equals(artTag.getCurrentArt())) {
+							artTag.setCurrentArt((Art) fixture.getBody().getUserData());
+						}
 						if (artTag.getCurrentArt().isScanned()) {
 							artTag.setInstruction(MSG_SCAN_3);
 						} else {
@@ -306,7 +309,7 @@ public class Player {
 				artTag.setResult(" Scanning " + SCANNING_PROGRESS[scanProgress]);
 				sumDeltaScan += delta;
 				if (sumDeltaScan > scanTime) {
-					artTag.getCurrentArt().onScanFinished();
+					artTag.getCurrentArt().onScanFinished(artTag);
 					artTag.setResult(artTag.getCurrentArt().resultText());
 					isScanning = false;
 					sumDeltaScan = 0f;
@@ -388,6 +391,10 @@ public class Player {
 
 	public int getCash() {
 		return cash;
+	}
+
+	public void increaseCash(int cash) {
+		this.cash += cash;
 	}
 
 	public void setCash(int cash) {
