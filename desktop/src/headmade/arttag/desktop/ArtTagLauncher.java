@@ -15,8 +15,8 @@
  *******************************************************************************/
 package headmade.arttag.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.jogamp.JoglNewtApplication;
+import com.badlogic.gdx.backends.jogamp.JoglNewtApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
@@ -52,16 +52,16 @@ public class ArtTagLauncher {
 			TexturePacker.process(settings, "assets-raw/images", "../android/assets/" + Assets.PACKS_BASE, Assets.PACK);
 		}
 
-		// final JoglNewtApplicationConfiguration config = new JoglNewtApplicationConfiguration();
-		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		final JoglNewtApplicationConfiguration config = new JoglNewtApplicationConfiguration();
+		// final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Headmade Game";
 		// config.foregroundFPS = 30;
 		config.width = 1280;
 		config.height = 1024;
 		// config.fullscreen = true;
 		// config.samples = 4;
-		final LwjglApplication app = new LwjglApplication(new ArtTag(), config);
-		// final JoglNewtApplication app = new JoglNewtApplication(new ArtTag(), config);
+		// final LwjglApplication app = new LwjglApplication(new ArtTag(), config);
+		final JoglNewtApplication app = new JoglNewtApplication(new ArtTag(), config);
 	}
 
 }
