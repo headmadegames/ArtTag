@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
+import headmade.arttag.ArtTag;
 import headmade.arttag.DirectedGame;
 import headmade.arttag.assets.AssetTextures;
 import headmade.arttag.assets.Assets;
@@ -53,9 +54,9 @@ public class HowToActor extends BaseMenuContainer {
 			add(joystick).bottom();
 			add(button).bottom();
 			add(button2).bottom().row();
-			add("Joystick").padBottom(20f);
-			add("Button A").padBottom(20f);
-			add("Button B").padBottom(20f).row();
+			add("Cursor Keys").padBottom(20f);
+			add(ArtTag.BUTTON_A).padBottom(20f);
+			add(ArtTag.BUTTON_B).padBottom(20f).row();
 
 			add("Move");
 			add("Sprint");

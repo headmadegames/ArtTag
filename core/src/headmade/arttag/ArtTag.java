@@ -35,8 +35,8 @@ public class ArtTag extends DirectedGame {
 
 	private static final String SAVE_FILE = "art_treachery_save.dat";
 
-	public static final String	BUTTON_A	= "Button A";
-	public static final String	BUTTON_B	= "Button B";
+	public static final String	BUTTON_A	= "Shift";
+	public static final String	BUTTON_B	= "Space";
 
 	public final static int		VELOCITY_ITERS		= 3;
 	public final static int		POSITION_ITERS		= 2;
