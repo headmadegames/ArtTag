@@ -15,33 +15,33 @@
  *******************************************************************************/
 package headmade.arttag.service;
 
-import headmade.arttag.JobDescription;
-import headmade.arttag.utils.RandomUtil;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 
+import headmade.arttag.JobDescription;
+import headmade.arttag.utils.RandomUtil;
+
 public class RandomService {
-	private static final String	TAG					= RandomService.class.getName();
+	private static final String TAG = RandomService.class.getName();
 
-	public static RandomService	instance			= new RandomService();
+	public static RandomService instance = new RandomService();
 
-	private static final String	COMMENTED_REGEX		= "//(.*?)\\\n";
-	private static final String	NOUN				= "#N";
-	private static final String	ADJECTIVE			= "#adj";
-	private static final String	VERB				= "#v";
-	private static final String	SUFFIX				= "#suffix";
+	private static final String	COMMENTED_REGEX	= "//(.*?)\\\n";
+	private static final String	NOUN			= "#N";
+	private static final String	ADJECTIVE		= "#adj";
+	private static final String	VERB			= "#v";
+	private static final String	SUFFIX			= "#suffix";
 
-	private static String[]		nouns;
-	private static String[]		adjectives;
-	private static String[]		verbs;
-	private static String[]		patterns;
-	private static String[]		surnames;
-	private static String[]		maleNames;
-	private static String[]		femaleNames;
-	private static String[]		suffixes;
+	private static String[]	nouns;
+	private static String[]	adjectives;
+	private static String[]	verbs;
+	private static String[]	patterns;
+	private static String[]	surnames;
+	private static String[]	maleNames;
+	private static String[]	femaleNames;
+	private static String[]	suffixes;
 
-	private static String[]		nickNamePatterns	= { "'#N' ", "'The #N' " };
+	private static String[] nickNamePatterns = { "'#N' ", "'The #N' " };
 
 	private RandomService() {
 		final String noun = Gdx.files.internal("text/noun.txt").readString("utf-8");
@@ -96,7 +96,7 @@ public class RandomService {
 		final StringBuilder result = new StringBuilder();
 		result.append("Dear Maggy,\n\nI have a new job for you. Please bring me \nan artwork with ");
 		if (job.artTag != null) {
-			result.append(job.artTag).append(" on it.\nIt must be from ");
+			result.append(job.artTagLabel).append(" on it.\nIt must be from ");
 		} else {
 			result.append("anything but ");
 			int i = 0;

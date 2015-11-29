@@ -27,6 +27,7 @@ public class JobDescription {
 
 	public String		desc;
 	public String		artTag;
+	public String		artTagLabel;
 	public Set<String>	artTagNot	= new HashSet<String>();
 	public String		artArtist;
 	public Integer		artYearFrom;
@@ -35,7 +36,7 @@ public class JobDescription {
 	public JobDescription() {
 		// if (RandomUtil.random() > 0.2f) {
 		artTag = RandomUtil.random(TagService.TAGS);
-		artTag = TagService.instance.getLabel(artTag);
+		artTagLabel = TagService.instance.getLabel(artTag);
 		// } else {
 		// for (int i = 0; i < 1 + RandomUtil.random(2); i++) {
 		// artTagNot.add(RandomUtil.random(TagService.TAGS));
